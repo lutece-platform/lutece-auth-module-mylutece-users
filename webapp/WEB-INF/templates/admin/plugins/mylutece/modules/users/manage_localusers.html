@@ -1,0 +1,54 @@
+<@box>
+    <@boxHeader boxTools=true>
+        <@tform class='form-inline pull-right' name='manage_localuser'
+            action='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp'>
+            <@button type='submit' name='view_createLocalUser' buttonIcon='plus'
+                title='#i18n{module.mylutece.users.manage_localusers.buttonAdd}' />
+        </@tform>
+    </@boxHeader>
+    <@boxBody>
+        <@messages infos=infos />
+        <@paginationAdmin paginator=paginator combo=1 />
+        <div class="clearfix"></div>
+        <@table>
+            <tr>
+                <input type="hidden" id="id" name="id" />
+                <th>#i18n{module.mylutece.users.manage_localusers.columnLogin}</th>
+                <th>#i18n{module.mylutece.users.manage_localusers.columnGivenName}</th>
+                <th>#i18n{module.mylutece.users.manage_localusers.columnFamilyName}</th>
+                <th>#i18n{module.mylutece.users.manage_localusers.columnEmail}</th>
+                <th>#i18n{portal.util.labelActions}</th>
+            </tr>
+            <@tableHeadBodySeparator />
+            <#list localuser_list as localuser>
+                <tr>
+                    <input type="hidden" id="id" name="id" />
+                    <td>
+                        ${localuser.login}
+                    </td>
+                    <td>
+                        ${localuser.givenName}
+                    </td>
+                    <td>
+                        ${localuser.familyName}
+                    </td>
+                    <td>
+                        ${localuser.email}
+                    </td>
+                    <td>
+                        <@aButton
+                            href='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp?view=modifyLocalUser&id=${localuser.id}'
+                            title='#i18n{portal.util.labelModify}' buttonIcon='pencil' showTitle=false />
+                        <@aButton
+                            href='jsp/admin/plugins/mylutece/modules/users/ManageLocalUserRoles.jsp?view=ManageLocalUserRoles&id_localuser=${localuser.id}'
+                            title='#i18n{portal.util.labelModify}' buttonIcon='shield' showTitle=false />
+                        <@aButton
+                            href='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp?action=confirmRemoveLocalUser&id=${localuser.id}'
+                            title='#i18n{portal.util.labelDelete}' buttonIcon='trash' color='danger' showTitle=false />
+                    </td>
+                </tr>
+            </#list>
+        </@table>
+        <@paginationAdmin paginator=paginator />
+    </@boxBody>
+</@box>
