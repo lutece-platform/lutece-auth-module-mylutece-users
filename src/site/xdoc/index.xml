@@ -7,7 +7,7 @@
         <section name="Module MyLutece users">
             <subsection name="Introduction">
                 <p>
-                  -
+                    This module allows you to import and manage users by inheriting mylutece attributes and roles.
                 </p>
             </subsection>
         </section>

@@ -46,13 +46,13 @@ import java.util.List;
 public final class LocalUserRoleDAO implements ILocalUserRoleDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECT = "SELECT id_local_user_role, id_localuser, role_key FROM mylutece_users_luteceuser_role WHERE id_local_user_role = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_role, id_localuser, role_key FROM mylutece_users_luteceuser_role WHERE id_role = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO mylutece_users_luteceuser_role ( id_localuser, role_key ) VALUES ( ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM mylutece_users_luteceuser_role WHERE id_local_user_role = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE mylutece_users_luteceuser_role SET id_local_user_role = ?, id_localuser = ?, role_key = ? WHERE id_local_user_role = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_local_user_role, id_localuser, role_key FROM mylutece_users_luteceuser_role";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_local_user_role FROM mylutece_users_luteceuser_role";
-    private static final String SQL_QUERY_SELECTALL_BY_LOCALUSER_ID = "SELECT id_local_user_role, id_localuser, role_key FROM mylutece_users_luteceuser_role WHERE id_localuser = ?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM mylutece_users_luteceuser_role WHERE id_role = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE mylutece_users_luteceuser_role SET id_role = ?, id_localuser = ?, role_key = ? WHERE id_role = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_role, id_localuser, role_key FROM mylutece_users_luteceuser_role";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_role FROM mylutece_users_luteceuser_role";
+    private static final String SQL_QUERY_SELECTALL_BY_LOCALUSER_ID = "SELECT id_role, id_localuser, role_key FROM mylutece_users_luteceuser_role WHERE id_localuser = ?";
 
     /**
      * {@inheritDoc }

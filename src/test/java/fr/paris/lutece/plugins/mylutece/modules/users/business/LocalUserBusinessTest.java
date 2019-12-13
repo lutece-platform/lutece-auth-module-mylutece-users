@@ -45,8 +45,8 @@ public class LocalUserBusinessTest extends LuteceTestCase
     private static final String LOGIN2 = "Login2";
     private static final String GIVENNAME1 = "GivenName1";
     private static final String GIVENNAME2 = "GivenName2";
-    private static final String FAMILYNAME1 = "FamilyName1";
-    private static final String FAMILYNAME2 = "FamilyName2";
+    private static final String LASTNAME1 = "LastName1";
+    private static final String LASTNAME2 = "LastName2";
     private static final String EMAIL1 = "Email1";
     private static final String EMAIL2 = "Email2";
 
@@ -59,7 +59,7 @@ public class LocalUserBusinessTest extends LuteceTestCase
         LocalUser localUser = new LocalUser( );
         localUser.setLogin( LOGIN1 );
         localUser.setGivenName( GIVENNAME1 );
-        localUser.setFamilyName( FAMILYNAME1 );
+        localUser.setLastName( LASTNAME1 );
         localUser.setEmail( EMAIL1 );
 
         // Create test
@@ -67,19 +67,19 @@ public class LocalUserBusinessTest extends LuteceTestCase
         LocalUser localUserStored = LocalUserHome.findByPrimaryKey( localUser.getId( ) );
         assertEquals( localUserStored.getLogin( ), localUser.getLogin( ) );
         assertEquals( localUserStored.getGivenName( ), localUser.getGivenName( ) );
-        assertEquals( localUserStored.getFamilyName( ), localUser.getFamilyName( ) );
+        assertEquals( localUserStored.getLastName( ), localUser.getLastName( ) );
         assertEquals( localUserStored.getEmail( ), localUser.getEmail( ) );
 
         // Update test
         localUser.setLogin( LOGIN2 );
         localUser.setGivenName( GIVENNAME2 );
-        localUser.setFamilyName( FAMILYNAME2 );
+        localUser.setLastName( LASTNAME2 );
         localUser.setEmail( EMAIL2 );
         LocalUserHome.update( localUser );
         localUserStored = LocalUserHome.findByPrimaryKey( localUser.getId( ) );
         assertEquals( localUserStored.getLogin( ), localUser.getLogin( ) );
         assertEquals( localUserStored.getGivenName( ), localUser.getGivenName( ) );
-        assertEquals( localUserStored.getFamilyName( ), localUser.getFamilyName( ) );
+        assertEquals( localUserStored.getLastName( ), localUser.getLastName( ) );
         assertEquals( localUserStored.getEmail( ), localUser.getEmail( ) );
 
         // List test

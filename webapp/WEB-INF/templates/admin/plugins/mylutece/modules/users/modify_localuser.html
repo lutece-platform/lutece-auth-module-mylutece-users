@@ -3,7 +3,7 @@
 	<@icon style='user' />
 </#assign>
 <@box>
-	<@boxHeader title='${headerIcon}&nbsp;${localuser.givenName} ${localuser.familyName}' />
+	<@boxHeader title='${headerIcon}&nbsp;${localuser.givenName} ${localuser.lastName}' />
 	<@boxBody>
 		<@localusermanagement tab="localuser" />
 		<@tform class="form-horizontal" method="post" name="modify_localuser"
@@ -18,9 +18,9 @@
 				helpKey='#i18n{module.mylutece.users.modify_localuser.labelGivenName.help}' mandatory=true>
 				<@input type='text' name='given_name' value='${localuser.givenName}' />
 			</@formGroup>
-			<@formGroup labelKey='#i18n{module.mylutece.users.modify_localuser.labelFamilyName}'
-				helpKey='#i18n{module.mylutece.users.modify_localuser.labelFamilyName.help}' mandatory=true>
-				<@input type='text' name='family_name' value='${localuser.familyName}' />
+			<@formGroup labelKey='#i18n{module.mylutece.users.modify_localuser.labelLastName}'
+				helpKey='#i18n{module.mylutece.users.modify_localuser.labelLastName.help}' mandatory=true>
+				<@input type='text' name='last_name' value='${localuser.lastName}' />
 			</@formGroup>
 			<@formGroup labelKey='#i18n{module.mylutece.users.modify_localuser.labelEmail}'
 				helpKey='#i18n{module.mylutece.users.modify_localuser.labelEmail.help}'>

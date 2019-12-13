@@ -56,9 +56,9 @@ public class LocalUser implements Serializable
     @Size( max = 255, message = "#i18n{module.mylutece.users.validation.localuser.GivenName.size}" )
     private String _strGivenName;
 
-    @NotEmpty( message = "#i18n{module.mylutece.users.validation.localuser.FamilyName.notEmpty}" )
-    @Size( max = 255, message = "#i18n{module.mylutece.users.validation.localuser.FamilyName.size}" )
-    private String _strFamilyName;
+    @NotEmpty( message = "#i18n{module.mylutece.users.validation.localuser.LastName.notEmpty}" )
+    @Size( max = 255, message = "#i18n{module.mylutece.users.validation.localuser.LastName.size}" )
+    private String _strLastName;
 
     @Email( message = "#i18n{portal.validation.message.email}" )
     @Size( max = 255, message = "#i18n{module.mylutece.users.validation.localuser.Email.size}" )
@@ -128,24 +128,24 @@ public class LocalUser implements Serializable
     }
 
     /**
-     * Returns the FamilyName
+     * Returns the LastName
      * 
-     * @return The FamilyName
+     * @return The LastName
      */
-    public String getFamilyName( )
+    public String getLastName( )
     {
-        return _strFamilyName;
+        return _strLastName;
     }
 
     /**
-     * Sets the FamilyName
+     * Sets the LastName
      * 
-     * @param strFamilyName
-     *            The FamilyName
+     * @param strLastName
+     *            The LastName
      */
-    public void setFamilyName( String strFamilyName )
+    public void setLastName( String strLastName )
     {
-        _strFamilyName = strFamilyName;
+        _strLastName = strLastName;
     }
 
     /**

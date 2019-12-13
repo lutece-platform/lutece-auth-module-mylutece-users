@@ -35,7 +35,17 @@
     <applications>
     </applications>
 
+     <!-- Search Indexer Service -->
+     <search-indexers>
+        <search-indexer>
+            <search-indexer-class>
+                fr.paris.lutece.plugins.mylutece.modules.users.service.search.LocalUserIndexer
+            </search-indexer-class>
+        </search-indexer>
+    </search-indexers>  
+
     <!-- Portlet parameters -->
     <portlets>
    </portlets>
 </plug-in>
+

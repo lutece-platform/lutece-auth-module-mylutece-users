@@ -150,7 +150,7 @@ public final class LocalUserRoleHome
      * @param localUserRoleToDeleteList
      *            The LocalUserRole List to delete
      */
-    public static void removeFromLocalUserRoleList( List<LocalUserRole> localUserRoleToDeleteList )
+    public static void removeLocalUserRoles( List<LocalUserRole> localUserRoleToDeleteList )
     {
         for ( LocalUserRole localUserRole : localUserRoleToDeleteList )
         {
@@ -166,7 +166,7 @@ public final class LocalUserRoleHome
      * @param nIdLocalUser
      *            The localUser primary key
      */
-    public static void createFromLocalUserRoleKeyList( List<String> myLuteceRoleKeyToAssignList, int nIdLocalUser )
+    public static void createLocalUserRoles( List<String> myLuteceRoleKeyToAssignList, int nIdLocalUser )
     {
         for ( String myLuteceRoleKey : myLuteceRoleKeyToAssignList )
         {

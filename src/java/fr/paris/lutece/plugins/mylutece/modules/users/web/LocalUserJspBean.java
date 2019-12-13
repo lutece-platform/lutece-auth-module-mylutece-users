@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeField;
 import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeFieldHome;
@@ -86,6 +87,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     private static final String MARK_LOCALUSER_LIST = "localuser_list";
     private static final String MARK_LOCALUSER = "localuser";
     private static final String MARK_MYLUTECE_ATTRIBUTES_LIST = "attribute_list";
+    // Jsp
     private static final String JSP_MANAGE_LOCALUSERS = "jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp";
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_LOCALUSER = "module.mylutece.users.message.confirmRemoveLocalUser";
@@ -105,7 +107,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     private static final String INFO_LOCALUSER_CREATED = "module.mylutece.users.info.localuser.created";
     private static final String INFO_LOCALUSER_UPDATED = "module.mylutece.users.info.localuser.updated";
     private static final String INFO_LOCALUSER_REMOVED = "module.mylutece.users.info.localuser.removed";
-    // Session variable to store working values
+    // Session variables
     private LocalUser _localuser;
     private Locale _locale;
     private Plugin _myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
@@ -263,7 +265,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
         {
             return redirect( request, VIEW_MODIFY_LOCALUSER, PARAMETER_ID_LOCALUSER, _localuser.getId( ) );
         }
-        validateMyLuteceAttribute( request );
+        // validateMyLuteceAttribute(request);
         LocalUserHome.update( _localuser );
         MyLuteceUserFieldService.doModifyUserFields( _localuser.getId( ), request, request.getLocale( ), AdminUserService.getAdminUser( request ) );
         addInfo( INFO_LOCALUSER_UPDATED, getLocale( ) );
@@ -338,4 +340,5 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
             }
         }
     }
+
 }

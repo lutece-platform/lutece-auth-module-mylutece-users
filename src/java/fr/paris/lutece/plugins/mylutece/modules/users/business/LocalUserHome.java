@@ -35,8 +35,13 @@ package fr.paris.lutece.plugins.mylutece.modules.users.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceList;
+import fr.paris.lutece.plugins.mylutece.modules.users.service.search.LocalUserIndexer;
+import fr.paris.lutece.plugins.mylutece.modules.users.utils.LocalUserIndexerUtils;
+import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 
 import java.util.List;
 
@@ -66,6 +71,12 @@ public final class LocalUserHome
     public static LocalUser create( LocalUser localUser )
     {
         _dao.insert( localUser, _plugin );
+
+        String strIdLocalUser = Integer.toString( localUser.getId( ) );
+        IndexationService.addIndexerAction( strIdLocalUser, AppPropertiesService.getProperty( LocalUserIndexer.PROPERTY_INDEXER_NAME ),
+                IndexerAction.TASK_CREATE );
+
+        LocalUserIndexerUtils.addIndexerAction( strIdLocalUser, IndexerAction.TASK_CREATE );
 
         return localUser;
     }

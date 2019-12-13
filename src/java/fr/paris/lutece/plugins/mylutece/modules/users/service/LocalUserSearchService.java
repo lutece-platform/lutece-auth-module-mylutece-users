@@ -31,56 +31,35 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.mylutece.modules.users.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserRole;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserRoleHome;
+import javax.servlet.http.HttpServletRequest;
+import fr.paris.lutece.portal.service.search.SearchEngine;
+import fr.paris.lutece.portal.service.search.SearchResult;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
- * Service class for LocalUserRole
+ * Service class for LocalUserSearchService
  *
  */
-public final class LocalUserRoleService
+public final class LocalUserSearchService
 {
     public static final String BEAN_NAME = "mylutece-users.localUserRoleService";
+    private static final String BEAN_SEARCH_ENGINE = "mylutece-users.localUserSearchEngine";
 
     /**
-     * Process to user assignements from Mylutece Role List
+     * Return Search result
      * 
-     * @param myLuteceRoleKeysList
-     *            The MyLutece role keys List
-     * @param nIdLocalUser
-     *            The localUser id
+     * @param strKeywords
+     *            Keywords
+     * @param request
+     *            Request
      */
-    public static void doLocalUserAssignements( List<String> myLuteceRoleKeysList, int nIdLocalUser )
+    public static List<SearchResult> searchResults( String strKeywords, HttpServletRequest request )
     {
-
-        List<LocalUserRole> localUserRolesList = LocalUserRoleHome.getLocalUserRolesListByUserId( nIdLocalUser );
-        if ( myLuteceRoleKeysList == null )
-        {
-            LocalUserRoleHome.removeLocalUserRoles( localUserRolesList );
-            return;
-        }
-        // find all localUser roles to delete.
-        List<LocalUserRole> localUsersRolesToDeleteList = localUserRolesList.stream( )
-                .filter( currentLocalUserRoleKey -> !myLuteceRoleKeysList.contains( currentLocalUserRoleKey.getRoleKey( ) ) ).collect( Collectors.toList( ) );
-        // find all myLutece roles to assign.
-        List<String> myLuteceRoleKeyToAssignList = myLuteceRoleKeysList.stream( )
-                .filter( myLuteceRoleKey -> !localUserRolesList.stream( ).anyMatch( localUserRole -> myLuteceRoleKey.equals( localUserRole.getRoleKey( ) ) ) )
-                .collect( Collectors.toList( ) );
-
-        if ( localUsersRolesToDeleteList != null )
-        {
-            LocalUserRoleHome.removeLocalUserRoles( localUsersRolesToDeleteList );
-        }
-        if ( myLuteceRoleKeyToAssignList != null )
-        {
-            LocalUserRoleHome.createLocalUserRoles( myLuteceRoleKeyToAssignList, nIdLocalUser );
-        }
+        SearchEngine engine = SpringContextService.getBean( BEAN_SEARCH_ENGINE );
+        List<SearchResult> listResults = engine.getSearchResults( strKeywords, request );
+        return listResults;
     }
-
 }

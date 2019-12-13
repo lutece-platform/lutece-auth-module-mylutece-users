@@ -46,12 +46,12 @@ import java.util.List;
 public final class LocalUserDAO implements ILocalUserDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECT = "SELECT id_local_user, login, given_name, family_name, email FROM mylutece_users_localuser WHERE id_local_user = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO mylutece_users_localuser ( login, given_name, family_name, email ) VALUES ( ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM mylutece_users_localuser WHERE id_local_user = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE mylutece_users_localuser SET id_local_user = ?, login = ?, given_name = ?, family_name = ?, email = ? WHERE id_local_user = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_local_user, login, given_name, family_name, email FROM mylutece_users_localuser";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_local_user FROM mylutece_users_localuser";
+    private static final String SQL_QUERY_SELECT = "SELECT connect_id, login, given_name, last_name, email FROM mylutece_users_localuser WHERE connect_id = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO mylutece_users_localuser ( login, given_name, last_name, email ) VALUES ( ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM mylutece_users_localuser WHERE connect_id = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE mylutece_users_localuser SET connect_id = ?, login = ?, given_name = ?, last_name = ?, email = ? WHERE connect_id = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT connect_id, login, given_name, last_name, email FROM mylutece_users_localuser";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT connect_id FROM mylutece_users_localuser";
 
     /**
      * {@inheritDoc }
@@ -64,7 +64,7 @@ public final class LocalUserDAO implements ILocalUserDAO
             int nIndex = 1;
             daoUtil.setString( nIndex++, localUser.getLogin( ) );
             daoUtil.setString( nIndex++, localUser.getGivenName( ) );
-            daoUtil.setString( nIndex++, localUser.getFamilyName( ) );
+            daoUtil.setString( nIndex++, localUser.getLastName( ) );
             daoUtil.setString( nIndex++, localUser.getEmail( ) );
             daoUtil.executeUpdate( );
             if ( daoUtil.nextGeneratedKey( ) )
@@ -92,7 +92,7 @@ public final class LocalUserDAO implements ILocalUserDAO
                 localUser.setId( daoUtil.getInt( nIndex++ ) );
                 localUser.setLogin( daoUtil.getString( nIndex++ ) );
                 localUser.setGivenName( daoUtil.getString( nIndex++ ) );
-                localUser.setFamilyName( daoUtil.getString( nIndex++ ) );
+                localUser.setLastName( daoUtil.getString( nIndex++ ) );
                 localUser.setEmail( daoUtil.getString( nIndex++ ) );
             }
         }
@@ -124,7 +124,7 @@ public final class LocalUserDAO implements ILocalUserDAO
             daoUtil.setInt( nIndex++, localUser.getId( ) );
             daoUtil.setString( nIndex++, localUser.getLogin( ) );
             daoUtil.setString( nIndex++, localUser.getGivenName( ) );
-            daoUtil.setString( nIndex++, localUser.getFamilyName( ) );
+            daoUtil.setString( nIndex++, localUser.getLastName( ) );
             daoUtil.setString( nIndex++, localUser.getEmail( ) );
             daoUtil.setInt( nIndex, localUser.getId( ) );
             daoUtil.executeUpdate( );
@@ -148,7 +148,7 @@ public final class LocalUserDAO implements ILocalUserDAO
                 localUser.setId( daoUtil.getInt( nIndex++ ) );
                 localUser.setLogin( daoUtil.getString( nIndex++ ) );
                 localUser.setGivenName( daoUtil.getString( nIndex++ ) );
-                localUser.setFamilyName( daoUtil.getString( nIndex++ ) );
+                localUser.setLastName( daoUtil.getString( nIndex++ ) );
                 localUser.setEmail( daoUtil.getString( nIndex++ ) );
                 localUserList.add( localUser );
             }
