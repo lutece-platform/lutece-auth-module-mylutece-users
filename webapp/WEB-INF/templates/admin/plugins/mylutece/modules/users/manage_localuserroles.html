@@ -1,0 +1,42 @@
+<#include "localusermanagement_tabs.html" />
+<#assign headerIcon>
+    <@icon style='user' />
+</#assign>
+<@box>
+    <@boxHeader title='${headerIcon}&nbsp; ${localuser.givenName} ${localuser.lastName}' boxTools=true>
+    </@boxHeader>
+    <@boxBody>
+        <@localusermanagement tab="localuserrole" />
+        <@messages infos=infos />
+        <div class="clearfix"></div>
+        <@tform name='action_doassignlocaluserrole'
+            action='jsp/admin/plugins/mylutece/modules/users/ManageLocalUserRoles.jsp'>
+            <input type="hidden" id="id_localuser" name="id_localuser" value="${id_localuser}" />
+            <@row>
+                <@columns>
+                    <@listGroup>
+                        <#list mylutece_role_list as role>
+                            <#if role.role !="none">
+                                <#if localuserrole_list??>
+                                    <#assign checked=false>
+                                        <#list localuserrole_list as user_role>
+                                            <#if user_role.role=role.role>
+                                                <#assign checked=true>
+                                                    <#break>
+                                            </#if>
+                                        </#list>
+                                        <@listGroupItem>
+                                            <@checkBox labelKey='${role.role} - ${role.roleDescription}'
+                                                value='${role.role}' name='role_key' checked=checked mandatory=false />
+                                        </@listGroupItem>
+                                </#if>
+                            </#if>
+                        </#list>
+                    </@listGroup>
+                </@columns>
+            </@row>
+            <@button type='submit' name='action_assignLocalUserRole' buttonIcon='check'
+                title='#i18n{module.mylutece.users.manage_localuserroles.buttonSave}' />
+        </@tform>
+    </@boxBody>
+</@box>

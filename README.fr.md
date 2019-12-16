@@ -7,7 +7,7 @@
 
 ## Introduction
 
-This module allows you to import and manage users by inheriting mylutece attributes and roles.
+-
 
 
 [Maven documentation and reports](https://dev.lutece.paris.fr/plugins/module-mylutece-users/)

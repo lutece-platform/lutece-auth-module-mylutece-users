@@ -1,0 +1,14 @@
+<#macro localusermanagement tab>
+	<@tabs>
+		<@tabList>
+			<li <#if tab="localuser">class="active"</#if>>
+				<a
+					href="jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp?view=modifyLocalUser&id=${localuser.id}">#i18n{module.mylutece.users.modify_localuser.pageTitle}</a>
+			</li>
+			<li <#if tab="localuserrole">class="active"</#if>>
+				<a
+					href="jsp/admin/plugins/mylutece/modules/users/ManageLocalUserRoles.jsp?view=ManageLocalUserRoles&id_localuser=${localuser.id}">#i18n{module.mylutece.users.manage_localuserroles.pageTitle}</a>
+			</li>
+		</@tabList>
+	</@tabs>
+</#macro>
