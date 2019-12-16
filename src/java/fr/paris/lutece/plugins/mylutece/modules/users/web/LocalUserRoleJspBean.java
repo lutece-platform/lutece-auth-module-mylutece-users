@@ -139,7 +139,7 @@ public class LocalUserRoleJspBean extends AbstractmyLuteceUsersManagementJspBean
     public Collection<Role> getLocalUserAuthorizedRoleList( List<Role> myLuteceAuthorizedRoleList, int nUserId )
     {
         List<LocalUserRole> currentlocalUserRoleList = LocalUserRoleHome.getLocalUserRolesListByUserId( nUserId );
-        Collection<Role> localUserRoleList = new ArrayList<Role>( );
+        Collection<Role> localUserRoleList = new ArrayList<>( );
         for ( LocalUserRole localUserRole : currentlocalUserRoleList )
         {
             for ( Role role : myLuteceAuthorizedRoleList )

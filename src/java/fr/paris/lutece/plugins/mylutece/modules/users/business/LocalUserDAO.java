@@ -137,7 +137,7 @@ public final class LocalUserDAO implements ILocalUserDAO
     @Override
     public List<LocalUser> selectLocalUsersList( Plugin plugin )
     {
-        List<LocalUser> localUserList = new ArrayList<LocalUser>( );
+        List<LocalUser> localUserList = new ArrayList<>( );
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
             daoUtil.executeQuery( );
@@ -162,7 +162,7 @@ public final class LocalUserDAO implements ILocalUserDAO
     @Override
     public List<Integer> selectIdLocalUsersList( Plugin plugin )
     {
-        List<Integer> localUserList = new ArrayList<Integer>( );
+        List<Integer> localUserList = new ArrayList<>( );
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
         {
             daoUtil.executeQuery( );

@@ -71,7 +71,7 @@ public class LocalUserSearchEngine implements SearchEngine
      */
     public List<SearchResult> getSearchResults( String strKeywords, HttpServletRequest request )
     {
-        List<SearchItem> listResults = new ArrayList<SearchItem>( );
+        List<SearchItem> listResults = new ArrayList<>( );
         IndexSearcher searcher = null;
         try( Directory directory = IndexationService.getDirectoryIndex( ) ; IndexReader ir = DirectoryReader.open( directory ) )
         {
@@ -110,7 +110,7 @@ public class LocalUserSearchEngine implements SearchEngine
      */
     private List<SearchResult> convertList( List<SearchItem> listSource )
     {
-        List<SearchResult> listSearchResult = new ArrayList<SearchResult>( );
+        List<SearchResult> listSearchResult = new ArrayList<>( );
         for ( SearchItem item : listSource )
         {
             SearchResult result = new SearchResult( );

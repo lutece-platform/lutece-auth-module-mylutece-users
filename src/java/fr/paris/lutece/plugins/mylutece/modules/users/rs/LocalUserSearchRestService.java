@@ -63,7 +63,7 @@ public class LocalUserSearchRestService
 {
     private final Logger _logger = Logger.getLogger( RestConstants.REST_LOGGER );
     private static final String BEAN_SEARCH_ENGINE = "mylutece-users.localUserSearchEngine";
-    private static String PARAMETER_KEYWORDS = "keywords";
+    private static final String PARAMETER_KEYWORDS = "keywords";
 
     /**
      * Get SearchResult List

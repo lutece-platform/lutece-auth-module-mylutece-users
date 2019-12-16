@@ -67,13 +67,11 @@ public class LocalUserIndexer implements SearchIndexer
     public static final String PROPERTY_INDEX_TYPE_PAGE = "localUser";
     private static final String PARAMETER_LOCALUSER_ID = "localUser_id";
     private static final String JSP_SEARCH_LOCALUSER = "";
-    // Fields Names;
     public static final String FIELD_ID_TITLE = "id";
     public static final String FIELD_LOGIN_TITLE = "login";
     public static final String FIELD_GIVEN_NAME_TITLE = "givenName";
     public static final String FIELD_LAST_NAME_TITLE = "LastName";
     public static final String FIELD_EMAIL_TITLE = "email";
-    // Variables
     String _pluginName = UsersPlugin.PLUGIN_NAME;
 
     /**
@@ -96,7 +94,7 @@ public class LocalUserIndexer implements SearchIndexer
             UrlItem url = new UrlItem( strPortalUrl );
             url.addParameter( XPageAppService.PARAM_XPAGE_APP, _pluginName );
             url.addParameter( PARAMETER_LOCALUSER_ID, localUser.getId( ) );
-            org.apache.lucene.document.Document docLocalUser = getDocument( localUser, url.getUrl( ), plugin );
+            org.apache.lucene.document.Document docLocalUser = getDocument( localUser, plugin );
             IndexationService.write( docLocalUser );
         }
     }
@@ -110,7 +108,7 @@ public class LocalUserIndexer implements SearchIndexer
      */
     public List<Document> getDocuments( String strId ) throws IOException, InterruptedException, SiteMessageException
     {
-        ArrayList<org.apache.lucene.document.Document> listDocuments = new ArrayList<Document>( );
+        ArrayList<org.apache.lucene.document.Document> listDocuments = new ArrayList<>( );
         String strPortalUrl = AppPathService.getPortalUrl( );
         Plugin plugin = PluginService.getPlugin( _pluginName );
         LocalUser localUser = LocalUserHome.findByPrimaryKey( Integer.parseInt( strId ) );
@@ -122,7 +120,7 @@ public class LocalUserIndexer implements SearchIndexer
             org.apache.lucene.document.Document docLocalUser = null;
             try
             {
-                docLocalUser = getDocument( localUser, url.getUrl( ), plugin );
+                docLocalUser = getDocument( localUser, plugin );
             }
             catch( Exception e )
             {
@@ -196,7 +194,7 @@ public class LocalUserIndexer implements SearchIndexer
      * @throws SiteMessageException
      *             occurs when a site message need to be displayed
      */
-    private Document getDocument( LocalUser localUser, String strUrl, Plugin plugin ) throws IOException, InterruptedException, SiteMessageException
+    private Document getDocument( LocalUser localUser, Plugin plugin ) throws IOException, InterruptedException, SiteMessageException
     {
         // make a new, empty document
         org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document( );
@@ -216,7 +214,7 @@ public class LocalUserIndexer implements SearchIndexer
      */
     private static String getContentToIndex( LocalUser localUser )
     {
-        StringBuffer sbContentToIndex = new StringBuffer( );
+        StringBuilder sbContentToIndex = new StringBuilder( );
         sbContentToIndex.append( localUser.getLogin( ) );
         sbContentToIndex.append( " " );
         sbContentToIndex.append( localUser.getGivenName( ) );
@@ -236,7 +234,7 @@ public class LocalUserIndexer implements SearchIndexer
      */
     private static String getFullName( LocalUser localUser )
     {
-        StringBuffer sbContentToIndex = new StringBuffer( );
+        StringBuilder sbContentToIndex = new StringBuilder( );
         sbContentToIndex.append( localUser.getLastName( ) );
         sbContentToIndex.append( " " );
         sbContentToIndex.append( localUser.getGivenName( ) );
@@ -248,7 +246,7 @@ public class LocalUserIndexer implements SearchIndexer
      */
     public List<String> getListType( )
     {
-        List<String> listType = new ArrayList<String>( );
+        List<String> listType = new ArrayList<>( );
         listType.add( _pluginName );
         return listType;
     }

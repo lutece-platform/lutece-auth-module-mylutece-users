@@ -1,4 +1,4 @@
-![](https://dev.lutece.paris.fr/jenkins/buildStatus/icon?job=module-myusers-deploy)
+![](https://dev.lutece.paris.fr/jenkins/buildStatus/icon?job=auth-module-myusers-deploy)
 [![Alerte](https://dev.lutece.paris.fr/sonar/api/project_badges/measure?project=fr.paris.lutece.plugins%3Amodule-mylutece-users&metric=alert_status)](https://dev.lutece.paris.fr/sonar/dashboard?id=fr.paris.lutece.plugins%3Amodule-mylutece-users)
 [![Line of code](https://dev.lutece.paris.fr/sonar/api/project_badges/measure?project=fr.paris.lutece.plugins%3Amodule-mylutece-users&metric=ncloc)](https://dev.lutece.paris.fr/sonar/dashboard?id=fr.paris.lutece.plugins%3Amodule-mylutece-users)
 [![Coverage](https://dev.lutece.paris.fr/sonar/api/project_badges/measure?project=fr.paris.lutece.plugins%3Amodule-mylutece-users&metric=coverage)](https://dev.lutece.paris.fr/sonar/dashboard?id=fr.paris.lutece.plugins%3Amodule-mylutece-users)

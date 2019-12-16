@@ -47,6 +47,11 @@ public class LocalUserIndexerUtils
     // Indexed resource type name
     public static final String CONSTANT_TYPE_RESOURCE = "MYLUTECE-USERS_LOCALUSER";
 
+    private LocalUserIndexerUtils( )
+    {
+        throw new IllegalStateException( "Utility class" );
+    }
+
     /**
      * Warn that a action has been done.
      * 

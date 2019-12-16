@@ -110,8 +110,8 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     // Session variables
     private LocalUser _localuser;
     private Locale _locale;
-    private Plugin _myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
-    List<IAttribute> _listAttributes;
+    private transient Plugin _myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
+    private transient List<IAttribute> _listAttributes;
 
     /**
      * Build the Manage View
@@ -265,7 +265,6 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
         {
             return redirect( request, VIEW_MODIFY_LOCALUSER, PARAMETER_ID_LOCALUSER, _localuser.getId( ) );
         }
-        // validateMyLuteceAttribute(request);
         LocalUserHome.update( _localuser );
         MyLuteceUserFieldService.doModifyUserFields( _localuser.getId( ), request, request.getLocale( ), AdminUserService.getAdminUser( request ) );
         addInfo( INFO_LOCALUSER_UPDATED, getLocale( ) );
@@ -282,7 +281,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
      */
     private boolean validateMyLuteceAttribute( HttpServletRequest request )
     {
-        List<ErrorMessage> listErrors = new ArrayList<ErrorMessage>( );
+        List<ErrorMessage> listErrors = new ArrayList<>( );
         for ( IAttribute attribute : _listAttributes )
         {
             if ( attribute.isMandatory( ) && attribute.getListAttributeFields( ).get( 0 ).getValue( ).isEmpty( ) )
@@ -294,10 +293,11 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
         }
         if ( !listErrors.isEmpty( ) )
         {
-            listErrors.forEach( item -> {
-                String strMessageErr = item.getMessage( );
+            for ( ErrorMessage errorMessage : listErrors )
+            {
+                String strMessageErr = errorMessage.getMessage( );
                 addError( strMessageErr );
-            } );
+            }
             return false;
         }
         return true;

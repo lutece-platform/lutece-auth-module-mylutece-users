@@ -132,7 +132,7 @@ public final class LocalUserRoleDAO implements ILocalUserRoleDAO
     @Override
     public List<LocalUserRole> selectLocalUserRolesList( Plugin plugin )
     {
-        List<LocalUserRole> localUserRoleList = new ArrayList<LocalUserRole>( );
+        List<LocalUserRole> localUserRoleList = new ArrayList<>( );
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
             daoUtil.executeQuery( );
@@ -155,7 +155,7 @@ public final class LocalUserRoleDAO implements ILocalUserRoleDAO
     @Override
     public List<Integer> selectIdLocalUserRolesList( Plugin plugin )
     {
-        List<Integer> localUserRoleList = new ArrayList<Integer>( );
+        List<Integer> localUserRoleList = new ArrayList<>( );
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
         {
             daoUtil.executeQuery( );
@@ -191,7 +191,7 @@ public final class LocalUserRoleDAO implements ILocalUserRoleDAO
     @Override
     public List<LocalUserRole> selectLocalUserRolesListByUserId( int nIdLocalUser, Plugin plugin )
     {
-        List<LocalUserRole> localUserRoleList = new ArrayList<LocalUserRole>( );
+        List<LocalUserRole> localUserRoleList = new ArrayList<>( );
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_BY_LOCALUSER_ID, plugin ) )
         {
             daoUtil.setInt( 1, nIdLocalUser );

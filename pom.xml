@@ -2,7 +2,7 @@
     <parent>
         <artifactId>lutece-global-pom</artifactId>
         <groupId>fr.paris.lutece.tools</groupId>
-        <version>4.0.5</version>
+        <version>4.0.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.paris.lutece.plugins</groupId>
@@ -51,7 +51,13 @@
     </dependencies>
     <properties>
         <componentName>mylutece-users</componentName>
-        <jiraProjectName>MYLUTECEUSERS</jiraProjectName>
+        <jiraProjectName>MYLUTUSERS</jiraProjectName>
         <jiraComponentId></jiraComponentId>
     </properties>
+    <scm>
+        <connection>scm:git:https://github.com/lutece-platform/lutece-auth-module-mylutece-users.git</connection>
+        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-auth-module-mylutece-users.git</developerConnection>
+        <url>https://github.com/lutece-platform/lutece-auth-module-mylutece-users.git</url>
+        <tag>HEAD</tag>
+    </scm>
 </project>

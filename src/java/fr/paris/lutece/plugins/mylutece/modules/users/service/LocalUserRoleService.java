@@ -48,6 +48,10 @@ public final class LocalUserRoleService
 {
     public static final String BEAN_NAME = "mylutece-users.localUserRoleService";
 
+    private LocalUserRoleService( )
+    {
+    }
+
     /**
      * Process to user assignements from Mylutece Role List
      * 
@@ -70,7 +74,7 @@ public final class LocalUserRoleService
                 .filter( currentLocalUserRoleKey -> !myLuteceRoleKeysList.contains( currentLocalUserRoleKey.getRoleKey( ) ) ).collect( Collectors.toList( ) );
         // find all myLutece roles to assign.
         List<String> myLuteceRoleKeyToAssignList = myLuteceRoleKeysList.stream( )
-                .filter( myLuteceRoleKey -> !localUserRolesList.stream( ).anyMatch( localUserRole -> myLuteceRoleKey.equals( localUserRole.getRoleKey( ) ) ) )
+                .filter( myLuteceRoleKey -> localUserRolesList.stream( ).noneMatch( localUserRole -> myLuteceRoleKey.equals( localUserRole.getRoleKey( ) ) ) )
                 .collect( Collectors.toList( ) );
 
         if ( localUsersRolesToDeleteList != null )
