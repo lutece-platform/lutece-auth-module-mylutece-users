@@ -91,7 +91,7 @@ public class LocalUser implements Serializable
      * 
      * @return The Id
      */
-    public String getproviderUserId( )
+    public String getProviderUserId( )
     {
         return _strproviderUserId;
     }
@@ -102,7 +102,7 @@ public class LocalUser implements Serializable
      * @param nId
      *            The Id
      */
-    public void setproviderUserId( String strproviderUserId )
+    public void setProviderUserId( String strproviderUserId )
     {
         _strproviderUserId = strproviderUserId;
     }
