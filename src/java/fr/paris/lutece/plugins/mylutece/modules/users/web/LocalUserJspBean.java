@@ -286,51 +286,51 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
         return redirectView( request, VIEW_MANAGE_LOCALUSERS );
     }
 
-  /**
+    /**
      * Get a page to import users from Provider.
      * 
-     * @param request The request
+     * @param request
+     *            The request
      * @return The HTML content
      */
     @View( VIEW_IMPORT_LOCALUSER )
     public String getImportLocalUser( HttpServletRequest request )
     {
-        setPageTitleProperty(PROPERTY_IMPORT_USERS_FROM_FILE_PAGETITLE);
-        Map<String, Object> model = new HashMap<String, Object>();
-        HtmlTemplate template = AppTemplateService.getTemplate(TEMPLATE_IMPORT_USERS_FROM_PROVIDER,
-                AdminUserService.getLocale(request), model);
-        return getAdminPage(template.getHtml());
+        setPageTitleProperty( PROPERTY_IMPORT_USERS_FROM_FILE_PAGETITLE );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
+        return getAdminPage( template.getHtml( ) );
     }
 
-     /**
+    /**
      * Get a page to import users from Provider.
      * 
-     * @param request The request
+     * @param request
+     *            The request
      * @return The HTML content
      */
     @Action( ACTION_SEARCH_LOCALUSER )
     public String doSearchUsersFromProvider( HttpServletRequest request )
     {
         Plugin myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
-        String strLastName = request.getParameter(PARAMETER_SEARCH_BY_USER_NAME);
+        String strLastName = request.getParameter( PARAMETER_SEARCH_BY_USER_NAME );
         // if (_plugin == null) {
-        //     _plugin = PluginService.getPlugin(UsersPlugin.PLUGIN_NAME);
+        // _plugin = PluginService.getPlugin(UsersPlugin.PLUGIN_NAME);
         // }
         // attributes
-        List<IAttribute> listAttributes = AttributeHome.findAll(getLocale(), myLutecePlugin);
-        for (IAttribute attribute : listAttributes) {
-            List<AttributeField> listAttributeFields = AttributeFieldHome
-                    .selectAttributeFieldsByIdAttribute(attribute.getIdAttribute(), myLutecePlugin);
-            attribute.setListAttributeFields(listAttributeFields);
+        List<IAttribute> listAttributes = AttributeHome.findAll( getLocale( ), myLutecePlugin );
+        for ( IAttribute attribute : listAttributes )
+        {
+            List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), myLutecePlugin );
+            attribute.setListAttributeFields( listAttributeFields );
         }
-        List<LocalUser> users = LocalUserInfoService.getInstance().findUsersByLastName( strLastName );
-        setPageTitleProperty(PROPERTY_IMPORT_USERS_FROM_FILE_PAGETITLE);
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put(MARK_LOCALUSER_LIST, users);
+        List<LocalUser> users = LocalUserInfoService.getInstance( ).findUsersByLastName( strLastName );
+        setPageTitleProperty( PROPERTY_IMPORT_USERS_FROM_FILE_PAGETITLE );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        model.put( MARK_LOCALUSER_LIST, users );
         // model.put(MARK_PLUGIN_NAME, _plugin.getName());
-        HtmlTemplate template = AppTemplateService.getTemplate(TEMPLATE_IMPORT_USERS_FROM_PROVIDER,
-                AdminUserService.getLocale(request), model);
-        return getAdminPage(template.getHtml());
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
+        return getAdminPage( template.getHtml( ) );
     }
 
     /**

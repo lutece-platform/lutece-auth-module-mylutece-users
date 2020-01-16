@@ -86,8 +86,7 @@ public class LocalUser implements Serializable
         _nId = nId;
     }
 
-
-      /**
+    /**
      * Returns the Id
      * 
      * @return The Id

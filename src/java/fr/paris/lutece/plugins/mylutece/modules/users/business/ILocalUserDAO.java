@@ -98,7 +98,6 @@ public interface ILocalUserDAO
      */
     LocalUser loadByConnectId( String strUserName, Plugin plugin );
 
-
     /**
      * Load the data of all the localUser objects and returns them as a list
      * 

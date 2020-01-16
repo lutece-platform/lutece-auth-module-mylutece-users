@@ -37,18 +37,21 @@ import java.util.List;
 import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-public final class LocalUserInfoService implements IUserInfosProvider {
+public final class LocalUserInfoService implements IUserInfosProvider
+{
     private static final String BEAN_NAME = "mylutece-localUserInfoProvider";
     private static IUserInfosProvider _userInfosProvider;
 
     /**
      * Default constructor
      */
-    private LocalUserInfoService() {
+    private LocalUserInfoService( )
+    {
     }
 
-    public void init() {
-        _userInfosProvider = (IUserInfosProvider) SpringContextService.getBean(BEAN_NAME);
+    public void init( )
+    {
+        _userInfosProvider = (IUserInfosProvider) SpringContextService.getBean( BEAN_NAME );
     }
 
     /**
@@ -56,22 +59,26 @@ public final class LocalUserInfoService implements IUserInfosProvider {
      *
      * @return The instance of the singleton
      */
-    public static IUserInfosProvider getInstance() {
-        if (_userInfosProvider == null) {
-            _userInfosProvider = SpringContextService.getBean(BEAN_NAME);
+    public static IUserInfosProvider getInstance( )
+    {
+        if ( _userInfosProvider == null )
+        {
+            _userInfosProvider = SpringContextService.getBean( BEAN_NAME );
         }
         return _userInfosProvider;
     }
 
-     /**
+    /**
      * Returns the users list
      *
-     * @param strParameterLastName Last Name
+     * @param strParameterLastName
+     *            Last Name
      * @return the users list
      */
     @Override
-    public List<LocalUser> findUsersByLastName(String strParameterLastName) {
-        return _userInfosProvider.findUsersByLastName(strParameterLastName);
+    public List<LocalUser> findUsersByLastName( String strParameterLastName )
+    {
+        return _userInfosProvider.findUsersByLastName( strParameterLastName );
 
     }
 }

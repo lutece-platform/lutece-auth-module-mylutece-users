@@ -40,14 +40,15 @@ import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
  * IUserInfosProvider Interface
  *
  */
-public interface IUserInfosProvider {
+public interface IUserInfosProvider
+{
     /**
      * Find users
      *
-     * @param listInfos Attributes
+     * @param listInfos
+     *            Attributes
      * @return List<LocalUser>
      */
-    List<LocalUser> findUsersByLastName(String strParameterLastName);
-
+    List<LocalUser> findUsersByLastName( String strParameterLastName );
 
 }

@@ -44,18 +44,21 @@ import fr.paris.lutece.plugins.mylutece.service.IMyLuteceExternalRolesProvider;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-public final class LocalUserRoleProvider implements IMyLuteceExternalRolesProvider {
+public final class LocalUserRoleProvider implements IMyLuteceExternalRolesProvider
+{
     private static final String BEAN_NAME = "mylutece-localUserRoleProvider";
     private static LocalUserRoleProvider _localUserRoleProvider;
 
     /**
      * Default constructor
      */
-    private LocalUserRoleProvider() {
+    private LocalUserRoleProvider( )
+    {
     }
 
-    public void init() {
-        _localUserRoleProvider = SpringContextService.getBean(BEAN_NAME);
+    public void init( )
+    {
+        _localUserRoleProvider = SpringContextService.getBean( BEAN_NAME );
     }
 
     /**
@@ -63,20 +66,24 @@ public final class LocalUserRoleProvider implements IMyLuteceExternalRolesProvid
      *
      * @return The instance of the singleton
      */
-    public static LocalUserRoleProvider getInstance() {
-        if (_localUserRoleProvider == null) {
-            _localUserRoleProvider = SpringContextService.getBean(BEAN_NAME);
+    public static LocalUserRoleProvider getInstance( )
+    {
+        if ( _localUserRoleProvider == null )
+        {
+            _localUserRoleProvider = SpringContextService.getBean( BEAN_NAME );
         }
         return _localUserRoleProvider;
     }
 
     @Override
-    public Collection<String> providesRoles(LuteceUser user) {
-        Collection<String> providesRoles = new ArrayList<String>();
-        LocalUser localUser = LocalUserHome.findByConnectId(user.getName());
-        List<LocalUserRole> localUserRoleList = LocalUserRoleHome.getLocalUserRolesListByUserId(localUser.getId());
-        for (LocalUserRole localUserRole : localUserRoleList) {
-            providesRoles.add(localUserRole.getRoleKey());
+    public Collection<String> providesRoles( LuteceUser user )
+    {
+        Collection<String> providesRoles = new ArrayList<String>( );
+        LocalUser localUser = LocalUserHome.findByConnectId( user.getName( ) );
+        List<LocalUserRole> localUserRoleList = LocalUserRoleHome.getLocalUserRolesListByUserId( localUser.getId( ) );
+        for ( LocalUserRole localUserRole : localUserRoleList )
+        {
+            providesRoles.add( localUserRole.getRoleKey( ) );
         }
         return providesRoles;
     }

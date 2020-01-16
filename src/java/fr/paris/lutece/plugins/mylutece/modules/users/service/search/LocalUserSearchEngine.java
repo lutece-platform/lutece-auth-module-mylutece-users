@@ -73,7 +73,7 @@ public class LocalUserSearchEngine implements SearchEngine
     {
         List<SearchItem> listResults = new ArrayList<>( );
         IndexSearcher searcher = null;
-        try( Directory directory = IndexationService.getDirectoryIndex( ) ; IndexReader ir = DirectoryReader.open( directory ) )
+        try ( Directory directory = IndexationService.getDirectoryIndex( ) ; IndexReader ir = DirectoryReader.open( directory ) )
         {
             searcher = new IndexSearcher( ir );
             BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder( );
