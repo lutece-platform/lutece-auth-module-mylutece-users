@@ -6,18 +6,18 @@
         <@row>
             <@columns sm=12 md=4 lg=3>
                 <@tform action='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp' method='post'>
-                    <@formGroup labelFor='search_login' labelKey='Login' showLabel=true>
+                    <@formGroup labelFor='search_login' labelKey='Login' >
                         <@input type='text' name='search_login' params='autofocus' placeHolder='Login'
                             params='disabled=disabled' />
                     </@formGroup>
-                    <@formGroup labelFor='search_lastName' labelKey='Nom' showLabel=true>
+                    <@formGroup labelFor='search_lastName' labelKey='Nom' >
                         <@input type='text' name='search_lastName' params='autofocus' placeHolder='Nom' />
                     </@formGroup>
-                    <@formGroup labelFor='search_firstName' labelKey='Prenom' showLabel=true>
+                    <@formGroup labelFor='search_firstName' labelKey='Prenom' >
                         <@input type='text' name='search_firstName' params='autofocus' placeHolder='Prenom'
                             params='disabled=disabled' />
                     </@formGroup>
-                    <@formGroup labelFor='search_email' labelKey='Email' showLabel=true>
+                    <@formGroup labelFor='search_email' labelKey='Email' >
                         <@input type='text' name='search_email' params='autofocus' placeHolder='Email'
                             params='disabled=disabled' />
                     </@formGroup>
@@ -53,11 +53,11 @@
                                             <input type="hidden" name="email" value="${localUser.email}" />
                                             <input type="hidden" name="last_name" value="${localUser.lastName}" />
                                             <input type="hidden" name="given_name" value="${localUser.givenName}" />
-                                            <input type="hidden" name="id_user_provider" value="${localUser.idProvider}" />
+                                            <input type="hidden" name="provider_user_id" value="${localUser.providerUserId}" />
 
                                             <@button type='submit'
                                                 title='#i18n{module.mylutece.users.localUser_filter.shortImport}'
-                                                buttonIcon='upload' showTitle=true size='' name='action_createLocalUser' />
+                                                buttonIcon='upload' size='' name='action_createLocalUser' />
                                     </td>
                                 </tr>
                             </#list>

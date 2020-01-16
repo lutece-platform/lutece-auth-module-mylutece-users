@@ -67,7 +67,7 @@ public final class LocalUserDAO implements ILocalUserDAO
             daoUtil.setString( nIndex++, localUser.getGivenName( ) );
             daoUtil.setString( nIndex++, localUser.getLastName( ) );
             daoUtil.setString( nIndex++, localUser.getEmail( ) );
-            daoUtil.setString( nIndex++, localUser.getIdProvider( ) );
+            daoUtil.setString( nIndex++, localUser.getproviderUserId( ) );
             daoUtil.executeUpdate( );
             if ( daoUtil.nextGeneratedKey( ) )
             {
@@ -96,7 +96,7 @@ public final class LocalUserDAO implements ILocalUserDAO
                 localUser.setGivenName( daoUtil.getString( nIndex++ ) );
                 localUser.setLastName( daoUtil.getString( nIndex++ ) );
                 localUser.setEmail( daoUtil.getString( nIndex++ ) );
-                localUser.setIdProvider( daoUtil.getString( nIndex++ ) );
+                localUser.setproviderUserId( daoUtil.getString( nIndex++ ) );
             }
         }
         return localUser;
@@ -129,7 +129,7 @@ public final class LocalUserDAO implements ILocalUserDAO
             daoUtil.setString( nIndex++, localUser.getGivenName( ) );
             daoUtil.setString( nIndex++, localUser.getLastName( ) );
             daoUtil.setString( nIndex++, localUser.getEmail( ) );
-            daoUtil.setString( nIndex++, localUser.getIdProvider( ) );
+            daoUtil.setString( nIndex++, localUser.getproviderUserId( ) );
             daoUtil.setInt( nIndex, localUser.getId( ) );
             daoUtil.executeUpdate( );
         }
@@ -154,7 +154,7 @@ public final class LocalUserDAO implements ILocalUserDAO
                 localUser.setGivenName( daoUtil.getString( nIndex++ ) );
                 localUser.setLastName( daoUtil.getString( nIndex++ ) );
                 localUser.setEmail( daoUtil.getString( nIndex++ ) );
-                localUser.setIdProvider( daoUtil.getString( nIndex++ ) );
+                localUser.setproviderUserId( daoUtil.getString( nIndex++ ) );
                 localUserList.add( localUser );
             }
         }
@@ -218,7 +218,7 @@ public final class LocalUserDAO implements ILocalUserDAO
                 localUser.setGivenName( daoUtil.getString( nIndex++ ) );
                 localUser.setLastName( daoUtil.getString( nIndex++ ) );
                 localUser.setEmail( daoUtil.getString( nIndex++ ) );
-                localUser.setIdProvider( daoUtil.getString( nIndex++ ) );
+                localUser.setproviderUserId( daoUtil.getString( nIndex++ ) );
             }
         }
         return localUser;
