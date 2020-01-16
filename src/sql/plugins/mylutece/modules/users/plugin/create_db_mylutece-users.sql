@@ -8,6 +8,7 @@ login varchar(255) default '' NOT NULL,
 given_name varchar(255) default '' NOT NULL,
 last_name varchar(255) default '' NOT NULL,
 email varchar(255) default '',
+connect_id_provider varchar(255) default '',
 PRIMARY KEY (connect_id)
 );
 --

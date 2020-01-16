@@ -2,6 +2,8 @@
     <@boxHeader boxTools=true>
         <@tform class='form-inline pull-right' name='manage_localuser'
             action='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp'>
+            <@button type='submit' name='view_importLocalUser' buttonIcon='plus'
+                title='#i18n{module.mylutece.users.manage_localusers.buttonImport}' />
             <@button type='submit' name='view_createLocalUser' buttonIcon='plus'
                 title='#i18n{module.mylutece.users.manage_localusers.buttonAdd}' />
         </@tform>
@@ -38,13 +40,13 @@
                     <td>
                         <@aButton
                             href='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp?view=modifyLocalUser&id=${localuser.id}'
-                            title='#i18n{portal.util.labelModify}' buttonIcon='pencil' showTitle=false />
+                            title='' buttonIcon='pencil' showTitle=false />
                         <@aButton
                             href='jsp/admin/plugins/mylutece/modules/users/ManageLocalUserRoles.jsp?view=ManageLocalUserRoles&id_localuser=${localuser.id}'
-                            title='#i18n{portal.util.labelModify}' buttonIcon='shield' showTitle=false />
+                            title='' buttonIcon='shield' showTitle=false />
                         <@aButton
                             href='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp?action=confirmRemoveLocalUser&id=${localuser.id}'
-                            title='#i18n{portal.util.labelDelete}' buttonIcon='trash' color='danger' showTitle=false />
+                            title='' buttonIcon='trash' color='danger' showTitle=false />
                     </td>
                 </tr>
             </#list>

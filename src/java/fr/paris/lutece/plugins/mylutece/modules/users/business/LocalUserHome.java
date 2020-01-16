@@ -117,6 +117,20 @@ public final class LocalUserHome
     {
         return _dao.load( nKey, _plugin );
     }
+    
+
+    /**
+     * Returns an instance of a localUser whose identifier is specified in parameter
+     * 
+     * @param nKey
+     *            The localUser primary key
+     * @return an instance of LocalUser
+     */
+    public static LocalUser findByConnectId( String strUserName )
+    {
+        return _dao.loadByConnectId( strUserName, _plugin );
+    }
+
 
     /**
      * Load the data of all the localUser objects and returns them as a list

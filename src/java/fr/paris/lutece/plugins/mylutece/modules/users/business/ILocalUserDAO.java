@@ -88,6 +88,18 @@ public interface ILocalUserDAO
     LocalUser load( int nKey, Plugin plugin );
 
     /**
+     * Load localUser from the table
+     * 
+     * @param strUserName
+     *            The user name of the localUser
+     * @param plugin
+     *            the Plugin
+     * @return The instance of the localUser
+     */
+    LocalUser loadByConnectId( String strUserName, Plugin plugin );
+
+
+    /**
      * Load the data of all the localUser objects and returns them as a list
      * 
      * @param plugin
