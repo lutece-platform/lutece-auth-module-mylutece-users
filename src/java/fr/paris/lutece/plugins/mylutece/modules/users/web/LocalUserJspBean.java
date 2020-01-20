@@ -154,10 +154,9 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
         _localuser = ( _localuser != null ) ? _localuser : new LocalUser( );
         Map<String, Object> model = getModel( );
         model.put( MARK_LOCALUSER, _localuser );
-        Plugin myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
         if ( _listAttributes == null )
         {
-            _listAttributes = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, myLutecePlugin ) );
+            _listAttributes = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
         }
         model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listAttributes );
         return getPage( PROPERTY_PAGE_TITLE_CREATE_LOCALUSER, TEMPLATE_CREATE_LOCALUSER, model );
@@ -174,10 +173,9 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     public String doCreateLocalUser( HttpServletRequest request )
     {
         _localuser = ( _localuser == null ) ? new LocalUser( ) : _localuser;
-        Plugin myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
         if ( _listAttributes == null )
         {
-            _listAttributes = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, myLutecePlugin ) );
+            _listAttributes = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
         }
         populate( _localuser, request, request.getLocale( ) );
         setMyLuteceAttributeValue( request );
@@ -314,14 +312,13 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     @Action( ACTION_SEARCH_LOCALUSER )
     public String doSearchUsersFromProvider( HttpServletRequest request )
     {
-        Plugin myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
         String strParameterLastName = request.getParameter( PARAMETER_SEARCH_BY_LAST_NAME );
         String strParameterGivenName = request.getParameter( PARAMETER_SEARCH_BY_GIVEN_NAME );
         String strParameterEmail = request.getParameter( PARAMETER_SEARCH_BY_EMAIL );
-        List<IAttribute> listAttributes = AttributeHome.findAll( getLocale( ), myLutecePlugin );
+        List<IAttribute> listAttributes = AttributeHome.findAll( getLocale( ), _myLutecePlugin );
         for ( IAttribute attribute : listAttributes )
         {
-            List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), myLutecePlugin );
+            List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), _myLutecePlugin );
             attribute.setListAttributeFields( listAttributeFields );
         }
         List<LocalUser> users = LocalUserInfoService.getInstance( ).findUsers( strParameterLastName, strParameterGivenName, strParameterEmail );
@@ -372,10 +369,9 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
      */
     private List<IAttribute> gettMyLuteceAttributeWithFields( List<IAttribute> listMyLuteceAttribute )
     {
-        Plugin myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
         for ( IAttribute attribute : listMyLuteceAttribute )
         {
-            List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), myLutecePlugin );
+            List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), _myLutecePlugin );
             attribute.setListAttributeFields( listAttributeFields );
         }
         return listMyLuteceAttribute;
