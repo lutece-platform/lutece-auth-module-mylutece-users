@@ -49,6 +49,6 @@ public interface IUserInfosProvider
      *            Attributes
      * @return List<LocalUser>
      */
-    List<LocalUser> findUsersByLastName( String strParameterLastName );
+    List<LocalUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail );
 
 }

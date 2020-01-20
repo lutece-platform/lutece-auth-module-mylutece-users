@@ -76,9 +76,9 @@ public final class LocalUserInfoService implements IUserInfosProvider
      * @return the users list
      */
     @Override
-    public List<LocalUser> findUsersByLastName( String strParameterLastName )
+    public List<LocalUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail )
     {
-        return _userInfosProvider.findUsersByLastName( strParameterLastName );
+        return _userInfosProvider.findUsers( strParameterLastName, strParameterGivenName, strParameterCriteriaMail);
 
     }
 }

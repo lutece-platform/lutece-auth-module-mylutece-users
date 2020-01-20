@@ -84,7 +84,9 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     // Parameters
     private static final String PARAMETER_ID_LOCALUSER = "id";
     private static final String PARAMETER_MYLUTECE_ATTRIBUTE_NAME = "attribute";
-    private static final String PARAMETER_SEARCH_BY_USER_NAME = "search_lastName";
+    private static final String PARAMETER_SEARCH_BY_LAST_NAME = "search_lastName";
+    private static final String PARAMETER_SEARCH_BY_GIVEN_NAME = "search_givenName";
+    private static final String PARAMETER_SEARCH_BY_EMAIL = "search_email";
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_LOCALUSERS = "module.mylutece.users.manage_localusers.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_LOCALUSER = "module.mylutece.users.modify_localuser.pageTitle";
@@ -313,22 +315,19 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     public String doSearchUsersFromProvider( HttpServletRequest request )
     {
         Plugin myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
-        String strLastName = request.getParameter( PARAMETER_SEARCH_BY_USER_NAME );
-        // if (_plugin == null) {
-        // _plugin = PluginService.getPlugin(UsersPlugin.PLUGIN_NAME);
-        // }
-        // attributes
+        String strParameterLastName = request.getParameter( PARAMETER_SEARCH_BY_LAST_NAME );
+        String strParameterGivenName = request.getParameter( PARAMETER_SEARCH_BY_GIVEN_NAME );
+        String strParameterEmail = request.getParameter( PARAMETER_SEARCH_BY_EMAIL );
         List<IAttribute> listAttributes = AttributeHome.findAll( getLocale( ), myLutecePlugin );
         for ( IAttribute attribute : listAttributes )
         {
             List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), myLutecePlugin );
             attribute.setListAttributeFields( listAttributeFields );
         }
-        List<LocalUser> users = LocalUserInfoService.getInstance( ).findUsersByLastName( strLastName );
+        List<LocalUser> users = LocalUserInfoService.getInstance( ).findUsers( strParameterLastName, strParameterGivenName, strParameterEmail );
         setPageTitleProperty( PROPERTY_IMPORT_USERS_FROM_FILE_PAGETITLE );
         Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_LOCALUSER_LIST, users );
-        // model.put(MARK_PLUGIN_NAME, _plugin.getName());
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
         return getAdminPage( template.getHtml( ) );
     }

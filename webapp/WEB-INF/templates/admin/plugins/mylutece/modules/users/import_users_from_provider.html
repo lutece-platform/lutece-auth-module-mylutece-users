@@ -6,20 +6,14 @@
         <@row>
             <@columns sm=12 md=4 lg=3>
                 <@tform action='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp' method='post'>
-                    <@formGroup labelFor='search_login' labelKey='Login' >
-                        <@input type='text' name='search_login' params='autofocus' placeHolder='Login'
-                            params='disabled=disabled' />
-                    </@formGroup>
                     <@formGroup labelFor='search_lastName' labelKey='Nom' >
                         <@input type='text' name='search_lastName' params='autofocus' placeHolder='Nom' />
                     </@formGroup>
-                    <@formGroup labelFor='search_firstName' labelKey='Prenom' >
-                        <@input type='text' name='search_firstName' params='autofocus' placeHolder='Prenom'
-                            params='disabled=disabled' />
+                    <@formGroup labelFor='search_givenName' labelKey='Prenom' >
+                        <@input type='text' name='search_givenName' params='autofocus' placeHolder='Prenom' />
                     </@formGroup>
                     <@formGroup labelFor='search_email' labelKey='Email' >
-                        <@input type='text' name='search_email' params='autofocus' placeHolder='Email'
-                            params='disabled=disabled' />
+                        <@input type='text' name='search_email' params='autofocus' placeHolder='Email' />
                     </@formGroup>
                     <@formGroup>
                         <@button type='submit' name='action_searchUsersFromProvider' buttonIcon='search'
