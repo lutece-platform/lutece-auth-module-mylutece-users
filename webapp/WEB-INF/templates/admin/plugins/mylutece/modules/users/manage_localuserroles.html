@@ -26,7 +26,7 @@
                                             </#if>
                                         </#list>
                                         <@listGroupItem>
-                                            <@checkBox labelKey='${role.role} - ${role.roleDescription}'
+                                            <@checkBox id="${role.role}" labelKey='${role.role} - ${role.roleDescription}'
                                                 value='${role.role}' name='role_key' checked=checked mandatory=false />
                                         </@listGroupItem>
                                 </#if>

@@ -46,12 +46,13 @@ import java.util.List;
 public final class LocalUserDAO implements ILocalUserDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECT = "SELECT connect_id, login, given_name, last_name, email FROM mylutece_users_localuser WHERE connect_id = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO mylutece_users_localuser ( login, given_name, last_name, email ) VALUES ( ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT connect_id, login, given_name, last_name, email, connect_id_provider FROM mylutece_users_localuser WHERE connect_id = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO mylutece_users_localuser ( login, given_name, last_name, email, connect_id_provider ) VALUES ( ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM mylutece_users_localuser WHERE connect_id = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE mylutece_users_localuser SET connect_id = ?, login = ?, given_name = ?, last_name = ?, email = ? WHERE connect_id = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT connect_id, login, given_name, last_name, email FROM mylutece_users_localuser";
+    private static final String SQL_QUERY_UPDATE = "UPDATE mylutece_users_localuser SET connect_id = ?, login = ?, given_name = ?, last_name = ?, email = ?, connect_id_provider = ? WHERE connect_id = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT connect_id, login, given_name, last_name, email, connect_id_provider FROM mylutece_users_localuser";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT connect_id FROM mylutece_users_localuser";
+    private static final String SQL_QUERY_SELECT_BY_CONNECT_ID = "SELECT connect_id, login, given_name, last_name, email, connect_id_provider FROM mylutece_users_localuser WHERE connect_id_provider = ?";
 
     /**
      * {@inheritDoc }
@@ -59,13 +60,14 @@ public final class LocalUserDAO implements ILocalUserDAO
     @Override
     public void insert( LocalUser localUser, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
         {
             int nIndex = 1;
             daoUtil.setString( nIndex++, localUser.getLogin( ) );
             daoUtil.setString( nIndex++, localUser.getGivenName( ) );
             daoUtil.setString( nIndex++, localUser.getLastName( ) );
             daoUtil.setString( nIndex++, localUser.getEmail( ) );
+            daoUtil.setString( nIndex++, localUser.getProviderUserId( ) );
             daoUtil.executeUpdate( );
             if ( daoUtil.nextGeneratedKey( ) )
             {
@@ -81,7 +83,7 @@ public final class LocalUserDAO implements ILocalUserDAO
     public LocalUser load( int nKey, Plugin plugin )
     {
         LocalUser localUser = null;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
             daoUtil.setInt( 1, nKey );
             daoUtil.executeQuery( );
@@ -94,6 +96,7 @@ public final class LocalUserDAO implements ILocalUserDAO
                 localUser.setGivenName( daoUtil.getString( nIndex++ ) );
                 localUser.setLastName( daoUtil.getString( nIndex++ ) );
                 localUser.setEmail( daoUtil.getString( nIndex++ ) );
+                localUser.setProviderUserId( daoUtil.getString( nIndex++ ) );
             }
         }
         return localUser;
@@ -105,7 +108,7 @@ public final class LocalUserDAO implements ILocalUserDAO
     @Override
     public void delete( int nKey, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nKey );
             daoUtil.executeUpdate( );
@@ -118,7 +121,7 @@ public final class LocalUserDAO implements ILocalUserDAO
     @Override
     public void store( LocalUser localUser, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
             int nIndex = 1;
             daoUtil.setInt( nIndex++, localUser.getId( ) );
@@ -126,6 +129,7 @@ public final class LocalUserDAO implements ILocalUserDAO
             daoUtil.setString( nIndex++, localUser.getGivenName( ) );
             daoUtil.setString( nIndex++, localUser.getLastName( ) );
             daoUtil.setString( nIndex++, localUser.getEmail( ) );
+            daoUtil.setString( nIndex++, localUser.getProviderUserId( ) );
             daoUtil.setInt( nIndex, localUser.getId( ) );
             daoUtil.executeUpdate( );
         }
@@ -138,7 +142,7 @@ public final class LocalUserDAO implements ILocalUserDAO
     public List<LocalUser> selectLocalUsersList( Plugin plugin )
     {
         List<LocalUser> localUserList = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
             daoUtil.executeQuery( );
             while ( daoUtil.next( ) )
@@ -150,6 +154,7 @@ public final class LocalUserDAO implements ILocalUserDAO
                 localUser.setGivenName( daoUtil.getString( nIndex++ ) );
                 localUser.setLastName( daoUtil.getString( nIndex++ ) );
                 localUser.setEmail( daoUtil.getString( nIndex++ ) );
+                localUser.setProviderUserId( daoUtil.getString( nIndex++ ) );
                 localUserList.add( localUser );
             }
         }
@@ -163,7 +168,7 @@ public final class LocalUserDAO implements ILocalUserDAO
     public List<Integer> selectIdLocalUsersList( Plugin plugin )
     {
         List<Integer> localUserList = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
         {
             daoUtil.executeQuery( );
             while ( daoUtil.next( ) )
@@ -181,7 +186,7 @@ public final class LocalUserDAO implements ILocalUserDAO
     public ReferenceList selectLocalUsersReferenceList( Plugin plugin )
     {
         ReferenceList localUserList = new ReferenceList( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
             daoUtil.executeQuery( );
             while ( daoUtil.next( ) )
@@ -190,5 +195,32 @@ public final class LocalUserDAO implements ILocalUserDAO
             }
         }
         return localUserList;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public LocalUser loadByConnectId( String strUserName, Plugin plugin )
+    {
+
+        LocalUser localUser = null;
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_CONNECT_ID, plugin ) )
+        {
+            daoUtil.setString( 1, strUserName );
+            daoUtil.executeQuery( );
+            if ( daoUtil.next( ) )
+            {
+                localUser = new LocalUser( );
+                int nIndex = 1;
+                localUser.setId( daoUtil.getInt( nIndex++ ) );
+                localUser.setLogin( daoUtil.getString( nIndex++ ) );
+                localUser.setGivenName( daoUtil.getString( nIndex++ ) );
+                localUser.setLastName( daoUtil.getString( nIndex++ ) );
+                localUser.setEmail( daoUtil.getString( nIndex++ ) );
+                localUser.setProviderUserId( daoUtil.getString( nIndex++ ) );
+            }
+        }
+        return localUser;
     }
 }

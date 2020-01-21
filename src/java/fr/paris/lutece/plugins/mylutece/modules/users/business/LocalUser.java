@@ -63,6 +63,7 @@ public class LocalUser implements Serializable
     @Email( message = "#i18n{portal.validation.message.email}" )
     @Size( max = 255, message = "#i18n{module.mylutece.users.validation.localuser.Email.size}" )
     private String _strEmail;
+    private String _strproviderUserId;
 
     /**
      * Returns the Id
@@ -83,6 +84,27 @@ public class LocalUser implements Serializable
     public void setId( int nId )
     {
         _nId = nId;
+    }
+
+    /**
+     * Returns the Id
+     * 
+     * @return The Id
+     */
+    public String getProviderUserId( )
+    {
+        return _strproviderUserId;
+    }
+
+    /**
+     * Sets the Id
+     * 
+     * @param nId
+     *            The Id
+     */
+    public void setProviderUserId( String strproviderUserId )
+    {
+        _strproviderUserId = strproviderUserId;
     }
 
     /**

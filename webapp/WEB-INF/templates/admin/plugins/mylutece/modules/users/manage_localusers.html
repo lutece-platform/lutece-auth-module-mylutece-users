@@ -2,6 +2,8 @@
     <@boxHeader boxTools=true>
         <@tform class='form-inline pull-right' name='manage_localuser'
             action='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp'>
+            <@button type='submit' name='view_importLocalUser' buttonIcon='plus'
+                title='#i18n{module.mylutece.users.manage_localusers.buttonImport}' />
             <@button type='submit' name='view_createLocalUser' buttonIcon='plus'
                 title='#i18n{module.mylutece.users.manage_localusers.buttonAdd}' />
         </@tform>
@@ -17,6 +19,7 @@
                 <th>#i18n{module.mylutece.users.manage_localusers.columnGivenName}</th>
                 <th>#i18n{module.mylutece.users.manage_localusers.columnLastName}</th>
                 <th>#i18n{module.mylutece.users.manage_localusers.columnEmail}</th>
+                <th>#i18n{module.mylutece.users.manage_localusers.columnProviderUserId}</th>
                 <th>#i18n{portal.util.labelActions}</th>
             </tr>
             <@tableHeadBodySeparator />
@@ -36,15 +39,18 @@
                         ${localuser.email}
                     </td>
                     <td>
+                        ${localuser.providerUserId!}
+                    </td>
+                    <td>
                         <@aButton
                             href='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp?view=modifyLocalUser&id=${localuser.id}'
-                            title='#i18n{portal.util.labelModify}' buttonIcon='pencil' showTitle=false />
+                            buttonIcon='pencil' />
                         <@aButton
                             href='jsp/admin/plugins/mylutece/modules/users/ManageLocalUserRoles.jsp?view=ManageLocalUserRoles&id_localuser=${localuser.id}'
-                            title='#i18n{portal.util.labelModify}' buttonIcon='shield' showTitle=false />
+                            buttonIcon='shield' />
                         <@aButton
                             href='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp?action=confirmRemoveLocalUser&id=${localuser.id}'
-                            title='#i18n{portal.util.labelDelete}' buttonIcon='trash' color='danger' showTitle=false />
+                            buttonIcon='trash' color='danger' />
                     </td>
                 </tr>
             </#list>

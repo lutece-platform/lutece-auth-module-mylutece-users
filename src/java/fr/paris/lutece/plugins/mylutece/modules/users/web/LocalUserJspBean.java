@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.mylutece.modules.users.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,6 +48,7 @@ import fr.paris.lutece.plugins.mylutece.business.attribute.MyLuteceUserField;
 import fr.paris.lutece.plugins.mylutece.business.attribute.MyLuteceUserFieldHome;
 import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
 import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserHome;
+import fr.paris.lutece.plugins.mylutece.modules.users.service.LocalUserInfoService;
 import fr.paris.lutece.plugins.mylutece.service.MyLutecePlugin;
 import fr.paris.lutece.plugins.mylutece.service.attribute.MyLuteceUserFieldService;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
@@ -55,11 +57,13 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
 import fr.paris.lutece.util.ErrorMessage;
+import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
 /**
@@ -76,9 +80,13 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     private static final String TEMPLATE_MANAGE_LOCALUSERS = "/admin/plugins/mylutece/modules/users/manage_localusers.html";
     private static final String TEMPLATE_CREATE_LOCALUSER = "/admin/plugins/mylutece/modules/users/create_localuser.html";
     private static final String TEMPLATE_MODIFY_LOCALUSER = "/admin/plugins/mylutece/modules/users/modify_localuser.html";
+    private static final String TEMPLATE_IMPORT_USERS_FROM_PROVIDER = "/admin/plugins/mylutece/modules/users/import_users_from_provider.html";
     // Parameters
     private static final String PARAMETER_ID_LOCALUSER = "id";
     private static final String PARAMETER_MYLUTECE_ATTRIBUTE_NAME = "attribute";
+    private static final String PARAMETER_SEARCH_BY_LAST_NAME = "search_lastName";
+    private static final String PARAMETER_SEARCH_BY_GIVEN_NAME = "search_givenName";
+    private static final String PARAMETER_SEARCH_BY_EMAIL = "search_email";
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_LOCALUSERS = "module.mylutece.users.manage_localusers.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_LOCALUSER = "module.mylutece.users.modify_localuser.pageTitle";
@@ -92,17 +100,20 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_LOCALUSER = "module.mylutece.users.message.confirmRemoveLocalUser";
     private static final String MESSAGE_FIELD_ERROR_MANDATORY = "module.mylutece.users.message.field.error.mandatory";
+    private static final String PROPERTY_IMPORT_USERS_FROM_FILE_PAGETITLE = "module.mylutece.users.import_users_from_file.pageTitle";
     // Validations
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "module.mylutece.users.model.entity.localuser.attribute.";
     // Views
     private static final String VIEW_MANAGE_LOCALUSERS = "manageLocalUsers";
     private static final String VIEW_CREATE_LOCALUSER = "createLocalUser";
     private static final String VIEW_MODIFY_LOCALUSER = "modifyLocalUser";
+    private static final String VIEW_IMPORT_LOCALUSER = "importLocalUser";
     // Actions
     private static final String ACTION_CREATE_LOCALUSER = "createLocalUser";
     private static final String ACTION_MODIFY_LOCALUSER = "modifyLocalUser";
     private static final String ACTION_REMOVE_LOCALUSER = "removeLocalUser";
     private static final String ACTION_CONFIRM_REMOVE_LOCALUSER = "confirmRemoveLocalUser";
+    private static final String ACTION_SEARCH_LOCALUSER = "searchUsersFromProvider";
     // Infos
     private static final String INFO_LOCALUSER_CREATED = "module.mylutece.users.info.localuser.created";
     private static final String INFO_LOCALUSER_UPDATED = "module.mylutece.users.info.localuser.updated";
@@ -143,10 +154,9 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
         _localuser = ( _localuser != null ) ? _localuser : new LocalUser( );
         Map<String, Object> model = getModel( );
         model.put( MARK_LOCALUSER, _localuser );
-        Plugin myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
         if ( _listAttributes == null )
         {
-            _listAttributes = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, myLutecePlugin ) );
+            _listAttributes = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
         }
         model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listAttributes );
         return getPage( PROPERTY_PAGE_TITLE_CREATE_LOCALUSER, TEMPLATE_CREATE_LOCALUSER, model );
@@ -162,6 +172,11 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     @Action( ACTION_CREATE_LOCALUSER )
     public String doCreateLocalUser( HttpServletRequest request )
     {
+        _localuser = ( _localuser == null ) ? new LocalUser( ) : _localuser;
+        if ( _listAttributes == null )
+        {
+            _listAttributes = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
+        }
         populate( _localuser, request, request.getLocale( ) );
         setMyLuteceAttributeValue( request );
         // Check constraints
@@ -272,6 +287,49 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     }
 
     /**
+     * Get a page to import users from Provider.
+     * 
+     * @param request
+     *            The request
+     * @return The HTML content
+     */
+    @View( VIEW_IMPORT_LOCALUSER )
+    public String getImportLocalUser( HttpServletRequest request )
+    {
+        setPageTitleProperty( PROPERTY_IMPORT_USERS_FROM_FILE_PAGETITLE );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
+        return getAdminPage( template.getHtml( ) );
+    }
+
+    /**
+     * Get a page to import users from Provider.
+     * 
+     * @param request
+     *            The request
+     * @return The HTML content
+     */
+    @Action( ACTION_SEARCH_LOCALUSER )
+    public String doSearchUsersFromProvider( HttpServletRequest request )
+    {
+        String strParameterLastName = request.getParameter( PARAMETER_SEARCH_BY_LAST_NAME );
+        String strParameterGivenName = request.getParameter( PARAMETER_SEARCH_BY_GIVEN_NAME );
+        String strParameterEmail = request.getParameter( PARAMETER_SEARCH_BY_EMAIL );
+        List<IAttribute> listAttributes = AttributeHome.findAll( getLocale( ), _myLutecePlugin );
+        for ( IAttribute attribute : listAttributes )
+        {
+            List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), _myLutecePlugin );
+            attribute.setListAttributeFields( listAttributeFields );
+        }
+        List<LocalUser> users = LocalUserInfoService.getInstance( ).findUsers( strParameterLastName, strParameterGivenName, strParameterEmail );
+        setPageTitleProperty( PROPERTY_IMPORT_USERS_FROM_FILE_PAGETITLE );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        model.put( MARK_LOCALUSER_LIST, users );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
+        return getAdminPage( template.getHtml( ) );
+    }
+
+    /**
      * Validate Attribute from Mylutece
      *
      * @param request
@@ -311,10 +369,9 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
      */
     private List<IAttribute> gettMyLuteceAttributeWithFields( List<IAttribute> listMyLuteceAttribute )
     {
-        Plugin myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
         for ( IAttribute attribute : listMyLuteceAttribute )
         {
-            List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), myLutecePlugin );
+            List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), _myLutecePlugin );
             attribute.setListAttributeFields( listAttributeFields );
         }
         return listMyLuteceAttribute;

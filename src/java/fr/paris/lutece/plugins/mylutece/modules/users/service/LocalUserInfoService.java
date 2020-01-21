@@ -33,36 +33,52 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.users.service;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
-import fr.paris.lutece.portal.service.plugin.PluginService;
+import java.util.List;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-/**
- * class UsersPlugin
- */
-public class UsersPlugin extends PluginDefaultImplementation
+public final class LocalUserInfoService implements IUserInfosProvider
 {
-    /**
-     * The name of the plugin
-     */
-    public static final String PLUGIN_NAME = "mylutece-users";
+    private static final String BEAN_NAME = "mylutece-localUserInfoProvider";
+    private static IUserInfosProvider _userInfosProvider;
 
     /**
-     * {@inheritDoc}
+     * Default constructor
      */
-    @Override
+    private LocalUserInfoService( )
+    {
+    }
+
     public void init( )
     {
-        // Do nothing
+        _userInfosProvider = (IUserInfosProvider) SpringContextService.getBean( BEAN_NAME );
     }
 
     /**
-     * Get the blog plugin
-     * 
-     * @return The blog plugin
+     * Returns the instance of the singleton
+     *
+     * @return The instance of the singleton
      */
-    public static Plugin getPlugin( )
+    public static IUserInfosProvider getInstance( )
     {
-        return PluginService.getPlugin( PLUGIN_NAME );
+        if ( _userInfosProvider == null )
+        {
+            _userInfosProvider = SpringContextService.getBean( BEAN_NAME );
+        }
+        return _userInfosProvider;
+    }
+
+    /**
+     * Returns the users list
+     *
+     * @param strParameterLastName
+     *            Last Name
+     * @return the users list
+     */
+    @Override
+    public List<LocalUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail )
+    {
+        return _userInfosProvider.findUsers( strParameterLastName, strParameterGivenName, strParameterCriteriaMail);
+
     }
 }
