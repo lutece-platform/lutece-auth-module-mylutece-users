@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.mylutece.modules.users.service.search;
 
 import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
 import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserHome;
-import fr.paris.lutece.plugins.mylutece.modules.users.service.UsersPlugin;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -72,7 +71,7 @@ public class LocalUserIndexer implements SearchIndexer
     public static final String FIELD_GIVEN_NAME_TITLE = "givenName";
     public static final String FIELD_LAST_NAME_TITLE = "LastName";
     public static final String FIELD_EMAIL_TITLE = "email";
-    String _pluginName = UsersPlugin.PLUGIN_NAME;
+    String _pluginName = "mylutece-users";
 
     /**
      * Index all Local Users
@@ -200,7 +199,7 @@ public class LocalUserIndexer implements SearchIndexer
         org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document( );
         doc.add( new Field( SearchItem.FIELD_CONTENTS, getContentToIndex( localUser ), TextField.TYPE_NOT_STORED ) );
         doc.add( new Field( SearchItem.FIELD_UID, String.valueOf( localUser.getId( ) ), TextField.TYPE_STORED ) );
-        doc.add( new Field( SearchItem.FIELD_TYPE, UsersPlugin.PLUGIN_NAME, TextField.TYPE_STORED ) );
+        doc.add( new Field( SearchItem.FIELD_TYPE, _pluginName, TextField.TYPE_STORED ) );
         doc.add( new Field( SearchItem.FIELD_TITLE, getFullName( localUser ), TextField.TYPE_STORED ) );
         return doc;
     }
