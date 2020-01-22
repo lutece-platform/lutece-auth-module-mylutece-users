@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,24 +30,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * License 1.0
- */ 
+ */
 package fr.paris.lutece.plugins.mylutece.modules.users.business;
 
 import java.io.Serializable;
 
 /**
  * This is the business class for the object AttributeMapping
- */ 
+ */
 public class AttributeMapping implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
-    private int _nId;    
+    // Variables declarations
+    private int _nId;
     private String _strIdProviderAttribute;
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
     public int getId( )
@@ -57,15 +58,18 @@ public class AttributeMapping implements Serializable
 
     /**
      * Sets the Id
-     * @param nId The Id
-     */ 
+     * 
+     * @param nId
+     *            The Id
+     */
     public void setId( int nId )
     {
         _nId = nId;
     }
-    
+
     /**
      * Returns the IdProviderAttribute
+     * 
      * @return The IdProviderAttribute
      */
     public String getIdProviderAttribute( )
@@ -75,8 +79,10 @@ public class AttributeMapping implements Serializable
 
     /**
      * Sets the IdProviderAttribute
-     * @param strIdProviderAttribute The IdProviderAttribute
-     */ 
+     * 
+     * @param strIdProviderAttribute
+     *            The IdProviderAttribute
+     */
     public void setIdProviderAttribute( String strIdProviderAttribute )
     {
         _strIdProviderAttribute = strIdProviderAttribute;

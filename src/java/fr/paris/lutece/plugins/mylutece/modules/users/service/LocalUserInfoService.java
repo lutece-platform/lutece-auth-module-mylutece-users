@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -70,13 +70,14 @@ public final class LocalUserInfoService implements IUserInfosProvider
     }
 
     @Override
-    public List<LocalUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail, ReferenceList listProviderAttribute )
+    public List<LocalUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail,
+            ReferenceList listProviderAttribute )
     {
         return _userInfosProvider.findUsers( strParameterLastName, strParameterGivenName, strParameterCriteriaMail, listProviderAttribute );
     }
 
     @Override
-    public List<String> getAllAttributes() 
+    public List<String> getAllAttributes( )
     {
         return _userInfosProvider.getAllAttributes( );
     }

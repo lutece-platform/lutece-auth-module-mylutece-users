@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,8 @@ import java.util.List;
 /**
  * This class provides Data Access methods for AttributeMapping objects
  */
-public final class AttributeMappingDAO implements IAttributeMappingDAO {
+public final class AttributeMappingDAO implements IAttributeMappingDAO
+{
     // Constants
     private static final String SQL_QUERY_SELECT = "SELECT id_attribute_mapping, id_provider_attribute FROM mylutece_users_attribute_mapping WHERE id_attribute_mapping = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO mylutece_users_attribute_mapping ( id_attribute_mapping, id_provider_attribute ) VALUES ( ?, ? ) ";
@@ -56,14 +57,17 @@ public final class AttributeMappingDAO implements IAttributeMappingDAO {
      * {@inheritDoc }
      */
     @Override
-    public void insert(AttributeMapping attributeMapping, Plugin plugin) {
-        try (DAOUtil daoUtil = new DAOUtil(SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin)) {
+    public void insert( AttributeMapping attributeMapping, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        {
             int nIndex = 1;
-            daoUtil.setInt(nIndex++, attributeMapping.getId());
-            daoUtil.setString(nIndex++, attributeMapping.getIdProviderAttribute());
-            daoUtil.executeUpdate();
-            if (daoUtil.nextGeneratedKey()) {
-                attributeMapping.setId(daoUtil.getGeneratedKeyInt(1));
+            daoUtil.setInt( nIndex++, attributeMapping.getId( ) );
+            daoUtil.setString( nIndex++, attributeMapping.getIdProviderAttribute( ) );
+            daoUtil.executeUpdate( );
+            if ( daoUtil.nextGeneratedKey( ) )
+            {
+                attributeMapping.setId( daoUtil.getGeneratedKeyInt( 1 ) );
             }
         }
     }
@@ -72,16 +76,19 @@ public final class AttributeMappingDAO implements IAttributeMappingDAO {
      * {@inheritDoc }
      */
     @Override
-    public AttributeMapping load(int nKey, Plugin plugin) {
+    public AttributeMapping load( int nKey, Plugin plugin )
+    {
         AttributeMapping attributeMapping = null;
-        try (DAOUtil daoUtil = new DAOUtil(SQL_QUERY_SELECT, plugin)) {
-            daoUtil.setInt(1, nKey);
-            daoUtil.executeQuery();
-            if (daoUtil.next()) {
-                attributeMapping = new AttributeMapping();
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        {
+            daoUtil.setInt( 1, nKey );
+            daoUtil.executeQuery( );
+            if ( daoUtil.next( ) )
+            {
+                attributeMapping = new AttributeMapping( );
                 int nIndex = 1;
-                attributeMapping.setId(daoUtil.getInt(nIndex++));
-                attributeMapping.setIdProviderAttribute(daoUtil.getString(nIndex++));
+                attributeMapping.setId( daoUtil.getInt( nIndex++ ) );
+                attributeMapping.setIdProviderAttribute( daoUtil.getString( nIndex++ ) );
             }
         }
         return attributeMapping;
@@ -91,10 +98,12 @@ public final class AttributeMappingDAO implements IAttributeMappingDAO {
      * {@inheritDoc }
      */
     @Override
-    public void delete(int nKey, Plugin plugin) {
-        try (DAOUtil daoUtil = new DAOUtil(SQL_QUERY_DELETE, plugin)) {
-            daoUtil.setInt(1, nKey);
-            daoUtil.executeUpdate();
+    public void delete( int nKey, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nKey );
+            daoUtil.executeUpdate( );
         }
     }
 
@@ -102,13 +111,15 @@ public final class AttributeMappingDAO implements IAttributeMappingDAO {
      * {@inheritDoc }
      */
     @Override
-    public void store(AttributeMapping attributeMapping, Plugin plugin) {
-        try (DAOUtil daoUtil = new DAOUtil(SQL_QUERY_UPDATE, plugin)) {
+    public void store( AttributeMapping attributeMapping, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
             int nIndex = 1;
-            daoUtil.setInt(nIndex++, attributeMapping.getId());
-            daoUtil.setString(nIndex++, attributeMapping.getIdProviderAttribute());
-            daoUtil.setInt(nIndex, attributeMapping.getId());
-            daoUtil.executeUpdate();
+            daoUtil.setInt( nIndex++, attributeMapping.getId( ) );
+            daoUtil.setString( nIndex++, attributeMapping.getIdProviderAttribute( ) );
+            daoUtil.setInt( nIndex, attributeMapping.getId( ) );
+            daoUtil.executeUpdate( );
         }
     }
 
@@ -116,16 +127,19 @@ public final class AttributeMappingDAO implements IAttributeMappingDAO {
      * {@inheritDoc }
      */
     @Override
-    public List<AttributeMapping> selectAttributeMappingsList(Plugin plugin) {
-        List<AttributeMapping> attributeMappingList = new ArrayList<AttributeMapping>();
-        try (DAOUtil daoUtil = new DAOUtil(SQL_QUERY_SELECTALL, plugin)) {
-            daoUtil.executeQuery();
-            while (daoUtil.next()) {
-                AttributeMapping attributeMapping = new AttributeMapping();
+    public List<AttributeMapping> selectAttributeMappingsList( Plugin plugin )
+    {
+        List<AttributeMapping> attributeMappingList = new ArrayList<AttributeMapping>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        {
+            daoUtil.executeQuery( );
+            while ( daoUtil.next( ) )
+            {
+                AttributeMapping attributeMapping = new AttributeMapping( );
                 int nIndex = 1;
-                attributeMapping.setId(daoUtil.getInt(nIndex++));
-                attributeMapping.setIdProviderAttribute(daoUtil.getString(nIndex++));
-                attributeMappingList.add(attributeMapping);
+                attributeMapping.setId( daoUtil.getInt( nIndex++ ) );
+                attributeMapping.setIdProviderAttribute( daoUtil.getString( nIndex++ ) );
+                attributeMappingList.add( attributeMapping );
             }
         }
         return attributeMappingList;
@@ -135,12 +149,15 @@ public final class AttributeMappingDAO implements IAttributeMappingDAO {
      * {@inheritDoc }
      */
     @Override
-    public List<Integer> selectIdAttributeMappingsList(Plugin plugin) {
-        List<Integer> attributeMappingList = new ArrayList<Integer>();
-        try (DAOUtil daoUtil = new DAOUtil(SQL_QUERY_SELECTALL_ID, plugin)) {
-            daoUtil.executeQuery();
-            while (daoUtil.next()) {
-                attributeMappingList.add(daoUtil.getInt(1));
+    public List<Integer> selectIdAttributeMappingsList( Plugin plugin )
+    {
+        List<Integer> attributeMappingList = new ArrayList<Integer>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
+        {
+            daoUtil.executeQuery( );
+            while ( daoUtil.next( ) )
+            {
+                attributeMappingList.add( daoUtil.getInt( 1 ) );
             }
         }
         return attributeMappingList;
@@ -150,12 +167,15 @@ public final class AttributeMappingDAO implements IAttributeMappingDAO {
      * {@inheritDoc }
      */
     @Override
-    public ReferenceList selectAttributeMappingsReferenceList(Plugin plugin) {
-        ReferenceList attributeMappingList = new ReferenceList();
-        try (DAOUtil daoUtil = new DAOUtil(SQL_QUERY_SELECTALL, plugin)) {
-            daoUtil.executeQuery();
-            while (daoUtil.next()) {
-                attributeMappingList.addItem(daoUtil.getInt(1), daoUtil.getString(2));
+    public ReferenceList selectAttributeMappingsReferenceList( Plugin plugin )
+    {
+        ReferenceList attributeMappingList = new ReferenceList( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        {
+            daoUtil.executeQuery( );
+            while ( daoUtil.next( ) )
+            {
+                attributeMappingList.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
             }
         }
         return attributeMappingList;

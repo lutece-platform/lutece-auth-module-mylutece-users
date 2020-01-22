@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -71,11 +71,11 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
 /**
- * This class provides the user interface to manage LocalUser features ( manage,
- * create, modify, remove )
+ * This class provides the user interface to manage LocalUser features ( manage, create, modify, remove )
  */
-@Controller(controllerJsp = "ManageLocalUsers.jsp", controllerPath = "jsp/admin/plugins/mylutece/modules/users/", right = "MYLUTECE_USERS_MANAGEMENT")
-public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean {
+@Controller( controllerJsp = "ManageLocalUsers.jsp", controllerPath = "jsp/admin/plugins/mylutece/modules/users/", right = "MYLUTECE_USERS_MANAGEMENT" )
+public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
+{
     /**
      *
      */
@@ -131,13 +131,13 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean {
     private static final String INFO_LOCALUSER_REMOVED = "module.mylutece.users.info.localuser.removed";
     private static final String ERROR_LOCALUSER_PROVIDER_USER_ID_EXIST = "module.mylutece.users.error.localuser.providerUserIdExist";
     private static final String INFO_ATTRIBUTE_MAPPING_DONE = "module.mylutece.users.info.attribute_mapping.done";
-    //Prefixes
+    // Prefixes
     private static final String PREFIX_ATTRIBUTE_MAPPING = "attribute_mapping_";
     private static final String PREFIX_PROVIDER_ATTRIBUTE = "provider_attribute_";
     // Session variables
     private LocalUser _localuser;
     private Locale _locale;
-    private transient Plugin _myLutecePlugin = PluginService.getPlugin(MyLutecePlugin.PLUGIN_NAME);
+    private transient Plugin _myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
     private transient List<IAttribute> _listMyLuteceAttribute;
     private transient List<String> _listProviderAttribute;
     private transient List<AttributeMapping> _listAttributeMapping;
@@ -145,36 +145,39 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean {
     /**
      * Build the Manage View
      * 
-     * @param request The HTTP request
+     * @param request
+     *            The HTTP request
      * @return The page
      */
-    @View(value = VIEW_MANAGE_LOCALUSERS, defaultView = true)
-    public String getManageLocalUsers(HttpServletRequest request) {
+    @View( value = VIEW_MANAGE_LOCALUSERS, defaultView = true )
+    public String getManageLocalUsers( HttpServletRequest request )
+    {
         _localuser = null;
         _listMyLuteceAttribute = null;
-        List<LocalUser> listLocalUsers = LocalUserHome.getLocalUsersList();
-        Map<String, Object> model = getPaginatedListModel(request, MARK_LOCALUSER_LIST, listLocalUsers,
-                JSP_MANAGE_LOCALUSERS);
-        return getPage(PROPERTY_PAGE_TITLE_MANAGE_LOCALUSERS, TEMPLATE_MANAGE_LOCALUSERS, model);
+        List<LocalUser> listLocalUsers = LocalUserHome.getLocalUsersList( );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_LOCALUSER_LIST, listLocalUsers, JSP_MANAGE_LOCALUSERS );
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_LOCALUSERS, TEMPLATE_MANAGE_LOCALUSERS, model );
     }
 
     /**
      * Returns the form to create a localuser
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code of the localuser form
      */
-    @View(VIEW_MANAGE_ATTRIBUTE_MAPPING)
-    public String getManageAttributeMapping(HttpServletRequest request) {
-        _listMyLuteceAttribute = gettMyLuteceAttributeWithFields(AttributeHome.findAll(_locale, _myLutecePlugin));
-        _listProviderAttribute = LocalUserInfoService.getInstance().getAllAttributes();
+    @View( VIEW_MANAGE_ATTRIBUTE_MAPPING )
+    public String getManageAttributeMapping( HttpServletRequest request )
+    {
+        _listMyLuteceAttribute = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
+        _listProviderAttribute = LocalUserInfoService.getInstance( ).getAllAttributes( );
         _listAttributeMapping = AttributeMappingHome.getAttributeMappingsList( );
-        Map<String, Object> model = getModel();
-        model.put(MARK_LOCALUSER, _localuser);
-        model.put(MARK_ATTRIBUTE_MAPPING_LIST, _listAttributeMapping);
-        model.put(MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute);
-        model.put(MARK_PROVIDER_ATTRIBUTES_LIST, _listProviderAttribute);
-        return getPage(PROPERTY_PAGE_TITLE_MANAGE_ATTRIBUTE_MAPPING, TEMPLATE_MANAGE_ATTRIBUTE_MAPPING, model);
+        Map<String, Object> model = getModel( );
+        model.put( MARK_LOCALUSER, _localuser );
+        model.put( MARK_ATTRIBUTE_MAPPING_LIST, _listAttributeMapping );
+        model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute );
+        model.put( MARK_PROVIDER_ATTRIBUTES_LIST, _listProviderAttribute );
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_ATTRIBUTE_MAPPING, TEMPLATE_MANAGE_ATTRIBUTE_MAPPING, model );
     }
 
     /**
@@ -187,27 +190,35 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean {
     @Action( ACTION_UPDATE_ATTRIBUTE_MAPPING )
     public String doUpdateAttributeMapping( HttpServletRequest request )
     {
-        List<Integer> listMyLuteceAttributeId = new ArrayList<>();
+        List<Integer> listMyLuteceAttributeId = new ArrayList<>( );
         Enumeration<String> requestAttributes = request.getParameterNames( );
-        while (requestAttributes.hasMoreElements( ) ) {
-            String parameterName = requestAttributes.nextElement();
-            if( parameterName.startsWith( PREFIX_ATTRIBUTE_MAPPING ) && !request.getParameter( parameterName ).isEmpty( ) ) {
+        while ( requestAttributes.hasMoreElements( ) )
+        {
+            String parameterName = requestAttributes.nextElement( );
+            if ( parameterName.startsWith( PREFIX_ATTRIBUTE_MAPPING ) && !request.getParameter( parameterName ).isEmpty( ) )
+            {
                 String strMyLuteceAttributeId = parameterName.substring( parameterName.lastIndexOf( "_" ) + 1 );
-                AttributeMapping attributeMapping = new AttributeMapping();
+                AttributeMapping attributeMapping = new AttributeMapping( );
                 attributeMapping.setId( Integer.valueOf( strMyLuteceAttributeId ) );
                 attributeMapping.setIdProviderAttribute( request.getParameter( parameterName ) );
-                listMyLuteceAttributeId.add( attributeMapping.getId() );
-                if( AttributeMappingHome.findByPrimaryKey( attributeMapping.getId( ) ) != null ) {
+                listMyLuteceAttributeId.add( attributeMapping.getId( ) );
+                if ( AttributeMappingHome.findByPrimaryKey( attributeMapping.getId( ) ) != null )
+                {
                     AttributeMappingHome.update( attributeMapping );
-                } else {
+                }
+                else
+                {
                     AttributeMappingHome.create( attributeMapping );
                 }
             }
-        };
-        for(IAttribute myLuteceAttribute : _listMyLuteceAttribute) {
-            int nIdMyLuteceAttribute = myLuteceAttribute.getIdAttribute();
-            if(!listMyLuteceAttributeId.contains(nIdMyLuteceAttribute)) {
-                AttributeMappingHome.remove(nIdMyLuteceAttribute);
+        }
+        ;
+        for ( IAttribute myLuteceAttribute : _listMyLuteceAttribute )
+        {
+            int nIdMyLuteceAttribute = myLuteceAttribute.getIdAttribute( );
+            if ( !listMyLuteceAttributeId.contains( nIdMyLuteceAttribute ) )
+            {
+                AttributeMappingHome.remove( nIdMyLuteceAttribute );
             }
         }
         addInfo( INFO_ATTRIBUTE_MAPPING_DONE, getLocale( ) );
@@ -257,9 +268,12 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean {
         {
             return redirectView( request, VIEW_CREATE_LOCALUSER );
         }
-        if( LocalUserHome.findByConnectId( _localuser.getProviderUserId( ) ) == null ) {
+        if ( LocalUserHome.findByConnectId( _localuser.getProviderUserId( ) ) == null )
+        {
             LocalUserHome.create( _localuser );
-        } else {
+        }
+        else
+        {
             addError( ERROR_LOCALUSER_PROVIDER_USER_ID_EXIST, getLocale( ) );
             return redirectView( request, request.getParameter( PARAMETER_FROM_PROVIDER ) == null ? VIEW_CREATE_LOCALUSER : VIEW_IMPORT_LOCALUSER );
         }
@@ -267,6 +281,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean {
         addInfo( INFO_LOCALUSER_CREATED, getLocale( ) );
         return redirectView( request, VIEW_MANAGE_LOCALUSERS );
     }
+
     /**
      * Manages the removal form of a localuser whose identifier is in the http request
      *
@@ -372,12 +387,13 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean {
     @View( VIEW_IMPORT_LOCALUSER )
     public String getImportLocalUser( HttpServletRequest request )
     {
-        _listAttributeMapping = (_listAttributeMapping != null) ? _listAttributeMapping : AttributeMappingHome.getAttributeMappingsList( );
-        _listMyLuteceAttribute = (_listMyLuteceAttribute != null) ? _listMyLuteceAttribute : gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
+        _listAttributeMapping = ( _listAttributeMapping != null ) ? _listAttributeMapping : AttributeMappingHome.getAttributeMappingsList( );
+        _listMyLuteceAttribute = ( _listMyLuteceAttribute != null ) ? _listMyLuteceAttribute
+                : gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
         Map<String, Object> model = getModel( );
         setPageTitleProperty( PROPERTY_IMPORT_USERS_PAGETITLE );
-        model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute);
-        model.put( MARK_ATTRIBUTE_MAPPING_LIST, _listAttributeMapping);
+        model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute );
+        model.put( MARK_ATTRIBUTE_MAPPING_LIST, _listAttributeMapping );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
         return getAdminPage( template.getHtml( ) );
     }
@@ -395,28 +411,32 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean {
         String strParameterLastName = request.getParameter( PARAMETER_SEARCH_BY_LAST_NAME );
         String strParameterGivenName = request.getParameter( PARAMETER_SEARCH_BY_GIVEN_NAME );
         String strParameterEmail = request.getParameter( PARAMETER_SEARCH_BY_EMAIL );
-        ReferenceList listProviderAttribute = new ReferenceList();
+        ReferenceList listProviderAttribute = new ReferenceList( );
         List<IAttribute> listAttributes = AttributeHome.findAll( getLocale( ), _myLutecePlugin );
         Enumeration<String> requestAttributes = request.getParameterNames( );
-        while (requestAttributes.hasMoreElements( ) ) {
+        while ( requestAttributes.hasMoreElements( ) )
+        {
             String parameterName = requestAttributes.nextElement( );
-            if( parameterName.startsWith( PREFIX_PROVIDER_ATTRIBUTE ) ) {
+            if ( parameterName.startsWith( PREFIX_PROVIDER_ATTRIBUTE ) )
+            {
                 String strProviderAttributeId = parameterName.substring( parameterName.lastIndexOf( "_" ) + 1 );
                 ReferenceItem providerAttribute = new ReferenceItem( );
                 providerAttribute.setName( strProviderAttributeId );
                 providerAttribute.setCode( request.getParameter( parameterName ) );
                 listProviderAttribute.add( providerAttribute );
             }
-        };
+        }
+        ;
         for ( IAttribute attribute : listAttributes )
         {
             List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), _myLutecePlugin );
             attribute.setListAttributeFields( listAttributeFields );
         }
-        List<LocalUser> users = LocalUserInfoService.getInstance( ).findUsers( strParameterLastName, strParameterGivenName, strParameterEmail, listProviderAttribute );
+        List<LocalUser> users = LocalUserInfoService.getInstance( ).findUsers( strParameterLastName, strParameterGivenName, strParameterEmail,
+                listProviderAttribute );
         Map<String, Object> model = getModel( );
-        model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute);
-        model.put( MARK_ATTRIBUTE_MAPPING_LIST, _listAttributeMapping);
+        model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute );
+        model.put( MARK_ATTRIBUTE_MAPPING_LIST, _listAttributeMapping );
         model.put( MARK_LOCALUSER_LIST, users );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
         return getAdminPage( template.getHtml( ) );

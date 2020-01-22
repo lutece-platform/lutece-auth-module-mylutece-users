@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
- 
 package fr.paris.lutece.plugins.mylutece.modules.users.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -45,22 +44,31 @@ public interface IAttributeMappingDAO
 {
     /**
      * Insert a new record in the table.
-     * @param attributeMapping instance of the AttributeMapping object to insert
-     * @param plugin the Plugin
+     * 
+     * @param attributeMapping
+     *            instance of the AttributeMapping object to insert
+     * @param plugin
+     *            the Plugin
      */
     void insert( AttributeMapping attributeMapping, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param attributeMapping the reference of the AttributeMapping
-     * @param plugin the Plugin
+     * 
+     * @param attributeMapping
+     *            the reference of the AttributeMapping
+     * @param plugin
+     *            the Plugin
      */
     void store( AttributeMapping attributeMapping, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the AttributeMapping to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the AttributeMapping to delete
+     * @param plugin
+     *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
 
@@ -69,29 +77,38 @@ public interface IAttributeMappingDAO
 
     /**
      * Load the data from the table
-     * @param nKey The identifier of the attributeMapping
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the attributeMapping
+     * @param plugin
+     *            the Plugin
      * @return The instance of the attributeMapping
      */
     AttributeMapping load( int nKey, Plugin plugin );
 
     /**
      * Load the data of all the attributeMapping objects and returns them as a list
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The list which contains the data of all the attributeMapping objects
      */
     List<AttributeMapping> selectAttributeMappingsList( Plugin plugin );
-    
+
     /**
      * Load the id of all the attributeMapping objects and returns them as a list
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The list which contains the id of all the attributeMapping objects
      */
     List<Integer> selectIdAttributeMappingsList( Plugin plugin );
-    
+
     /**
      * Load the data of all the attributeMapping objects and returns them as a referenceList
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The referenceList which contains the data of all the attributeMapping objects
      */
     ReferenceList selectAttributeMappingsReferenceList( Plugin plugin );
