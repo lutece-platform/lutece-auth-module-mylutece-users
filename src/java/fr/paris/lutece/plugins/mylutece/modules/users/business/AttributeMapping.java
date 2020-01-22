@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,54 +30,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * License 1.0
- */
-package fr.paris.lutece.plugins.mylutece.modules.users.service;
+ */ 
+package fr.paris.lutece.plugins.mylutece.modules.users.business;
 
-import java.util.List;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.util.ReferenceList;
+import java.io.Serializable;
 
-public final class LocalUserInfoService implements IUserInfosProvider
+/**
+ * This is the business class for the object AttributeMapping
+ */ 
+public class AttributeMapping implements Serializable
 {
-    private static final String BEAN_NAME = "mylutece-localUserInfoProvider";
-    private static IUserInfosProvider _userInfosProvider;
+    private static final long serialVersionUID = 1L;
+
+    // Variables declarations 
+    private int _nId;    
+    private String _strIdProviderAttribute;
 
     /**
-     * Default constructor
+     * Returns the Id
+     * @return The Id
      */
-    private LocalUserInfoService( )
+    public int getId( )
     {
-    }
-
-    public void init( )
-    {
-        _userInfosProvider = (IUserInfosProvider) SpringContextService.getBean( BEAN_NAME );
+        return _nId;
     }
 
     /**
-     * Returns the instance of the singleton
-     *
-     * @return The instance of the singleton
+     * Sets the Id
+     * @param nId The Id
+     */ 
+    public void setId( int nId )
+    {
+        _nId = nId;
+    }
+    
+    /**
+     * Returns the IdProviderAttribute
+     * @return The IdProviderAttribute
      */
-    public static IUserInfosProvider getInstance( )
+    public String getIdProviderAttribute( )
     {
-        if ( _userInfosProvider == null )
-        {
-            _userInfosProvider = SpringContextService.getBean( BEAN_NAME );
-        }
-        return _userInfosProvider;
+        return _strIdProviderAttribute;
     }
 
-    @Override
-    public List<LocalUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail, ReferenceList listProviderAttribute )
+    /**
+     * Sets the IdProviderAttribute
+     * @param strIdProviderAttribute The IdProviderAttribute
+     */ 
+    public void setIdProviderAttribute( String strIdProviderAttribute )
     {
-        return _userInfosProvider.findUsers( strParameterLastName, strParameterGivenName, strParameterCriteriaMail, listProviderAttribute );
-    }
-
-    @Override
-    public List<String> getAllAttributes() 
-    {
-        return _userInfosProvider.getAllAttributes( );
+        _strIdProviderAttribute = strIdProviderAttribute;
     }
 }
