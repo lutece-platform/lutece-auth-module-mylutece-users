@@ -9,7 +9,7 @@
 		<@tform class="form-horizontal" method="post" name="modify_localuser"
 			action="jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp">
 			<@messages errors=errors />
-			<input type="hidden" id="id" name="id" value="${localuser.id}" />
+			<@input type="hidden" id="id" name="id" value="${localuser.id}" />
 			<@formGroup labelKey='#i18n{module.mylutece.users.modify_localuser.labelLogin}'
 				helpKey='#i18n{module.mylutece.users.modify_localuser.labelLogin.help}' mandatory=true>
 				<@input type='text' name='login' value='${localuser.login}' />
@@ -21,6 +21,10 @@
 			<@formGroup labelKey='#i18n{module.mylutece.users.modify_localuser.labelLastName}'
 				helpKey='#i18n{module.mylutece.users.modify_localuser.labelLastName.help}' mandatory=true>
 				<@input type='text' name='last_name' value='${localuser.lastName}' />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{module.mylutece.users.create_localuser.labelProviderUserId}'
+				helpKey='#i18n{module.mylutece.users.create_localuser.labelProviderUserId.help}' mandatory=true>
+				<@input type='text' name='provider_user_id' value='${localuser.providerUserId!}' />
 			</@formGroup>
 			<@formGroup labelKey='#i18n{module.mylutece.users.modify_localuser.labelEmail}'
 				helpKey='#i18n{module.mylutece.users.modify_localuser.labelEmail.help}'>

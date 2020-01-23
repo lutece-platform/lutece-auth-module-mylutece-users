@@ -4,6 +4,8 @@
             action='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp'>
             <@button type='submit' name='view_importLocalUser' buttonIcon='plus'
                 title='#i18n{module.mylutece.users.manage_localusers.buttonImport}' />
+                <@button type='submit' name='view_manageAttributeMapping' buttonIcon='cog'
+                title='#i18n{module.mylutece.users.manage_attribute_mapping.buttonManageAttributeMapping}' />
             <@button type='submit' name='view_createLocalUser' buttonIcon='plus'
                 title='#i18n{module.mylutece.users.manage_localusers.buttonAdd}' />
         </@tform>
@@ -14,7 +16,7 @@
         <div class="clearfix"></div>
         <@table>
             <tr>
-                <input type="hidden" id="id" name="id" />
+                <@input type="hidden" id="id" name="id" />
                 <th>#i18n{module.mylutece.users.manage_localusers.columnLogin}</th>
                 <th>#i18n{module.mylutece.users.manage_localusers.columnGivenName}</th>
                 <th>#i18n{module.mylutece.users.manage_localusers.columnLastName}</th>
@@ -25,7 +27,7 @@
             <@tableHeadBodySeparator />
             <#list localuser_list as localuser>
                 <tr>
-                    <input type="hidden" id="id" name="id" />
+                    <@input type="hidden" id="id" name="id" />
                     <td>
                         ${localuser.login}
                     </td>

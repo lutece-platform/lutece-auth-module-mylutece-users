@@ -21,3 +21,13 @@ id_localuser int default '0' NOT NULL,
 role_key varchar(255) default '' NOT NULL,
 PRIMARY KEY (id_role)
 );
+
+--
+-- Structure for table mylutece_users_attribute_mapping
+--
+DROP TABLE IF EXISTS mylutece_users_attribute_mapping;
+CREATE TABLE mylutece_users_attribute_mapping (
+id_mylutece_attribute int default '0' NOT NULL,
+id_provider_attribute long varchar NOT NULL,
+PRIMARY KEY (id_mylutece_attribute)
+);

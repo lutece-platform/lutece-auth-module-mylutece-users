@@ -1,23 +1,36 @@
 <@box>
-    <@boxHeader title='#i18n{module.mylutece.users.localUser_filter.import}' boxTools=true>
+    <@boxHeader title='#i18n{module.mylutece.users.import.pageTitle}' boxTools=true>
     </@boxHeader>
     <@boxBody>
         <@messages infos=infos />
+        <@messages errors=errors />
         <@row>
             <@columns sm=12 md=4 lg=3>
                 <@tform action='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp' method='post'>
-                    <@formGroup labelFor='search_lastName' labelKey='Nom' >
-                        <@input type='text' name='search_lastName' params='autofocus' placeHolder='Nom' />
+                    <@formGroup labelFor='search_lastName' labelKey='Nom'>
+                        <@input type='text' name='search_lastName' params='autofocus' />
                     </@formGroup>
-                    <@formGroup labelFor='search_givenName' labelKey='Prenom' >
-                        <@input type='text' name='search_givenName' params='autofocus' placeHolder='Prenom' />
+                    <@formGroup labelFor='search_givenName' labelKey='Prenom'>
+                        <@input type='text' name='search_givenName' params='autofocus' />
                     </@formGroup>
-                    <@formGroup labelFor='search_email' labelKey='Email' >
-                        <@input type='text' name='search_email' params='autofocus' placeHolder='Email' />
+                    <@formGroup labelFor='search_email' labelKey='Email'>
+                        <@input type='text' name='search_email' params='autofocus' />
                     </@formGroup>
+                    <#if attribute_list??>
+                        <#list attribute_list as mylutece_attribute>
+                            <#assign provider_attribute_id=getSelected( mylutece_attribute.idAttribute )>
+                                <#if provider_attribute_id?has_content>
+                                    <@formGroup labelFor='provider_attribute_${provider_attribute_id}'
+                                        labelKey='${mylutece_attribute.title}'>
+                                        <@input type='text' name='provider_attribute_${provider_attribute_id}'
+                                            params='autofocus' />
+                                    </@formGroup>
+                                </#if>
+                        </#list>
+                    </#if>
                     <@formGroup>
                         <@button type='submit' name='action_searchUsersFromProvider' buttonIcon='search'
-                            title='#i18n{module.mylutece.users.localUser_filter.buttonSearch}' size='' />
+                            title='#i18n{module.mylutece.users.buttonSearch}' size='' />
                     </@formGroup>
                 </@tform>
             </@columns>
@@ -40,18 +53,32 @@
                                     <td>${localUser.givenName}</td>
                                     <td>${localUser.email}</td>
                                     <td class="text-right">
-                                        <form class="form-horizontal" method="post" name="create_localUser"
+                                        <@tform method="post"
                                             action="jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp">
-                                            <input type="hidden" name="plugin_name" value="${plugin_name!''}" />
-                                            <input type="hidden" name="login" value="${localUser.login}" />
-                                            <input type="hidden" name="email" value="${localUser.email}" />
-                                            <input type="hidden" name="last_name" value="${localUser.lastName}" />
-                                            <input type="hidden" name="given_name" value="${localUser.givenName}" />
-                                            <input type="hidden" name="provider_user_id" value="${localUser.providerUserId}" />
+                                            <@input type="hidden" name="plugin_name" value="${plugin_name!''}" />
+                                            <@input type="hidden" name="login" value="${localUser.login}" />
+                                            <@input type="hidden" name="email" value="${localUser.email}" />
+                                            <@input type="hidden" name="last_name" value="${localUser.lastName}" />
+                                            <@input type="hidden" name="given_name" value="${localUser.givenName}" />
+                                            <@input type="hidden" name="provider_user_id"
+                                                value="${localUser.providerUserId}" />
+                                            <@input type="hidden" name="import_from_provider" value="true" />
+                                            <#if localUser.attributes??>
+                                                <#list localUser.attributes as attribute>
+                                                    <#if attribute.code??>
+                                                        <#assign mylutece_attribute_id=getIdMyLuteceAttribute(
+                                                            attribute.name )>
+                                                            <@input type="hidden"
+                                                                name="attribute_${mylutece_attribute_id}"
+                                                                value="${attribute.code}" />
+                                                    </#if>
 
+                                                </#list>
+                                            </#if>
                                             <@button type='submit'
                                                 title='#i18n{module.mylutece.users.localUser_filter.shortImport}'
                                                 buttonIcon='upload' size='' name='action_createLocalUser' />
+                                        </@tform>
                                     </td>
                                 </tr>
                             </#list>
@@ -62,3 +89,30 @@
         </@row>
     </@boxBody>
 </@box>
+
+
+<#-- -- Get the current provider attribute id mapped with the mylutece attribute -- @param idMyLuteceAttribute --
+    @return the provider attribute id -->
+    <#function getSelected idMyLuteceAttribute>
+        <#if attribute_mapping_list?has_content>
+            <#list attribute_mapping_list as attribute_mapping>
+                <#if attribute_mapping.id=idMyLuteceAttribute>
+                    <#return attribute_mapping.idProviderAttribute>
+                </#if>
+            </#list>
+        </#if>
+        <#return "">
+    </#function>
+
+    <#-- -- Get the current mylutece attribute id mapped with the provider attribute id -- @param idProviderAttribute --
+        @return the provider attribute id -->
+        <#function getIdMyLuteceAttribute idProviderAttribute>
+            <#if attribute_mapping_list?has_content>
+                <#list attribute_mapping_list as attribute_mapping>
+                    <#if attribute_mapping.idProviderAttribute=idProviderAttribute>
+                        <#return attribute_mapping.id>
+                    </#if>
+                </#list>
+            </#if>
+            <#return "">
+        </#function>

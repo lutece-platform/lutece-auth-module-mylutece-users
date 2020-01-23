@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,9 @@ package fr.paris.lutece.plugins.mylutece.modules.users.business;
 
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import fr.paris.lutece.util.ReferenceList;
+
 import org.hibernate.validator.constraints.Email;
 import java.io.Serializable;
 
@@ -64,6 +67,7 @@ public class LocalUser implements Serializable
     @Size( max = 255, message = "#i18n{module.mylutece.users.validation.localuser.Email.size}" )
     private String _strEmail;
     private String _strproviderUserId;
+    private ReferenceList _strAttributes;
 
     /**
      * Returns the Id
@@ -189,5 +193,26 @@ public class LocalUser implements Serializable
     public void setEmail( String strEmail )
     {
         _strEmail = strEmail;
+    }
+
+    /**
+     * Returns the Attributes
+     *
+     * @return The Attributes
+     */
+    public ReferenceList getAttributes( )
+    {
+        return _strAttributes;
+    }
+
+    /**
+     * Sets the Attributes
+     *
+     * @param strAttributes
+     *            The Attributes
+     */
+    public void setAttributes( ReferenceList strAttributes )
+    {
+        _strAttributes = strAttributes;
     }
 }

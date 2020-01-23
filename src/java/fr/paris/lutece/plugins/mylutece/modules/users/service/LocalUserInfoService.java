@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.mylutece.modules.users.service;
 import java.util.List;
 import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.util.ReferenceList;
 
 public final class LocalUserInfoService implements IUserInfosProvider
 {
@@ -68,17 +69,16 @@ public final class LocalUserInfoService implements IUserInfosProvider
         return _userInfosProvider;
     }
 
-    /**
-     * Returns the users list
-     *
-     * @param strParameterLastName
-     *            Last Name
-     * @return the users list
-     */
     @Override
-    public List<LocalUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail )
+    public List<LocalUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail,
+            ReferenceList listProviderAttribute )
     {
-        return _userInfosProvider.findUsers( strParameterLastName, strParameterGivenName, strParameterCriteriaMail);
+        return _userInfosProvider.findUsers( strParameterLastName, strParameterGivenName, strParameterCriteriaMail, listProviderAttribute );
+    }
 
+    @Override
+    public List<String> getAllAttributes( )
+    {
+        return _userInfosProvider.getAllAttributes( );
     }
 }

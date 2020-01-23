@@ -38,89 +38,78 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
 
 /**
- * ILocalUserRoleDAO Interface
+ * IAttributeMappingDAO Interface
  */
-public interface ILocalUserRoleDAO
+public interface IAttributeMappingDAO
 {
     /**
      * Insert a new record in the table.
      * 
-     * @param localUserRole
-     *            instance of the LocalUserRole object to insert
+     * @param attributeMapping
+     *            instance of the AttributeMapping object to insert
      * @param plugin
      *            the Plugin
      */
-    void insert( LocalUserRole localUserRole, Plugin plugin );
+    void insert( AttributeMapping attributeMapping, Plugin plugin );
 
     /**
      * Update the record in the table
      * 
-     * @param localUserRole
-     *            the reference of the LocalUserRole
+     * @param attributeMapping
+     *            the reference of the AttributeMapping
      * @param plugin
      *            the Plugin
      */
-    void store( LocalUserRole localUserRole, Plugin plugin );
+    void store( AttributeMapping attributeMapping, Plugin plugin );
 
     /**
      * Delete a record from the table
      * 
      * @param nKey
-     *            The identifier of the LocalUserRole to delete
+     *            The identifier of the AttributeMapping to delete
      * @param plugin
      *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
 
-    // /////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Load the data from the table
      * 
      * @param nKey
-     *            The identifier of the localUserRole
+     *            The identifier of the attributeMapping
      * @param plugin
      *            the Plugin
-     * @return The instance of the localUserRole
+     * @return The instance of the attributeMapping
      */
-    LocalUserRole load( int nKey, Plugin plugin );
+    AttributeMapping load( int nKey, Plugin plugin );
 
     /**
-     * Load the data of all the localUserRole objects and returns them as a list
+     * Load the data of all the attributeMapping objects and returns them as a list
      * 
      * @param plugin
      *            the Plugin
-     * @return The list which contains the data of all the localUserRole objects
+     * @return The list which contains the data of all the attributeMapping objects
      */
-    List<LocalUserRole> selectLocalUserRolesList( Plugin plugin );
+    List<AttributeMapping> selectAttributeMappingsList( Plugin plugin );
 
     /**
-     * Load the id of all the localUserRole objects and returns them as a list
+     * Load the id of all the attributeMapping objects and returns them as a list
      * 
      * @param plugin
      *            the Plugin
-     * @return The list which contains the id of all the localUserRole objects
+     * @return The list which contains the id of all the attributeMapping objects
      */
-    List<Integer> selectIdLocalUserRolesList( Plugin plugin );
+    List<Integer> selectIdAttributeMappingsList( Plugin plugin );
 
     /**
-     * Load the id of all the localUserRole objects and returns them as a list
+     * Load the data of all the attributeMapping objects and returns them as a referenceList
      * 
      * @param plugin
      *            the Plugin
-     * @param nIdLocalUser
-     *            the LocalUserId
-     * @return The list which contains the id of all the localUserRole objects
+     * @return The referenceList which contains the data of all the attributeMapping objects
      */
-    List<LocalUserRole> selectLocalUserRolesListByUserId( int nIdLocalUser, Plugin plugin );
-
-    /**
-     * Load the data of all the localUserRole objects and returns them as a referenceList
-     * 
-     * @param plugin
-     *            the Plugin
-     * @return The referenceList which contains the data of all the localUserRole objects
-     */
-    ReferenceList selectLocalUserRolesReferenceList( Plugin plugin );
+    ReferenceList selectAttributeMappingsReferenceList( Plugin plugin );
 }

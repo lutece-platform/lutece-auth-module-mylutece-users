@@ -31,28 +31,60 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.mylutece.modules.users.rs;
+package fr.paris.lutece.plugins.mylutece.modules.users.business;
+
+import java.io.Serializable;
 
 /**
- * Rest Constants
+ * This is the business class for the object AttributeMapping
  */
-public final class Constants
+public class AttributeMapping implements Serializable
 {
-    public static final String API_PATH = "mylutece/users/api";
-    public static final String VERSION_PATH = "/v{" + Constants.VERSION + "}";
-    public static final String ID_PATH = "/{" + Constants.ID + "}";
-    public static final String VERSION = "version";
-    public static final String ID = "id";
+    private static final long serialVersionUID = 1L;
 
-    public static final String EMPTY_OBJECT = "{}";
-    public static final String ERROR_NOT_FOUND_VERSION = "Version not found";
-    public static final String ERROR_NOT_FOUND_RESOURCE = "Resource not found";
-    public static final String ERROR_BAD_REQUEST_EMPTY_PARAMETER = "Empty parameter";
+    // Variables declarations
+    private int _nId;
+    private String _strIdProviderAttribute;
 
     /**
-     * Private constructor
+     * Returns the Id
+     * 
+     * @return The Id
      */
-    private Constants( )
+    public int getId( )
     {
+        return _nId;
+    }
+
+    /**
+     * Sets the Id
+     * 
+     * @param nId
+     *            The Id
+     */
+    public void setId( int nId )
+    {
+        _nId = nId;
+    }
+
+    /**
+     * Returns the IdProviderAttribute
+     * 
+     * @return The IdProviderAttribute
+     */
+    public String getIdProviderAttribute( )
+    {
+        return _strIdProviderAttribute;
+    }
+
+    /**
+     * Sets the IdProviderAttribute
+     * 
+     * @param strIdProviderAttribute
+     *            The IdProviderAttribute
+     */
+    public void setIdProviderAttribute( String strIdProviderAttribute )
+    {
+        _strIdProviderAttribute = strIdProviderAttribute;
     }
 }
