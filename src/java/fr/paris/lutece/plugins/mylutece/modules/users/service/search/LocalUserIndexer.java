@@ -44,6 +44,8 @@ import fr.paris.lutece.portal.service.search.SearchIndexer;
 import fr.paris.lutece.portal.service.search.SearchItem;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.ReferenceItem;
+import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -201,6 +203,16 @@ public class LocalUserIndexer implements SearchIndexer
         doc.add( new Field( SearchItem.FIELD_UID, String.valueOf( localUser.getId( ) ), TextField.TYPE_STORED ) );
         doc.add( new Field( SearchItem.FIELD_TYPE, _pluginName, TextField.TYPE_STORED ) );
         doc.add( new Field( SearchItem.FIELD_TITLE, getFullName( localUser ), TextField.TYPE_STORED ) );
+        ReferenceList listAttribute = localUser.getAttributes( );
+
+        if ( listAttribute != null )
+        {
+            for ( ReferenceItem attribute : listAttribute )
+            {
+                doc.add( new Field( "attribute_" + attribute.getName( ), attribute.getCode( ), TextField.TYPE_STORED ) );
+            }
+        }
+
         return doc;
     }
 

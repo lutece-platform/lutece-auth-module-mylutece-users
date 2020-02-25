@@ -262,7 +262,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
             _listMyLuteceAttribute = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
         }
         populate( _localuser, request, request.getLocale( ) );
-        setMyLuteceAttributeValue( request );
+        setMyLuteceAttributeValue( request, _localuser );
         // Check constraints
         if ( !validateBean( _localuser, VALIDATION_ATTRIBUTES_PREFIX ) || !validateMyLuteceAttribute( request ) )
         {
@@ -366,7 +366,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     public String doModifyLocalUser( HttpServletRequest request )
     {
         populate( _localuser, request, request.getLocale( ) );
-        setMyLuteceAttributeValue( request );
+        setMyLuteceAttributeValue( request, _localuser );
         if ( !validateBean( _localuser, VALIDATION_ATTRIBUTES_PREFIX ) || !validateMyLuteceAttribute( request ) )
         {
             return redirect( request, VIEW_MODIFY_LOCALUSER, PARAMETER_ID_LOCALUSER, _localuser.getId( ) );
@@ -491,24 +491,31 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     }
 
     /**
-     * Fill mylutece attribute from user request
+     * Fill mylutece attribute in request & localUser
      *
      * @param request
+     *            The Http request
+     * @param localUser
      *            The Http request
      * @return returns a list of mylutece attribute
      * 
      */
-    private void setMyLuteceAttributeValue( HttpServletRequest request )
+    private void setMyLuteceAttributeValue( HttpServletRequest request, LocalUser localUser )
     {
+        ReferenceList userAttributes = new ReferenceList( );
         for ( IAttribute attribute : _listMyLuteceAttribute )
         {
             String strAttributeName = PARAMETER_MYLUTECE_ATTRIBUTE_NAME + "_" + attribute.getIdAttribute( );
             String strAttributeValue = request.getParameter( strAttributeName );
             if ( strAttributeValue != null )
             {
+                ReferenceItem userAttribute = new ReferenceItem( );
+                userAttribute.setCode( strAttributeValue );
+                userAttribute.setName( String.valueOf( attribute.getIdAttribute( ) ) );
                 attribute.getListAttributeFields( ).get( 0 ).setValue( strAttributeValue );
             }
         }
+        localUser.setAttributes( userAttributes );
     }
 
 }

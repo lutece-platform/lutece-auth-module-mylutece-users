@@ -33,19 +33,19 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.users.rs;
 
+import fr.paris.lutece.plugins.mylutece.modules.users.service.search.LocalUserSearchEngine;
 import fr.paris.lutece.plugins.mylutece.modules.users.web.LocalUserJspBean;
 import fr.paris.lutece.plugins.rest.service.RestConstants;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
-import fr.paris.lutece.portal.service.search.SearchEngine;
-import fr.paris.lutece.portal.service.search.SearchResult;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.json.ErrorJsonResponse;
 import fr.paris.lutece.util.json.JsonResponse;
 import fr.paris.lutece.util.json.JsonUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import java.util.List;
+import java.util.Map;
+
 import javax.ws.rs.GET;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
@@ -99,8 +99,7 @@ public class LocalUserSearchRestService
      */
     private Response getSearchResultList( String strQuery, HttpServletRequest request )
     {
-        SearchEngine engine = SpringContextService.getBean( BEAN_SEARCH_ENGINE );
-        List<SearchResult> listResults = engine.getSearchResults( strQuery, request );
+        List<Map<String, String>> listResults = LocalUserSearchEngine.getSearchResults( strQuery, request );
         if ( listResults == null || listResults.isEmpty( ) )
         {
             return Response.status( Response.Status.NO_CONTENT ).entity( JsonUtil.buildJsonResponse( new JsonResponse( Constants.EMPTY_OBJECT ) ) ).build( );

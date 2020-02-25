@@ -45,7 +45,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
  */
 public final class LocalUserSearchService
 {
-    public static final String BEAN_NAME = "mylutece-users.localUserRoleService";
     private static final String BEAN_SEARCH_ENGINE = "mylutece-users.localUserSearchEngine";
 
     private LocalUserSearchService( )

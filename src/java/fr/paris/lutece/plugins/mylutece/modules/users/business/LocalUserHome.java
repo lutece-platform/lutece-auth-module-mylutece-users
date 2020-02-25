@@ -38,12 +38,19 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
+import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeField;
+import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeFieldHome;
+import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeHome;
+import fr.paris.lutece.plugins.mylutece.business.attribute.IAttribute;
+import fr.paris.lutece.plugins.mylutece.business.attribute.MyLuteceUserField;
+import fr.paris.lutece.plugins.mylutece.business.attribute.MyLuteceUserFieldHome;
 import fr.paris.lutece.plugins.mylutece.modules.users.service.search.LocalUserIndexer;
-import fr.paris.lutece.plugins.mylutece.modules.users.utils.LocalUserIndexerUtils;
+import fr.paris.lutece.plugins.mylutece.service.MyLutecePlugin;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
-
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This class provides instances management methods (create, find, ...) for LocalUser objects
@@ -53,6 +60,8 @@ public final class LocalUserHome
     // Static variable pointed at the DAO instance
     private static ILocalUserDAO _dao = SpringContextService.getBean( "mylutece-users.localUserDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "mylutece-users" );
+    private static Locale _locale;
+    private static Plugin _myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -71,13 +80,9 @@ public final class LocalUserHome
     public static LocalUser create( LocalUser localUser )
     {
         _dao.insert( localUser, _plugin );
-
         String strIdLocalUser = Integer.toString( localUser.getId( ) );
         IndexationService.addIndexerAction( strIdLocalUser, AppPropertiesService.getProperty( LocalUserIndexer.PROPERTY_INDEXER_NAME ),
                 IndexerAction.TASK_CREATE );
-
-        LocalUserIndexerUtils.addIndexerAction( strIdLocalUser, IndexerAction.TASK_CREATE );
-
         return localUser;
     }
 
@@ -91,7 +96,9 @@ public final class LocalUserHome
     public static LocalUser update( LocalUser localUser )
     {
         _dao.store( localUser, _plugin );
-
+        String strIdLocalUser = Integer.toString( localUser.getId( ) );
+        IndexationService.addIndexerAction( strIdLocalUser, AppPropertiesService.getProperty( LocalUserIndexer.PROPERTY_INDEXER_NAME ),
+                IndexerAction.TASK_MODIFY );
         return localUser;
     }
 
@@ -104,6 +111,8 @@ public final class LocalUserHome
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
+        IndexationService.addIndexerAction( String.valueOf( nKey ), AppPropertiesService.getProperty( LocalUserIndexer.PROPERTY_INDEXER_NAME ),
+                IndexerAction.TASK_DELETE );
     }
 
     /**
@@ -115,7 +124,9 @@ public final class LocalUserHome
      */
     public static LocalUser findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin );
+        LocalUser localUser = _dao.load( nKey, _plugin );
+        fillAttributes( localUser );
+        return localUser;
     }
 
     /**
@@ -137,7 +148,14 @@ public final class LocalUserHome
      */
     public static List<LocalUser> getLocalUsersList( )
     {
-        return _dao.selectLocalUsersList( _plugin );
+
+        List<LocalUser> listLocalUser = _dao.selectLocalUsersList( _plugin );
+        for ( LocalUser localUser : listLocalUser )
+        {
+            fillAttributes( localUser );
+        }
+
+        return listLocalUser;
     }
 
     /**
@@ -159,4 +177,45 @@ public final class LocalUserHome
     {
         return _dao.selectLocalUsersReferenceList( _plugin );
     }
+
+    /**
+     * Fill Localuser with attributes
+     * 
+     * @param localUser
+     *            The localUser
+     * @return the referenceList which contains the data of all the localUser objects
+     */
+    private static void fillAttributes( LocalUser localUser )
+    {
+        List<IAttribute> listMyLuteceAttribute = AttributeHome.findAll( _locale, _myLutecePlugin );
+        ReferenceList listLocalUserAttribute = new ReferenceList( );
+
+        for ( IAttribute attribute : listMyLuteceAttribute )
+        {
+            List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), _myLutecePlugin );
+            attribute.setListAttributeFields( listAttributeFields );
+        }
+
+        for ( IAttribute attribute : listMyLuteceAttribute )
+        {
+            List<MyLuteceUserField> listUserFields = MyLuteceUserFieldHome.selectUserFieldsByIdUserIdAttribute( localUser.getId( ), attribute.getIdAttribute( ),
+                    _myLutecePlugin );
+            for ( AttributeField attributeField : attribute.getListAttributeFields( ) )
+            {
+                MyLuteceUserField myLuteceUserField = listUserFields.stream( ).limit( 1 )
+                        .filter( userField -> userField.getAttribute( ).getIdAttribute( ) == attributeField.getAttribute( ).getIdAttribute( ) ).findAny( )
+                        .orElse( null );
+                if ( myLuteceUserField != null )
+                {
+                    ReferenceItem localUserAttribute = new ReferenceItem( );
+                    localUserAttribute.setCode( myLuteceUserField.getValue( ) );
+                    localUserAttribute.setName( String.valueOf( attribute.getIdAttribute( ) ) );
+                    listLocalUserAttribute.add( localUserAttribute );
+                }
+            }
+        }
+
+        localUser.setAttributes( listLocalUserAttribute );
+    }
+
 }

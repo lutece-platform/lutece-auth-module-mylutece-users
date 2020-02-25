@@ -35,16 +35,18 @@ package fr.paris.lutece.plugins.mylutece.modules.users.service.search;
 
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
-import fr.paris.lutece.portal.service.search.SearchEngine;
 import fr.paris.lutece.portal.service.search.SearchItem;
-import fr.paris.lutece.portal.service.search.SearchResult;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
@@ -58,7 +60,7 @@ import org.apache.lucene.store.Directory;
  * LocalUserSearchEngine
  * 
  */
-public class LocalUserSearchEngine implements SearchEngine
+public class LocalUserSearchEngine
 {
     /**
      * Return search results
@@ -69,9 +71,9 @@ public class LocalUserSearchEngine implements SearchEngine
      *            The HTTP request
      * @return Results as a collection of SearchResult
      */
-    public List<SearchResult> getSearchResults( String strKeywords, HttpServletRequest request )
+    public static List<Map<String, String>> getSearchResults( String strKeywords, HttpServletRequest request )
     {
-        List<SearchItem> listResults = new ArrayList<>( );
+        List<Map<String, String>> listResults = new ArrayList<>( );
         IndexSearcher searcher = null;
         try ( Directory directory = IndexationService.getDirectoryIndex( ) ; IndexReader ir = DirectoryReader.open( directory ) )
         {
@@ -90,35 +92,21 @@ public class LocalUserSearchEngine implements SearchEngine
             {
                 int docId = hits [i].doc;
                 Document document = searcher.doc( docId );
-                SearchItem searchItem = new SearchItem( document );
-                listResults.add( searchItem );
+                Map<String, String> listUserResults = new HashMap<>( );
+                for ( IndexableField field : document.getFields( ) )
+                {
+
+                    listUserResults.put( field.name( ), field.stringValue( ) );
+
+                }
+                listResults.add( listUserResults );
             }
         }
         catch( Exception e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
-        return convertList( listResults );
+        return listResults;
     }
 
-    /**
-     * Convert a list of Lucene items into a list of generic search items
-     * 
-     * @param listSource
-     *            The list of Lucene items
-     * @return A list of generic search items
-     */
-    private List<SearchResult> convertList( List<SearchItem> listSource )
-    {
-        List<SearchResult> listSearchResult = new ArrayList<>( );
-        for ( SearchItem item : listSource )
-        {
-            SearchResult result = new SearchResult( );
-            result.setId( item.getId( ) );
-            result.setTitle( item.getTitle( ) );
-            result.setType( item.getType( ) );
-            listSearchResult.add( result );
-        }
-        return listSearchResult;
-    }
 }
