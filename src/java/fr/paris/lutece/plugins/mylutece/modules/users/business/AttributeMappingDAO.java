@@ -46,12 +46,12 @@ import java.util.List;
 public final class AttributeMappingDAO implements IAttributeMappingDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECT = "SELECT id_attribute_mapping, id_provider_attribute FROM mylutece_users_attribute_mapping WHERE id_attribute_mapping = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO mylutece_users_attribute_mapping ( id_attribute_mapping, id_provider_attribute ) VALUES ( ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM mylutece_users_attribute_mapping WHERE id_attribute_mapping = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE mylutece_users_attribute_mapping SET id_attribute_mapping = ?, id_provider_attribute = ? WHERE id_attribute_mapping = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_attribute_mapping, id_provider_attribute FROM mylutece_users_attribute_mapping";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_attribute_mapping FROM mylutece_users_attribute_mapping";
+    private static final String SQL_QUERY_SELECT = "SELECT id_mylutece_attribute, id_provider_attribute FROM mylutece_users_attribute_mapping WHERE id_mylutece_attribute = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO mylutece_users_attribute_mapping ( id_mylutece_attribute, id_provider_attribute ) VALUES ( ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM mylutece_users_attribute_mapping WHERE id_mylutece_attribute = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE mylutece_users_attribute_mapping SET id_mylutece_attribute = ?, id_provider_attribute = ? WHERE id_mylutece_attribute = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_mylutece_attribute, id_provider_attribute FROM mylutece_users_attribute_mapping";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_mylutece_attribute FROM mylutece_users_attribute_mapping";
 
     /**
      * {@inheritDoc }
