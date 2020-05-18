@@ -80,10 +80,12 @@ public final class LocalUserRoleProvider implements IMyLuteceExternalRolesProvid
     {
         Collection<String> providesRoles = new ArrayList<String>( );
         LocalUser localUser = LocalUserHome.findByConnectId( user.getName( ) );
-        List<LocalUserRole> localUserRoleList = LocalUserRoleHome.getLocalUserRolesListByUserId( localUser.getId( ) );
-        for ( LocalUserRole localUserRole : localUserRoleList )
-        {
-            providesRoles.add( localUserRole.getRoleKey( ) );
+        if( localUser != null ) {
+            List<LocalUserRole> localUserRoleList = LocalUserRoleHome.getLocalUserRolesListByUserId( localUser.getId( ) );
+            for ( LocalUserRole localUserRole : localUserRoleList )
+            {
+                providesRoles.add( localUserRole.getRoleKey( ) );
+            }
         }
         return providesRoles;
     }
