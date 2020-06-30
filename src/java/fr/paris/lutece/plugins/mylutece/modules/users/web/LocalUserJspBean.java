@@ -154,7 +154,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     {
         _localuser = null;
         _listMyLuteceAttribute = null;
-        List<LocalUser> listLocalUsers = LocalUserHome.getLocalUsersList( );
+        List<LocalUser> listLocalUsers = LocalUserHome.getLocalUsersListWithoutAttribute( );
         Map<String, Object> model = getPaginatedListModel( request, MARK_LOCALUSER_LIST, listLocalUsers, JSP_MANAGE_LOCALUSERS );
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_LOCALUSERS, TEMPLATE_MANAGE_LOCALUSERS, model );
     }

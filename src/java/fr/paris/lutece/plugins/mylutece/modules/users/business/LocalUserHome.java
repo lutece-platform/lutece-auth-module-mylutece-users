@@ -142,6 +142,18 @@ public final class LocalUserHome
     }
 
     /**
+     * Load the data of all the localUser without attributes and returns them as a list
+     * 
+     * @return the list which contains the data of all the localUser objects
+     */
+    public static List<LocalUser> getLocalUsersListWithoutAttribute( )
+    {
+
+        List<LocalUser> listLocalUser = _dao.selectLocalUsersList( _plugin );
+        return listLocalUser;
+    }
+
+    /**
      * Load the data of all the localUser objects and returns them as a list
      * 
      * @return the list which contains the data of all the localUser objects
