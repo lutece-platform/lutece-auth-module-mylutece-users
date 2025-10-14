@@ -33,12 +33,13 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.users.business;
 
+import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
 import fr.paris.lutece.test.LuteceTestCase;
 
 /**
- * This is the business class test for the object LocalUser
+ * This is the business class test for the object MyLuteceSearchUser
  */
-public class LocalUserBusinessTest extends LuteceTestCase
+public class MyLuteceSearchUserBusinessTest extends LuteceTestCase
 {
     private static final String LOGIN1 = "Login1";
     private static final String LOGIN2 = "Login2";
@@ -50,44 +51,44 @@ public class LocalUserBusinessTest extends LuteceTestCase
     private static final String EMAIL2 = "Email2";
 
     /**
-     * test LocalUser
+     * test MyLuteceSearchUser
      */
     public void testBusiness( )
     {
         // Initialize an object
-        LocalUser localUser = new LocalUser( );
-        localUser.setLogin( LOGIN1 );
-        localUser.setGivenName( GIVENNAME1 );
-        localUser.setLastName( LASTNAME1 );
-        localUser.setEmail( EMAIL1 );
+        MyLuteceSearchUser myLuteceSearchUser = new MyLuteceSearchUser( );
+        myLuteceSearchUser.setLogin( LOGIN1 );
+        myLuteceSearchUser.setGivenName( GIVENNAME1 );
+        myLuteceSearchUser.setLastName( LASTNAME1 );
+        myLuteceSearchUser.setEmail( EMAIL1 );
 
         // Create test
-        LocalUserHome.create( localUser );
-        LocalUser localUserStored = LocalUserHome.findByPrimaryKey( localUser.getId( ) );
-        assertEquals( localUserStored.getLogin( ), localUser.getLogin( ) );
-        assertEquals( localUserStored.getGivenName( ), localUser.getGivenName( ) );
-        assertEquals( localUserStored.getLastName( ), localUser.getLastName( ) );
-        assertEquals( localUserStored.getEmail( ), localUser.getEmail( ) );
+        MyLuteceSearchUserHome.create( myLuteceSearchUser );
+        MyLuteceSearchUser myLuteceSearchUserStored = MyLuteceSearchUserHome.findByPrimaryKey( myLuteceSearchUser.getId( ) );
+        assertEquals( myLuteceSearchUserStored.getLogin( ), myLuteceSearchUser.getLogin( ) );
+        assertEquals( myLuteceSearchUserStored.getGivenName( ), myLuteceSearchUser.getGivenName( ) );
+        assertEquals( myLuteceSearchUserStored.getLastName( ), myLuteceSearchUser.getLastName( ) );
+        assertEquals( myLuteceSearchUserStored.getEmail( ), myLuteceSearchUser.getEmail( ) );
 
         // Update test
-        localUser.setLogin( LOGIN2 );
-        localUser.setGivenName( GIVENNAME2 );
-        localUser.setLastName( LASTNAME2 );
-        localUser.setEmail( EMAIL2 );
-        LocalUserHome.update( localUser );
-        localUserStored = LocalUserHome.findByPrimaryKey( localUser.getId( ) );
-        assertEquals( localUserStored.getLogin( ), localUser.getLogin( ) );
-        assertEquals( localUserStored.getGivenName( ), localUser.getGivenName( ) );
-        assertEquals( localUserStored.getLastName( ), localUser.getLastName( ) );
-        assertEquals( localUserStored.getEmail( ), localUser.getEmail( ) );
+        myLuteceSearchUser.setLogin( LOGIN2 );
+        myLuteceSearchUser.setGivenName( GIVENNAME2 );
+        myLuteceSearchUser.setLastName( LASTNAME2 );
+        myLuteceSearchUser.setEmail( EMAIL2 );
+        MyLuteceSearchUserHome.update( myLuteceSearchUser );
+        myLuteceSearchUserStored = MyLuteceSearchUserHome.findByPrimaryKey( myLuteceSearchUser.getId( ) );
+        assertEquals( myLuteceSearchUserStored.getLogin( ), myLuteceSearchUser.getLogin( ) );
+        assertEquals( myLuteceSearchUserStored.getGivenName( ), myLuteceSearchUser.getGivenName( ) );
+        assertEquals( myLuteceSearchUserStored.getLastName( ), myLuteceSearchUser.getLastName( ) );
+        assertEquals( myLuteceSearchUserStored.getEmail( ), myLuteceSearchUser.getEmail( ) );
 
         // List test
-        LocalUserHome.getLocalUsersList( );
+        MyLuteceSearchUserHome.getMyLuteceSearchUsersList( );
 
         // Delete test
-        LocalUserHome.remove( localUser.getId( ) );
-        localUserStored = LocalUserHome.findByPrimaryKey( localUser.getId( ) );
-        assertNull( localUserStored );
+        MyLuteceSearchUserHome.remove( myLuteceSearchUser.getId( ) );
+        myLuteceSearchUserStored = MyLuteceSearchUserHome.findByPrimaryKey( myLuteceSearchUser.getId( ) );
+        assertNull( myLuteceSearchUserStored );
 
     }
 

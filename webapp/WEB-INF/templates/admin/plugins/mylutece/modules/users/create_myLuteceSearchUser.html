@@ -1,0 +1,40 @@
+<@box>
+	<@boxHeader title='#i18n{module.mylutece.users.create_mylutecesearchuser.title}' />
+	<@boxBody>
+		<@tform name='create_mylutecesearchuser' action='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp'>
+			<@messages errors=errors />
+			<@input type="hidden" id="id" name="id" />
+			<@formGroup labelKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelLogin}'
+				helpKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelLogin.help}' mandatory=true>
+				<@input type='text' name='login' value='${mylutecesearchuser.login!}' />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelGivenName}'
+				helpKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelGivenName.help}' mandatory=true>
+				<@input type='text' name='given_name' value='${mylutecesearchuser.givenName!}' />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelLastName}'
+				helpKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelLastName.help}' mandatory=true>
+				<@input type='text' name='last_name' value='${mylutecesearchuser.lastName!}' />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelEmail}'
+				helpKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelEmail.help}'>
+				<@input type='text' name='email' value='${mylutecesearchuser.email!}' />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelProviderUserId}'
+				helpKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelProviderUserId.help}' mandatory=true>
+				<@input type='text' name='provider_user_id' value='${mylutecesearchuser.providerUserId!}' />
+			</@formGroup>
+			<#list attribute_list as attribute>
+				<@formGroup labelKey='${attribute.title}' helpKey='${attribute.helpMessage!}'
+					mandatory=attribute.mandatory!false>
+					<#list attribute.listAttributeFields as attributeField>
+						<@input type="text" class="form-control" name="attribute_${attribute.idAttribute}"
+							id="attribute_${attribute.idAttribute}" size="${attributeField.width}"
+							value=attributeField.value />
+					</#list>
+				</@formGroup>
+			</#list>
+			<@actionButtons button1Name="action_createMyLuteceSearchUser" button2Name="view_manageMyLuteceSearchUser" />
+		</@tform>
+	</@boxBody>
+</@box>

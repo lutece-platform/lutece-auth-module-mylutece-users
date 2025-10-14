@@ -26,7 +26,7 @@
             <feature-title>module.mylutece.users.adminFeature.myLuteceUsersManagement.name</feature-title>
             <feature-description>module.mylutece.users.adminFeature.myLuteceUsersManagement.description</feature-description>
             <feature-level>0</feature-level>
-            <feature-url>jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp</feature-url>
+            <feature-url>jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp</feature-url>
             <feature-icon-url></feature-icon-url>
       </admin-feature>
     </admin-features>    
@@ -39,7 +39,7 @@
      <search-indexers>
         <search-indexer>
             <search-indexer-class>
-                fr.paris.lutece.plugins.mylutece.modules.users.service.search.LocalUserIndexer
+                fr.paris.lutece.plugins.mylutece.modules.users.service.search.MyLuteceSearchUserIndexer
             </search-indexer-class>
         </search-indexer>
     </search-indexers>  

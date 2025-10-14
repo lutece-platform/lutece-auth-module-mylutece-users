@@ -1,25 +1,25 @@
-<#include "localusermanagement_tabs.html" />
+<#include "mylutecesearchusermanagement_tabs.html" />
 <#assign headerIcon>
     <@icon style='user' />
 </#assign>
 <@box>
-    <@boxHeader title='${headerIcon}&nbsp; ${localuser.givenName} ${localuser.lastName}' boxTools=true>
+    <@boxHeader title='${headerIcon}&nbsp; ${mylutecesearchuser.givenName} ${mylutecesearchuser.lastName}' boxTools=true>
     </@boxHeader>
     <@boxBody>
-        <@localusermanagement tab="localuserrole" />
+        <@mylutecesearchusermanagement tab="mylutecesearchuserrole" />
         <@messages infos=infos />
         <div class="clearfix"></div>
-        <@tform name='action_doassignlocaluserrole'
-            action='jsp/admin/plugins/mylutece/modules/users/ManageLocalUserRoles.jsp'>
-            <@input type="hidden" id="id_localuser" name="id_localuser" value="${id_localuser}" />
+        <@tform name='action_doassignmylutecesearchuserrole'
+            action='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUserRoles.jsp'>
+            <@input type="hidden" id="id_mylutecesearchuser" name="id_mylutecesearchuser" value="${id_mylutecesearchuser}" />
             <@row>
                 <@columns>
                     <@listGroup>
                         <#list mylutece_role_list as role>
                             <#if role.role !="none">
-                                <#if localuserrole_list??>
+                                <#if mylutecesearchuserrole_list??>
                                     <#assign checked=false>
-                                        <#list localuserrole_list as user_role>
+                                        <#list mylutecesearchuserrole_list as user_role>
                                             <#if user_role.role=role.role>
                                                 <#assign checked=true>
                                                     <#break>
@@ -35,8 +35,8 @@
                     </@listGroup>
                 </@columns>
             </@row>
-            <@button type='submit' name='action_assignLocalUserRole' buttonIcon='check'
-                title='#i18n{module.mylutece.users.manage_localuserroles.buttonSave}' />
+            <@button type='submit' name='action_assignMyLuteceSearchUserRole' buttonIcon='check'
+                title='#i18n{module.mylutece.users.manage_mylutecesearchuserroles.buttonSave}' />
         </@tform>
     </@boxBody>
 </@box>

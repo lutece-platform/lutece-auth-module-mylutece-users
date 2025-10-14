@@ -41,34 +41,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class provides Data Access methods for LocalUserRole objects
+ * This class provides Data Access methods for MyLuteceUserRole objects
  */
-public final class LocalUserRoleDAO implements ILocalUserRoleDAO
+public final class MyLuteceUserRoleDAO implements IMyLuteceUserRoleDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECT = "SELECT id_role, id_localuser, role_key FROM mylutece_users_luteceuser_role WHERE id_role = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO mylutece_users_luteceuser_role ( id_localuser, role_key ) VALUES ( ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM mylutece_users_luteceuser_role WHERE id_role = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE mylutece_users_luteceuser_role SET id_role = ?, id_localuser = ?, role_key = ? WHERE id_role = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_role, id_localuser, role_key FROM mylutece_users_luteceuser_role";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_role FROM mylutece_users_luteceuser_role";
-    private static final String SQL_QUERY_SELECTALL_BY_LOCALUSER_ID = "SELECT id_role, id_localuser, role_key FROM mylutece_users_luteceuser_role WHERE id_localuser = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_role, id_searchuser, role_key FROM mylutece_users_userrole WHERE id_role = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO mylutece_users_userrole ( id_searchuser, role_key ) VALUES ( ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM mylutece_users_userrole WHERE id_role = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE mylutece_users_userrole SET id_role = ?, id_searchuser = ?, role_key = ? WHERE id_role = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_role, id_searchuser, role_key FROM mylutece_users_userrole";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_role FROM mylutece_users_userrole";
+    private static final String SQL_QUERY_SELECTALL_BY_SEARCHUSER_ID = "SELECT id_role, id_searchuser, role_key FROM mylutece_users_userrole WHERE id_searchuser = ?";
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public void insert( LocalUserRole localUserRole, Plugin plugin )
+    public void insert( MyLuteceUserRole myLuteceUserRole, Plugin plugin )
     {
         try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
         {
             int nIndex = 1;
-            daoUtil.setInt( nIndex++, localUserRole.getIdLocaluser( ) );
-            daoUtil.setString( nIndex++, localUserRole.getRoleKey( ) );
+            daoUtil.setInt( nIndex++, myLuteceUserRole.getIdMyLuteceSearchUser( ) );
+            daoUtil.setString( nIndex++, myLuteceUserRole.getRoleKey( ) );
             daoUtil.executeUpdate( );
             if ( daoUtil.nextGeneratedKey( ) )
             {
-                localUserRole.setId( daoUtil.getGeneratedKeyInt( 1 ) );
+                myLuteceUserRole.setId( daoUtil.getGeneratedKeyInt( 1 ) );
             }
         }
     }
@@ -77,23 +77,23 @@ public final class LocalUserRoleDAO implements ILocalUserRoleDAO
      * {@inheritDoc }
      */
     @Override
-    public LocalUserRole load( int nKey, Plugin plugin )
+    public MyLuteceUserRole load( int nKey, Plugin plugin )
     {
-        LocalUserRole localUserRole = null;
+        MyLuteceUserRole myLuteceUserRole = null;
         try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
             daoUtil.setInt( 1, nKey );
             daoUtil.executeQuery( );
             if ( daoUtil.next( ) )
             {
-                localUserRole = new LocalUserRole( );
+                myLuteceUserRole = new MyLuteceUserRole( );
                 int nIndex = 1;
-                localUserRole.setId( daoUtil.getInt( nIndex++ ) );
-                localUserRole.setIdLocaluser( daoUtil.getInt( nIndex++ ) );
-                localUserRole.setRoleKey( daoUtil.getString( nIndex++ ) );
+                myLuteceUserRole.setId( daoUtil.getInt( nIndex++ ) );
+                myLuteceUserRole.setIdMyLuteceSearchUser( daoUtil.getInt( nIndex++ ) );
+                myLuteceUserRole.setRoleKey( daoUtil.getString( nIndex++ ) );
             }
         }
-        return localUserRole;
+        return myLuteceUserRole;
     }
 
     /**
@@ -113,15 +113,15 @@ public final class LocalUserRoleDAO implements ILocalUserRoleDAO
      * {@inheritDoc }
      */
     @Override
-    public void store( LocalUserRole localUserRole, Plugin plugin )
+    public void store( MyLuteceUserRole myLuteceUserRole, Plugin plugin )
     {
         try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
             int nIndex = 1;
-            daoUtil.setInt( nIndex++, localUserRole.getId( ) );
-            daoUtil.setInt( nIndex++, localUserRole.getIdLocaluser( ) );
-            daoUtil.setString( nIndex++, localUserRole.getRoleKey( ) );
-            daoUtil.setInt( nIndex, localUserRole.getId( ) );
+            daoUtil.setInt( nIndex++, myLuteceUserRole.getId( ) );
+            daoUtil.setInt( nIndex++, myLuteceUserRole.getIdMyLuteceSearchUser( ) );
+            daoUtil.setString( nIndex++, myLuteceUserRole.getRoleKey( ) );
+            daoUtil.setInt( nIndex, myLuteceUserRole.getId( ) );
             daoUtil.executeUpdate( );
         }
     }
@@ -130,82 +130,82 @@ public final class LocalUserRoleDAO implements ILocalUserRoleDAO
      * {@inheritDoc }
      */
     @Override
-    public List<LocalUserRole> selectLocalUserRolesList( Plugin plugin )
+    public List<MyLuteceUserRole> selectMyLuteceUserRolesList( Plugin plugin )
     {
-        List<LocalUserRole> localUserRoleList = new ArrayList<>( );
+        List<MyLuteceUserRole> myLuteceUserRoleList = new ArrayList<>( );
         try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
             daoUtil.executeQuery( );
             while ( daoUtil.next( ) )
             {
-                LocalUserRole localUserRole = new LocalUserRole( );
+                MyLuteceUserRole myLuteceUserRole = new MyLuteceUserRole( );
                 int nIndex = 1;
-                localUserRole.setId( daoUtil.getInt( nIndex++ ) );
-                localUserRole.setIdLocaluser( daoUtil.getInt( nIndex++ ) );
-                localUserRole.setRoleKey( daoUtil.getString( nIndex++ ) );
-                localUserRoleList.add( localUserRole );
+                myLuteceUserRole.setId( daoUtil.getInt( nIndex++ ) );
+                myLuteceUserRole.setIdMyLuteceSearchUser( daoUtil.getInt( nIndex++ ) );
+                myLuteceUserRole.setRoleKey( daoUtil.getString( nIndex++ ) );
+                myLuteceUserRoleList.add( myLuteceUserRole );
             }
         }
-        return localUserRoleList;
+        return myLuteceUserRoleList;
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public List<Integer> selectIdLocalUserRolesList( Plugin plugin )
+    public List<Integer> selectIdMyLuteceUserRolesList( Plugin plugin )
     {
-        List<Integer> localUserRoleList = new ArrayList<>( );
+        List<Integer> myLuteceUserRoleList = new ArrayList<>( );
         try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
         {
             daoUtil.executeQuery( );
             while ( daoUtil.next( ) )
             {
-                localUserRoleList.add( daoUtil.getInt( 1 ) );
+                myLuteceUserRoleList.add( daoUtil.getInt( 1 ) );
             }
         }
-        return localUserRoleList;
+        return myLuteceUserRoleList;
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public ReferenceList selectLocalUserRolesReferenceList( Plugin plugin )
+    public ReferenceList selectMyLuteceUserRolesReferenceList( Plugin plugin )
     {
-        ReferenceList localUserRoleList = new ReferenceList( );
+        ReferenceList myLuteceUserRoleList = new ReferenceList( );
         try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
             daoUtil.executeQuery( );
             while ( daoUtil.next( ) )
             {
-                localUserRoleList.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
+                myLuteceUserRoleList.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
             }
         }
-        return localUserRoleList;
+        return myLuteceUserRoleList;
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public List<LocalUserRole> selectLocalUserRolesListByUserId( int nIdLocalUser, Plugin plugin )
+    public List<MyLuteceUserRole> selectMyLuteceUserRolesListByUserId( int nIdSearchUser, Plugin plugin )
     {
-        List<LocalUserRole> localUserRoleList = new ArrayList<>( );
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_BY_LOCALUSER_ID, plugin ) )
+        List<MyLuteceUserRole> myLuteceUserRoleList = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_BY_SEARCHUSER_ID, plugin ) )
         {
-            daoUtil.setInt( 1, nIdLocalUser );
+            daoUtil.setInt( 1, nIdSearchUser );
             daoUtil.executeQuery( );
             while ( daoUtil.next( ) )
             {
-                LocalUserRole localUserRole = new LocalUserRole( );
+                MyLuteceUserRole myLuteceUserRole = new MyLuteceUserRole( );
                 int nIndex = 1;
-                localUserRole.setId( daoUtil.getInt( nIndex++ ) );
-                localUserRole.setIdLocaluser( daoUtil.getInt( nIndex++ ) );
-                localUserRole.setRoleKey( daoUtil.getString( nIndex++ ) );
-                localUserRoleList.add( localUserRole );
+                myLuteceUserRole.setId( daoUtil.getInt( nIndex++ ) );
+                myLuteceUserRole.setIdMyLuteceSearchUser( daoUtil.getInt( nIndex++ ) );
+                myLuteceUserRole.setRoleKey( daoUtil.getString( nIndex++ ) );
+                myLuteceUserRoleList.add( myLuteceUserRole );
             }
         }
-        return localUserRoleList;
+        return myLuteceUserRoleList;
     }
 }

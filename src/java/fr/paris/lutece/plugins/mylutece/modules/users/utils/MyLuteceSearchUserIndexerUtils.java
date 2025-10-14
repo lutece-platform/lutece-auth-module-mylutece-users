@@ -31,84 +31,53 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.mylutece.modules.users.business;
+package fr.paris.lutece.plugins.mylutece.modules.users.utils;
 
-import java.io.Serializable;
+import fr.paris.lutece.portal.business.event.ResourceEvent;
+import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
+import fr.paris.lutece.portal.service.event.ResourceEventManager;
 
 /**
- * This is the business class for the object LocalUserRole
+ * 
+ * HtmlPageIndexerUtils
+ *
  */
-public class LocalUserRole implements Serializable
+public class MyLuteceSearchUserIndexerUtils
 {
-    private static final long serialVersionUID = 1L;
+    // Indexed resource type name
+    public static final String CONSTANT_TYPE_RESOURCE = "MYLUTECE-USERS_MYLUTECESEARCHUSER";
 
-    // Variables declarations
-    private int _nId;
-
-    private int _nIdLocaluser;
-
-    private String _strRoleKey;
-
-    /**
-     * Returns the Id
-     * 
-     * @return The Id
-     */
-    public int getId( )
+    private MyLuteceSearchUserIndexerUtils( )
     {
-        return _nId;
+        throw new IllegalStateException( "Utility class" );
     }
 
     /**
-     * Sets the Id
+     * Warn that a action has been done.
      * 
-     * @param nId
-     *            The Id
+     * @param strIdResource
+     *            the resource id
+     * @param nIdTask
+     *            the key of the action to do
      */
-    public void setId( int nId )
+    public static void addIndexerAction( String strIdResource, int nIdTask )
     {
-        _nId = nId;
-    }
-
-    /**
-     * Returns the IdLocaluser
-     * 
-     * @return The IdLocaluser
-     */
-    public int getIdLocaluser( )
-    {
-        return _nIdLocaluser;
-    }
-
-    /**
-     * Sets the IdLocaluser
-     * 
-     * @param nIdLocaluser
-     *            The IdLocaluser
-     */
-    public void setIdLocaluser( int nIdLocaluser )
-    {
-        _nIdLocaluser = nIdLocaluser;
-    }
-
-    /**
-     * Returns the RoleKey
-     * 
-     * @return The RoleKey
-     */
-    public String getRoleKey( )
-    {
-        return _strRoleKey;
-    }
-
-    /**
-     * Sets the RoleKey
-     * 
-     * @param strRoleKey
-     *            The RoleKey
-     */
-    public void setRoleKey( String strRoleKey )
-    {
-        _strRoleKey = strRoleKey;
+        ResourceEvent event = new ResourceEvent( );
+        event.setIdResource( String.valueOf( strIdResource ) );
+        event.setTypeResource( CONSTANT_TYPE_RESOURCE );
+        switch( nIdTask )
+        {
+            case IndexerAction.TASK_CREATE:
+                ResourceEventManager.fireAddedResource( event );
+                break;
+            case IndexerAction.TASK_MODIFY:
+                ResourceEventManager.fireUpdatedResource( event );
+                break;
+            case IndexerAction.TASK_DELETE:
+                ResourceEventManager.fireDeletedResource( event );
+                break;
+            default:
+                break;
+        }
     }
 }

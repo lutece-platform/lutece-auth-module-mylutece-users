@@ -36,18 +36,18 @@ package fr.paris.lutece.plugins.mylutece.modules.users.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserRole;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserRoleHome;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserRole;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserRoleHome;
 
 /**
- * Service class for LocalUserRole
+ * Service class for MyLuteceUserRole
  *
  */
-public final class LocalUserRoleService
+public final class MyLuteceUserRoleService
 {
-    public static final String BEAN_NAME = "mylutece-users.localUserRoleService";
+    public static final String BEAN_NAME = "mylutece-users.myLuteceUserRoleService";
 
-    private LocalUserRoleService( )
+    private MyLuteceUserRoleService( )
     {
     }
 
@@ -56,33 +56,33 @@ public final class LocalUserRoleService
      * 
      * @param myLuteceRoleKeysList
      *            The MyLutece role keys List
-     * @param nIdLocalUser
-     *            The localUser id
+     * @param nIdSearchUser
+     *            The searchUser id
      */
-    public static void doLocalUserAssignements( List<String> myLuteceRoleKeysList, int nIdLocalUser )
+    public static void doSearchUserAssignements( List<String> myLuteceRoleKeysList, int nIdSearchUser )
     {
 
-        List<LocalUserRole> localUserRolesList = LocalUserRoleHome.getLocalUserRolesListByUserId( nIdLocalUser );
+        List<MyLuteceUserRole> myLuteceUserRolesList = MyLuteceUserRoleHome.getMyLuteceUserRolesListByUserId( nIdSearchUser );
         if ( myLuteceRoleKeysList == null )
         {
-            LocalUserRoleHome.removeLocalUserRoles( localUserRolesList );
+            MyLuteceUserRoleHome.removeMyLuteceUserRoles( myLuteceUserRolesList );
             return;
         }
-        // find all localUser roles to delete.
-        List<LocalUserRole> localUsersRolesToDeleteList = localUserRolesList.stream( )
-                .filter( currentLocalUserRoleKey -> !myLuteceRoleKeysList.contains( currentLocalUserRoleKey.getRoleKey( ) ) ).collect( Collectors.toList( ) );
+        // find all searchUser roles to delete.
+        List<MyLuteceUserRole> searchUsersRolesToDeleteList = myLuteceUserRolesList.stream( )
+                .filter( currentMyLuteceUserRoleKey -> !myLuteceRoleKeysList.contains( currentMyLuteceUserRoleKey.getRoleKey( ) ) ).collect( Collectors.toList( ) );
         // find all myLutece roles to assign.
         List<String> myLuteceRoleKeyToAssignList = myLuteceRoleKeysList.stream( )
-                .filter( myLuteceRoleKey -> localUserRolesList.stream( ).noneMatch( localUserRole -> myLuteceRoleKey.equals( localUserRole.getRoleKey( ) ) ) )
+                .filter( myLuteceRoleKey -> myLuteceUserRolesList.stream( ).noneMatch( myLuteceUserRole -> myLuteceRoleKey.equals( myLuteceUserRole.getRoleKey( ) ) ) )
                 .collect( Collectors.toList( ) );
 
-        if ( localUsersRolesToDeleteList != null )
+        if ( searchUsersRolesToDeleteList != null )
         {
-            LocalUserRoleHome.removeLocalUserRoles( localUsersRolesToDeleteList );
+            MyLuteceUserRoleHome.removeMyLuteceUserRoles( searchUsersRolesToDeleteList );
         }
         if ( myLuteceRoleKeyToAssignList != null )
         {
-            LocalUserRoleHome.createLocalUserRoles( myLuteceRoleKeyToAssignList, nIdLocalUser );
+            MyLuteceUserRoleHome.createMyLuteceUserRoles( myLuteceRoleKeyToAssignList, nIdSearchUser );
         }
     }
 

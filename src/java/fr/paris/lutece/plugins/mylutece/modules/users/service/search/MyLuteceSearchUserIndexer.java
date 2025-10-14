@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.users.service.search;
 
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserHome;
+import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceSearchUserHome;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -55,9 +55,9 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 
 /**
- * Indexer service for localUser Xpages
+ * Indexer service for myLuteceSearchUser Xpages
  */
-public class LocalUserIndexer implements SearchIndexer
+public class MyLuteceSearchUserIndexer implements SearchIndexer
 {
     public static final String SHORT_NAME = "mlu";
     private static final String ENABLE_VALUE_TRUE = "1";
@@ -65,9 +65,9 @@ public class LocalUserIndexer implements SearchIndexer
     private static final String PROPERTY_INDEXER_DESCRIPTION = "mylutece-users.indexer.description";
     private static final String PROPERTY_INDEXER_VERSION = "mylutece-users.indexer.version";
     private static final String PROPERTY_INDEXER_ENABLE = "mylutece-users.indexer.enable";
-    public static final String PROPERTY_INDEX_TYPE_PAGE = "localUser";
-    private static final String PARAMETER_LOCALUSER_ID = "localUser_id";
-    private static final String JSP_SEARCH_LOCALUSER = "";
+    public static final String PROPERTY_INDEX_TYPE_PAGE = "myLuteceSearchUser";
+    private static final String PARAMETER_SEARCHUSER_ID = "myLuteceSearchUser_id";
+    private static final String JSP_SEARCH_SEARCHUSER = "";
     public static final String FIELD_ID_TITLE = "id";
     public static final String FIELD_LOGIN_TITLE = "login";
     public static final String FIELD_GIVEN_NAME_TITLE = "givenName";
@@ -89,14 +89,14 @@ public class LocalUserIndexer implements SearchIndexer
     {
         String strPortalUrl = AppPathService.getPortalUrl( );
         Plugin plugin = PluginService.getPlugin( _pluginName );
-        List<LocalUser> listLocalUsers = LocalUserHome.getLocalUsersList( );
-        for ( LocalUser localUser : listLocalUsers )
+        List<MyLuteceSearchUser> listMyLuteceSearchUsers = MyLuteceSearchUserHome.getMyLuteceSearchUsersList( );
+        for ( MyLuteceSearchUser myLuteceSearchUser : listMyLuteceSearchUsers )
         {
             UrlItem url = new UrlItem( strPortalUrl );
             url.addParameter( XPageAppService.PARAM_XPAGE_APP, _pluginName );
-            url.addParameter( PARAMETER_LOCALUSER_ID, localUser.getId( ) );
-            org.apache.lucene.document.Document docLocalUser = getDocument( localUser, plugin );
-            IndexationService.write( docLocalUser );
+            url.addParameter( PARAMETER_SEARCHUSER_ID, myLuteceSearchUser.getId( ) );
+            org.apache.lucene.document.Document docMyLuteceSearchUser = getDocument( myLuteceSearchUser, plugin );
+            IndexationService.write( docMyLuteceSearchUser );
         }
     }
 
@@ -112,25 +112,25 @@ public class LocalUserIndexer implements SearchIndexer
         ArrayList<org.apache.lucene.document.Document> listDocuments = new ArrayList<>( );
         String strPortalUrl = AppPathService.getPortalUrl( );
         Plugin plugin = PluginService.getPlugin( _pluginName );
-        LocalUser localUser = LocalUserHome.findByPrimaryKey( Integer.parseInt( strId ) );
-        if ( localUser != null )
+        MyLuteceSearchUser myLuteceSearchUser = MyLuteceSearchUserHome.findByPrimaryKey( Integer.parseInt( strId ) );
+        if ( myLuteceSearchUser != null )
         {
             UrlItem url = new UrlItem( strPortalUrl );
             url.addParameter( XPageAppService.PARAM_XPAGE_APP, _pluginName );
-            url.addParameter( PARAMETER_LOCALUSER_ID, localUser.getId( ) );
-            org.apache.lucene.document.Document docLocalUser = null;
+            url.addParameter( PARAMETER_SEARCHUSER_ID, myLuteceSearchUser.getId( ) );
+            org.apache.lucene.document.Document docMyLuteceSearchUser = null;
             try
             {
-                docLocalUser = getDocument( localUser, plugin );
+                docMyLuteceSearchUser = getDocument( myLuteceSearchUser, plugin );
             }
             catch( Exception e )
             {
-                String strMessage = "LocalUser ID : " + localUser.getId( );
+                String strMessage = "MyLuteceSearchUser ID : " + myLuteceSearchUser.getId( );
                 IndexationService.error( this, e, strMessage );
             }
-            if ( docLocalUser != null )
+            if ( docMyLuteceSearchUser != null )
             {
-                listDocuments.add( docLocalUser );
+                listDocuments.add( docMyLuteceSearchUser );
             }
         }
         return listDocuments;
@@ -184,7 +184,7 @@ public class LocalUserIndexer implements SearchIndexer
      * @return the built Document
      * @param strUrl
      *            The base URL for documents
-     * @param localUser
+     * @param myLuteceSearchUser
      *            the page to index
      * @param plugin
      *            The {@link Plugin}
@@ -195,15 +195,15 @@ public class LocalUserIndexer implements SearchIndexer
      * @throws SiteMessageException
      *             occurs when a site message need to be displayed
      */
-    private Document getDocument( LocalUser localUser, Plugin plugin ) throws IOException, InterruptedException, SiteMessageException
+    private Document getDocument( MyLuteceSearchUser myLuteceSearchUser, Plugin plugin ) throws IOException, InterruptedException, SiteMessageException
     {
         // make a new, empty document
         org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document( );
-        doc.add( new Field( SearchItem.FIELD_CONTENTS, getContentToIndex( localUser ), TextField.TYPE_NOT_STORED ) );
-        doc.add( new Field( SearchItem.FIELD_UID, String.valueOf( localUser.getId( ) ), TextField.TYPE_STORED ) );
+        doc.add( new Field( SearchItem.FIELD_CONTENTS, getContentToIndex( myLuteceSearchUser ), TextField.TYPE_NOT_STORED ) );
+        doc.add( new Field( SearchItem.FIELD_UID, String.valueOf( myLuteceSearchUser.getId( ) ), TextField.TYPE_STORED ) );
         doc.add( new Field( SearchItem.FIELD_TYPE, _pluginName, TextField.TYPE_STORED ) );
-        doc.add( new Field( SearchItem.FIELD_TITLE, getFullName( localUser ), TextField.TYPE_STORED ) );
-        ReferenceList listAttribute = localUser.getAttributes( );
+        doc.add( new Field( SearchItem.FIELD_TITLE, getFullName( myLuteceSearchUser ), TextField.TYPE_STORED ) );
+        ReferenceList listAttribute = myLuteceSearchUser.getAttributes( );
 
         if ( listAttribute != null )
         {
@@ -219,36 +219,36 @@ public class LocalUserIndexer implements SearchIndexer
     /**
      * Set the Content to index
      * 
-     * @param localUser
-     *            The localUser to index
+     * @param myLuteceSearchUser
+     *            The myLuteceSearchUser to index
      * @return The content to index
      */
-    private static String getContentToIndex( LocalUser localUser )
+    private static String getContentToIndex( MyLuteceSearchUser myLuteceSearchUser )
     {
         StringBuilder sbContentToIndex = new StringBuilder( );
-        sbContentToIndex.append( localUser.getLogin( ) );
+        sbContentToIndex.append( myLuteceSearchUser.getLogin( ) );
         sbContentToIndex.append( " " );
-        sbContentToIndex.append( localUser.getGivenName( ) );
+        sbContentToIndex.append( myLuteceSearchUser.getGivenName( ) );
         sbContentToIndex.append( " " );
-        sbContentToIndex.append( localUser.getLastName( ) );
+        sbContentToIndex.append( myLuteceSearchUser.getLastName( ) );
         sbContentToIndex.append( " " );
-        sbContentToIndex.append( localUser.getEmail( ) );
+        sbContentToIndex.append( myLuteceSearchUser.getEmail( ) );
         return sbContentToIndex.toString( );
     }
 
     /**
      * Set the Content to index
      * 
-     * @param localUser
-     *            The localUser to index
+     * @param myLuteceSearchUser
+     *            The myLuteceSearchUser to index
      * @return The content to index
      */
-    private static String getFullName( LocalUser localUser )
+    private static String getFullName( MyLuteceSearchUser myLuteceSearchUser )
     {
         StringBuilder sbContentToIndex = new StringBuilder( );
-        sbContentToIndex.append( localUser.getLastName( ) );
+        sbContentToIndex.append( myLuteceSearchUser.getLastName( ) );
         sbContentToIndex.append( " " );
-        sbContentToIndex.append( localUser.getGivenName( ) );
+        sbContentToIndex.append( myLuteceSearchUser.getGivenName( ) );
         return sbContentToIndex.toString( );
     }
 
@@ -267,6 +267,6 @@ public class LocalUserIndexer implements SearchIndexer
      */
     public String getSpecificSearchAppUrl( )
     {
-        return JSP_SEARCH_LOCALUSER;
+        return JSP_SEARCH_SEARCHUSER;
     }
 }

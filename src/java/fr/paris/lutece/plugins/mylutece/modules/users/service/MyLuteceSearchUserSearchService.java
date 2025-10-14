@@ -31,53 +31,37 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.mylutece.modules.users.utils;
+package fr.paris.lutece.plugins.mylutece.modules.users.service;
 
-import fr.paris.lutece.portal.business.event.ResourceEvent;
-import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
-import fr.paris.lutece.portal.service.event.ResourceEventManager;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import fr.paris.lutece.portal.service.search.SearchEngine;
+import fr.paris.lutece.portal.service.search.SearchResult;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
- * 
- * HtmlPageIndexerUtils
+ * Service class for MyLuteceSearchUserSearchService
  *
  */
-public class LocalUserIndexerUtils
+public final class MyLuteceSearchUserSearchService
 {
-    // Indexed resource type name
-    public static final String CONSTANT_TYPE_RESOURCE = "MYLUTECE-USERS_LOCALUSER";
+    private static final String BEAN_SEARCH_ENGINE = "mylutece-users.myLuteceSearchUserSearchEngine";
 
-    private LocalUserIndexerUtils( )
+    private MyLuteceSearchUserSearchService( )
     {
-        throw new IllegalStateException( "Utility class" );
     }
 
     /**
-     * Warn that a action has been done.
+     * Return Search result
      * 
-     * @param strIdResource
-     *            the resource id
-     * @param nIdTask
-     *            the key of the action to do
+     * @param strKeywords
+     *            Keywords
+     * @param request
+     *            Request
      */
-    public static void addIndexerAction( String strIdResource, int nIdTask )
+    public static List<SearchResult> searchResults( String strKeywords, HttpServletRequest request )
     {
-        ResourceEvent event = new ResourceEvent( );
-        event.setIdResource( String.valueOf( strIdResource ) );
-        event.setTypeResource( CONSTANT_TYPE_RESOURCE );
-        switch( nIdTask )
-        {
-            case IndexerAction.TASK_CREATE:
-                ResourceEventManager.fireAddedResource( event );
-                break;
-            case IndexerAction.TASK_MODIFY:
-                ResourceEventManager.fireUpdatedResource( event );
-                break;
-            case IndexerAction.TASK_DELETE:
-                ResourceEventManager.fireDeletedResource( event );
-                break;
-            default:
-                break;
-        }
+        SearchEngine engine = SpringContextService.getBean( BEAN_SEARCH_ENGINE );
+        return engine.getSearchResults( strKeywords, request );
     }
 }

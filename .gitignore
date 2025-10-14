@@ -6,4 +6,6 @@
 /nb-configuration.xml
 /src/conf/
 /.vscode
+.claude
+.token-counter
 

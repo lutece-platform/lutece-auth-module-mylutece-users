@@ -33,40 +33,41 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.users.business;
 
+import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
 
 /**
- * ILocalUserDAO Interface
+ * IMyLuteceSearchUserDAO Interface
  */
-public interface ILocalUserDAO
+public interface IMyLuteceSearchUserDAO
 {
     /**
      * Insert a new record in the table.
-     * 
-     * @param localUser
-     *            instance of the LocalUser object to insert
+     *
+     * @param myLuteceSearchUser
+     *            instance of the MyLuteceSearchUser object to insert
      * @param plugin
      *            the Plugin
      */
-    void insert( LocalUser localUser, Plugin plugin );
+    void insert( MyLuteceSearchUser myLuteceSearchUser, Plugin plugin );
 
     /**
      * Update the record in the table
-     * 
-     * @param localUser
-     *            the reference of the LocalUser
+     *
+     * @param myLuteceSearchUser
+     *            the reference of the MyLuteceSearchUser
      * @param plugin
      *            the Plugin
      */
-    void store( LocalUser localUser, Plugin plugin );
+    void store( MyLuteceSearchUser myLuteceSearchUser, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nKey
-     *            The identifier of the LocalUser to delete
+     *            The identifier of the MyLuteceSearchUser to delete
      * @param plugin
      *            the Plugin
      */
@@ -77,50 +78,50 @@ public interface ILocalUserDAO
 
     /**
      * Load the data from the table
-     * 
+     *
      * @param nKey
-     *            The identifier of the localUser
+     *            The identifier of the myLuteceSearchUser
      * @param plugin
      *            the Plugin
-     * @return The instance of the localUser
+     * @return The instance of the myLuteceSearchUser
      */
-    LocalUser load( int nKey, Plugin plugin );
+    MyLuteceSearchUser load( int nKey, Plugin plugin );
 
     /**
-     * Load localUser from the table
-     * 
+     * Load myLuteceSearchUser from the table
+     *
      * @param strUserName
-     *            The user name of the localUser
+     *            The user name of the myLuteceSearchUser
      * @param plugin
      *            the Plugin
-     * @return The instance of the localUser
+     * @return The instance of the myLuteceSearchUser
      */
-    LocalUser loadByConnectId( String strUserName, Plugin plugin );
+    MyLuteceSearchUser loadByConnectId( String strUserName, Plugin plugin );
 
     /**
-     * Load the data of all the localUser objects and returns them as a list
-     * 
+     * Load the data of all the myLuteceSearchUser objects and returns them as a list
+     *
      * @param plugin
      *            the Plugin
-     * @return The list which contains the data of all the localUser objects
+     * @return The list which contains the data of all the myLuteceSearchUser objects
      */
-    List<LocalUser> selectLocalUsersList( Plugin plugin );
+    List<MyLuteceSearchUser> selectMyLuteceSearchUsersList( Plugin plugin );
 
     /**
-     * Load the id of all the localUser objects and returns them as a list
-     * 
+     * Load the id of all the myLuteceSearchUser objects and returns them as a list
+     *
      * @param plugin
      *            the Plugin
-     * @return The list which contains the id of all the localUser objects
+     * @return The list which contains the id of all the myLuteceSearchUser objects
      */
-    List<Integer> selectIdLocalUsersList( Plugin plugin );
+    List<Integer> selectIdMyLuteceSearchUsersList( Plugin plugin );
 
     /**
-     * Load the data of all the localUser objects and returns them as a referenceList
-     * 
+     * Load the data of all the myLuteceSearchUser objects and returns them as a referenceList
+     *
      * @param plugin
      *            the Plugin
-     * @return The referenceList which contains the data of all the localUser objects
+     * @return The referenceList which contains the data of all the myLuteceSearchUser objects
      */
-    ReferenceList selectLocalUsersReferenceList( Plugin plugin );
+    ReferenceList selectMyLuteceSearchUsersReferenceList( Plugin plugin );
 }

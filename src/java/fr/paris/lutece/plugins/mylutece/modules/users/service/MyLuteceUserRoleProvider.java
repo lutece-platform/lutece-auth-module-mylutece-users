@@ -33,26 +33,32 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.users.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
+import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceSearchUserHome;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserRole;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserRoleHome;
+import fr.paris.lutece.plugins.mylutece.service.IMyLuteceExternalRolesProvider;
+import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.util.ReferenceList;
 
-public final class LocalUserInfoService implements IUserInfosProvider
+public final class MyLuteceUserRoleProvider implements IMyLuteceExternalRolesProvider
 {
-    private static final String BEAN_NAME = "mylutece-localUserInfoProvider";
-    private static IUserInfosProvider _userInfosProvider;
+    private static final String BEAN_NAME = "mylutece-myLuteceSearchUserRoleProvider";
+    private static MyLuteceUserRoleProvider _myLuteceSearchUserRoleProvider;
 
     /**
      * Default constructor
      */
-    private LocalUserInfoService( )
+    private MyLuteceUserRoleProvider( )
     {
     }
 
     public void init( )
     {
-        _userInfosProvider = (IUserInfosProvider) SpringContextService.getBean( BEAN_NAME );
+        _myLuteceSearchUserRoleProvider = SpringContextService.getBean( BEAN_NAME );
     }
 
     /**
@@ -60,25 +66,27 @@ public final class LocalUserInfoService implements IUserInfosProvider
      *
      * @return The instance of the singleton
      */
-    public static IUserInfosProvider getInstance( )
+    public static MyLuteceUserRoleProvider getInstance( )
     {
-        if ( _userInfosProvider == null )
+        if ( _myLuteceSearchUserRoleProvider == null )
         {
-            _userInfosProvider = SpringContextService.getBean( BEAN_NAME );
+            _myLuteceSearchUserRoleProvider = SpringContextService.getBean( BEAN_NAME );
         }
-        return _userInfosProvider;
+        return _myLuteceSearchUserRoleProvider;
     }
 
     @Override
-    public List<LocalUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail,
-            ReferenceList listProviderAttribute )
+    public Collection<String> providesRoles( LuteceUser user )
     {
-        return _userInfosProvider.findUsers( strParameterLastName, strParameterGivenName, strParameterCriteriaMail, listProviderAttribute );
-    }
-
-    @Override
-    public List<String> getAllAttributes( )
-    {
-        return _userInfosProvider.getAllAttributes( );
+        Collection<String> providesRoles = new ArrayList<String>( );
+        MyLuteceSearchUser myLuteceSearchUser = MyLuteceSearchUserHome.findByConnectId( user.getName( ) );
+        if( myLuteceSearchUser != null ) {
+            List<MyLuteceUserRole> myLuteceSearchUserRoleList = MyLuteceUserRoleHome.getMyLuteceUserRolesListByUserId( myLuteceSearchUser.getId( ) );
+            for ( MyLuteceUserRole myLuteceSearchUserRole : myLuteceSearchUserRoleList )
+            {
+                providesRoles.add( myLuteceSearchUserRole.getRoleKey( ) );
+            }
+        }
+        return providesRoles;
     }
 }

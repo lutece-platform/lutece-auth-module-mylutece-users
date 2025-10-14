@@ -6,7 +6,7 @@
         <@messages errors=errors />
         <@row>
             <@columns sm=12 md=4 lg=3>
-                <@tform action='jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp' method='post'>
+                <@tform action='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp' method='post'>
                     <@formGroup labelFor='search_lastName' labelKey='Nom'>
                         <@input type='text' name='search_lastName' params='autofocus' />
                     </@formGroup>
@@ -43,28 +43,28 @@
                         <th>Email</th>
                     </thead>
                     <tbody>
-                        <#if localuser_list??>
-                            <#list localuser_list as localUser>
+                        <#if mylutecesearchuser_list??>
+                            <#list mylutecesearchuser_list as searchUser>
                                 <tr>
                                     <td>
-                                        ${localUser.login}
+                                        ${searchUser.login}
                                     </td>
-                                    <td>${localUser.lastName}</td>
-                                    <td>${localUser.givenName}</td>
-                                    <td>${localUser.email}</td>
+                                    <td>${searchUser.lastName}</td>
+                                    <td>${searchUser.givenName}</td>
+                                    <td>${searchUser.email}</td>
                                     <td class="text-right">
                                         <@tform method="post"
-                                            action="jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp">
+                                            action="jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp">
                                             <@input type="hidden" name="plugin_name" value="${plugin_name!''}" />
-                                            <@input type="hidden" name="login" value="${localUser.login}" />
-                                            <@input type="hidden" name="email" value="${localUser.email}" />
-                                            <@input type="hidden" name="last_name" value="${localUser.lastName}" />
-                                            <@input type="hidden" name="given_name" value="${localUser.givenName}" />
+                                            <@input type="hidden" name="login" value="${searchUser.login}" />
+                                            <@input type="hidden" name="email" value="${searchUser.email}" />
+                                            <@input type="hidden" name="last_name" value="${searchUser.lastName}" />
+                                            <@input type="hidden" name="given_name" value="${searchUser.givenName}" />
                                             <@input type="hidden" name="provider_user_id"
-                                                value="${localUser.providerUserId}" />
+                                                value="${searchUser.providerUserId}" />
                                             <@input type="hidden" name="import_from_provider" value="true" />
-                                            <#if localUser.attributes??>
-                                                <#list localUser.attributes as attribute>
+                                            <#if searchUser.attributes??>
+                                                <#list searchUser.attributes as attribute>
                                                     <#if attribute.code??>
                                                         <#assign mylutece_attribute_id=getIdMyLuteceAttribute(
                                                             attribute.name )>
@@ -76,8 +76,8 @@
                                                 </#list>
                                             </#if>
                                             <@button type='submit'
-                                                title='#i18n{module.mylutece.users.localUser_filter.shortImport}'
-                                                buttonIcon='upload' size='' name='action_createLocalUser' />
+                                                title='#i18n{module.mylutece.users.searchUser_filter.shortImport}'
+                                                buttonIcon='upload' size='' name='action_createMyLuteceSearchUser' />
                                         </@tform>
                                     </td>
                                 </tr>

@@ -36,46 +36,46 @@ package fr.paris.lutece.plugins.mylutece.modules.users.business;
 import fr.paris.lutece.test.LuteceTestCase;
 
 /**
- * This is the business class test for the object LocalUserRole
+ * This is the business class test for the object MyLuteceUserRole
  */
-public class LocalUserRoleBusinessTest extends LuteceTestCase
+public class MyLuteceUserRoleBusinessTest extends LuteceTestCase
 {
-    private static final int IDLOCALUSER1 = 1;
-    private static final int IDLOCALUSER2 = 2;
+    private static final int IDMYLUTECESEARCHUSER1 = 1;
+    private static final int IDMYLUTECESEARCHUSER2 = 2;
     private static final String STRROLE1 = "ROLE1";
     private static final String STRROLE2 = "ROLE2";
 
     /**
-     * test LocalUserRole
+     * test MyLuteceUserRole
      */
     public void testBusiness( )
     {
         // Initialize an object
-        LocalUserRole localUserRole = new LocalUserRole( );
-        localUserRole.setIdLocaluser( IDLOCALUSER1 );
-        localUserRole.setRoleKey( STRROLE1 );
+        MyLuteceUserRole myLuteceUserRole = new MyLuteceUserRole( );
+        myLuteceUserRole.setIdMyLuteceSearchUser( IDMYLUTECESEARCHUSER1 );
+        myLuteceUserRole.setRoleKey( STRROLE1 );
 
         // Create test
-        LocalUserRoleHome.create( localUserRole );
-        LocalUserRole localUserRoleStored = LocalUserRoleHome.findByPrimaryKey( localUserRole.getId( ) );
-        assertEquals( localUserRoleStored.getIdLocaluser( ), localUserRole.getIdLocaluser( ) );
-        assertEquals( localUserRoleStored.getRoleKey( ), localUserRole.getRoleKey( ) );
+        MyLuteceUserRoleHome.create( myLuteceUserRole );
+        MyLuteceUserRole myLuteceUserRoleStored = MyLuteceUserRoleHome.findByPrimaryKey( myLuteceUserRole.getId( ) );
+        assertEquals( myLuteceUserRoleStored.getIdMyLuteceSearchUser( ), myLuteceUserRole.getIdMyLuteceSearchUser( ) );
+        assertEquals( myLuteceUserRoleStored.getRoleKey( ), myLuteceUserRole.getRoleKey( ) );
 
         // Update test
-        localUserRole.setIdLocaluser( IDLOCALUSER2 );
-        localUserRole.setRoleKey( STRROLE2 );
-        LocalUserRoleHome.update( localUserRole );
-        localUserRoleStored = LocalUserRoleHome.findByPrimaryKey( localUserRole.getId( ) );
-        assertEquals( localUserRoleStored.getIdLocaluser( ), localUserRole.getIdLocaluser( ) );
-        assertEquals( localUserRoleStored.getRoleKey( ), localUserRole.getRoleKey( ) );
+        myLuteceUserRole.setIdMyLuteceSearchUser( IDMYLUTECESEARCHUSER2 );
+        myLuteceUserRole.setRoleKey( STRROLE2 );
+        MyLuteceUserRoleHome.update( myLuteceUserRole );
+        myLuteceUserRoleStored = MyLuteceUserRoleHome.findByPrimaryKey( myLuteceUserRole.getId( ) );
+        assertEquals( myLuteceUserRoleStored.getIdMyLuteceSearchUser( ), myLuteceUserRole.getIdMyLuteceSearchUser( ) );
+        assertEquals( myLuteceUserRoleStored.getRoleKey( ), myLuteceUserRole.getRoleKey( ) );
 
         // List test
-        LocalUserRoleHome.getLocalUserRolesList( );
+        MyLuteceUserRoleHome.getMyLuteceUserRolesList( );
 
         // Delete test
-        LocalUserRoleHome.remove( localUserRole.getId( ) );
-        localUserRoleStored = LocalUserRoleHome.findByPrimaryKey( localUserRole.getId( ) );
-        assertNull( localUserRoleStored );
+        MyLuteceUserRoleHome.remove( myLuteceUserRole.getId( ) );
+        myLuteceUserRoleStored = MyLuteceUserRoleHome.findByPrimaryKey( myLuteceUserRole.getId( ) );
+        assertNull( myLuteceUserRoleStored );
 
     }
 

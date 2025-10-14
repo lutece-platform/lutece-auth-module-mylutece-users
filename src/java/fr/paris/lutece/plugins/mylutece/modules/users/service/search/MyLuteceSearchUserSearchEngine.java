@@ -57,10 +57,10 @@ import org.apache.lucene.store.Directory;
 
 /**
  * 
- * LocalUserSearchEngine
+ * MyLuteceSearchUserSearchEngine
  * 
  */
-public class LocalUserSearchEngine
+public class MyLuteceSearchUserSearchEngine
 {
     /**
      * Return search results

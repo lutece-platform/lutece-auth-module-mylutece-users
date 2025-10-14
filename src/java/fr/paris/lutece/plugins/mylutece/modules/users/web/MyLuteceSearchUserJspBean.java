@@ -40,6 +40,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeField;
 import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeFieldHome;
 import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeHome;
@@ -48,11 +49,11 @@ import fr.paris.lutece.plugins.mylutece.business.attribute.MyLuteceUserField;
 import fr.paris.lutece.plugins.mylutece.business.attribute.MyLuteceUserFieldHome;
 import fr.paris.lutece.plugins.mylutece.modules.users.business.AttributeMapping;
 import fr.paris.lutece.plugins.mylutece.modules.users.business.AttributeMappingHome;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserHome;
-import fr.paris.lutece.plugins.mylutece.modules.users.service.LocalUserInfoService;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceSearchUserHome;
+import fr.paris.lutece.plugins.mylutece.modules.users.service.MyLuteceUserSearchService;
 import fr.paris.lutece.plugins.mylutece.service.MyLutecePlugin;
 import fr.paris.lutece.plugins.mylutece.service.attribute.MyLuteceUserFieldService;
+import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -71,71 +72,71 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
 /**
- * This class provides the user interface to manage LocalUser features ( manage, create, modify, remove )
+ * This class provides the user interface to manage MyLuteceSearchUserfeatures ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageLocalUsers.jsp", controllerPath = "jsp/admin/plugins/mylutece/modules/users/", right = "MYLUTECE_USERS_MANAGEMENT" )
-public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
+@Controller( controllerJsp = "ManageMyLuteceSearchUsers.jsp", controllerPath = "jsp/admin/plugins/mylutece/modules/users/", right = "MYLUTECE_USERS_MANAGEMENT" )
+public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJspBean
 {
     /**
      *
      */
     private static final long serialVersionUID = 2163559576736974617L;
     // Templates
-    private static final String TEMPLATE_MANAGE_LOCALUSERS = "/admin/plugins/mylutece/modules/users/manage_localusers.html";
-    private static final String TEMPLATE_CREATE_LOCALUSER = "/admin/plugins/mylutece/modules/users/create_localuser.html";
-    private static final String TEMPLATE_MODIFY_LOCALUSER = "/admin/plugins/mylutece/modules/users/modify_localuser.html";
+    private static final String TEMPLATE_MANAGE_SEARCHUSERS = "/admin/plugins/mylutece/modules/users/manage_myLuteceSearchUsers.html";
+    private static final String TEMPLATE_CREATE_SEARCHUSER = "/admin/plugins/mylutece/modules/users/create_myLuteceSearchUser.html";
+    private static final String TEMPLATE_MODIFY_SEARCHUSER = "/admin/plugins/mylutece/modules/users/modify_myLuteceSearchUser.html";
     private static final String TEMPLATE_IMPORT_USERS_FROM_PROVIDER = "/admin/plugins/mylutece/modules/users/import_users_from_provider.html";
     private static final String TEMPLATE_MANAGE_ATTRIBUTE_MAPPING = "/admin/plugins/mylutece/modules/users/manage_attribute_mapping.html";
     // Parameters
-    private static final String PARAMETER_ID_LOCALUSER = "id";
+    private static final String PARAMETER_ID_SEARCHUSER = "id";
     private static final String PARAMETER_MYLUTECE_ATTRIBUTE_NAME = "attribute";
     private static final String PARAMETER_SEARCH_BY_LAST_NAME = "search_lastName";
     private static final String PARAMETER_SEARCH_BY_GIVEN_NAME = "search_givenName";
     private static final String PARAMETER_SEARCH_BY_EMAIL = "search_email";
     private static final String PARAMETER_FROM_PROVIDER = "import_from_provider";
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_LOCALUSERS = "module.mylutece.users.manage_localusers.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_LOCALUSER = "module.mylutece.users.modify_localuser.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_LOCALUSER = "module.mylutece.users.create_localuser.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERS = "module.mylutece.users.manage_myLuteceSearchUsers.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_SEARCHUSER = "module.mylutece.users.modify_myLuteceSearchUser.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_SEARCHUSER = "module.mylutece.users.create_myLuteceSearchUser.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ATTRIBUTE_MAPPING = "module.mylutece.users.manage_attribute_mapping.pageTitle";
     private static final String PROPERTY_IMPORT_USERS_PAGETITLE = "module.mylutece.users.import.pageTitle";
     // Markers
-    private static final String MARK_LOCALUSER_LIST = "localuser_list";
-    private static final String MARK_LOCALUSER = "localuser";
+    private static final String MARK_SEARCHUSER_LIST = "myLuteceSearchUser_list";
+    private static final String MARK_SEARCHUSER = "myLuteceSearchUser";
     private static final String MARK_MYLUTECE_ATTRIBUTES_LIST = "attribute_list";
     private static final String MARK_PROVIDER_ATTRIBUTES_LIST = "provider_attribute_list";
     private static final String MARK_ATTRIBUTE_MAPPING_LIST = "attribute_mapping_list";
     // Jsp
-    private static final String JSP_MANAGE_LOCALUSERS = "jsp/admin/plugins/mylutece/modules/users/ManageLocalUsers.jsp";
+    private static final String JSP_MANAGE_SEARCHUSERS = "jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp";
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_LOCALUSER = "module.mylutece.users.message.confirmRemoveLocalUser";
+    private static final String MESSAGE_CONFIRM_REMOVE_SEARCHUSER = "module.mylutece.users.message.confirmRemoveMyLuteceSearchUser";
     private static final String MESSAGE_FIELD_ERROR_MANDATORY = "module.mylutece.users.message.field.error.mandatory";
     // Validations
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "module.mylutece.users.model.entity.localuser.attribute.";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX = "module.mylutece.users.model.entity.myLuteceSearchUser.attribute.";
     // Views
-    private static final String VIEW_MANAGE_LOCALUSERS = "manageLocalUsers";
-    private static final String VIEW_CREATE_LOCALUSER = "createLocalUser";
-    private static final String VIEW_MODIFY_LOCALUSER = "modifyLocalUser";
-    private static final String VIEW_IMPORT_LOCALUSER = "importLocalUser";
+    private static final String VIEW_MANAGE_SEARCHUSERS = "manageMyLuteceSearchUsers";
+    private static final String VIEW_CREATE_SEARCHUSER = "createMyLuteceSearchUser";
+    private static final String VIEW_MODIFY_SEARCHUSER = "modifyMyLuteceSearchUser";
+    private static final String VIEW_IMPORT_SEARCHUSER = "importMyLuteceSearchUser";
     private static final String VIEW_MANAGE_ATTRIBUTE_MAPPING = "manageAttributeMapping";
     // Actions
-    private static final String ACTION_CREATE_LOCALUSER = "createLocalUser";
-    private static final String ACTION_MODIFY_LOCALUSER = "modifyLocalUser";
-    private static final String ACTION_REMOVE_LOCALUSER = "removeLocalUser";
-    private static final String ACTION_CONFIRM_REMOVE_LOCALUSER = "confirmRemoveLocalUser";
-    private static final String ACTION_SEARCH_LOCALUSER = "searchUsersFromProvider";
+    private static final String ACTION_CREATE_SEARCHUSER = "createMyLuteceSearchUser";
+    private static final String ACTION_MODIFY_SEARCHUSER = "modifyMyLuteceSearchUser";
+    private static final String ACTION_REMOVE_SEARCHUSER = "removeMyLuteceSearchUser";
+    private static final String ACTION_CONFIRM_REMOVE_SEARCHUSER = "confirmRemoveMyLuteceSearchUser";
+    private static final String ACTION_SEARCH_SEARCHUSER = "searchUsersFromProvider";
     private static final String ACTION_UPDATE_ATTRIBUTE_MAPPING = "updateAttributeMapping";
     // Infos
-    private static final String INFO_LOCALUSER_CREATED = "module.mylutece.users.info.localuser.created";
-    private static final String INFO_LOCALUSER_UPDATED = "module.mylutece.users.info.localuser.updated";
-    private static final String INFO_LOCALUSER_REMOVED = "module.mylutece.users.info.localuser.removed";
-    private static final String ERROR_LOCALUSER_PROVIDER_USER_ID_EXIST = "module.mylutece.users.error.localuser.providerUserIdExist";
+    private static final String INFO_SEARCHUSER_CREATED = "module.mylutece.users.info.myLuteceSearchUser.created";
+    private static final String INFO_SEARCHUSER_UPDATED = "module.mylutece.users.info.myLuteceSearchUser.updated";
+    private static final String INFO_SEARCHUSER_REMOVED = "module.mylutece.users.info.myLuteceSearchUser.removed";
+    private static final String ERROR_SEARCHUSER_PROVIDER_USER_ID_EXIST = "module.mylutece.users.error.myLuteceSearchUser.providerUserIdExist";
     private static final String INFO_ATTRIBUTE_MAPPING_DONE = "module.mylutece.users.info.attribute_mapping.done";
     // Prefixes
     private static final String PREFIX_ATTRIBUTE_MAPPING = "attribute_mapping_";
     private static final String PREFIX_PROVIDER_ATTRIBUTE = "provider_attribute_";
     // Session variables
-    private LocalUser _localuser;
+    private MyLuteceSearchUser _myLuteceSearchUser;
     private Locale _locale;
     private transient Plugin _myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
     private transient List<IAttribute> _listMyLuteceAttribute;
@@ -149,31 +150,31 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
      *            The HTTP request
      * @return The page
      */
-    @View( value = VIEW_MANAGE_LOCALUSERS, defaultView = true )
-    public String getManageLocalUsers( HttpServletRequest request )
+    @View( value = VIEW_MANAGE_SEARCHUSERS, defaultView = true )
+    public String getManageMyLuteceSearchUsers( HttpServletRequest request )
     {
-        _localuser = null;
+        _myLuteceSearchUser = null;
         _listMyLuteceAttribute = null;
-        List<LocalUser> listLocalUsers = LocalUserHome.getLocalUsersListWithoutAttribute( );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_LOCALUSER_LIST, listLocalUsers, JSP_MANAGE_LOCALUSERS );
-        return getPage( PROPERTY_PAGE_TITLE_MANAGE_LOCALUSERS, TEMPLATE_MANAGE_LOCALUSERS, model );
+        List<MyLuteceSearchUser> listMyLuteceSearchUsers = MyLuteceSearchUserHome.getMyLuteceSearchUsersListWithoutAttribute( );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_SEARCHUSER_LIST, listMyLuteceSearchUsers, JSP_MANAGE_SEARCHUSERS );
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERS, TEMPLATE_MANAGE_SEARCHUSERS, model );
     }
 
     /**
-     * Returns the form to create a localuser
+     * Returns the form to create a myLuteceSearchUser
      *
      * @param request
      *            The Http request
-     * @return the html code of the localuser form
+     * @return the html code of the myLuteceSearchUser form
      */
     @View( VIEW_MANAGE_ATTRIBUTE_MAPPING )
     public String getManageAttributeMapping( HttpServletRequest request )
     {
         _listMyLuteceAttribute = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
-        _listProviderAttribute = LocalUserInfoService.getInstance( ).getAllAttributes( );
+        _listProviderAttribute = MyLuteceUserSearchService.getInstance( ).getAllAttributes( );
         _listAttributeMapping = AttributeMappingHome.getAttributeMappingsList( );
         Map<String, Object> model = getModel( );
-        model.put( MARK_LOCALUSER, _localuser );
+        model.put( MARK_SEARCHUSER, _myLuteceSearchUser );
         model.put( MARK_ATTRIBUTE_MAPPING_LIST, _listAttributeMapping );
         model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute );
         model.put( MARK_PROVIDER_ATTRIBUTES_LIST, _listProviderAttribute );
@@ -181,7 +182,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     }
 
     /**
-     * Process the data capture form of a new localuser
+     * Process the data capture form of a new myLuteceSearchUser
      *
      * @param request
      *            The Http Request
@@ -226,109 +227,109 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     }
 
     /**
-     * Returns the form to create a localuser
+     * Returns the form to create a myLuteceSearchUser
      *
      * @param request
      *            The Http request
-     * @return the html code of the localuser form
+     * @return the html code of the myLuteceSearchUser form
      */
-    @View( VIEW_CREATE_LOCALUSER )
-    public String getCreateLocalUser( HttpServletRequest request )
+    @View( VIEW_CREATE_SEARCHUSER )
+    public String getCreateMyLuteceSearchUser( HttpServletRequest request )
     {
-        _localuser = ( _localuser != null ) ? _localuser : new LocalUser( );
+        _myLuteceSearchUser = ( _myLuteceSearchUser != null ) ? _myLuteceSearchUser : new MyLuteceSearchUser( );
         Map<String, Object> model = getModel( );
-        model.put( MARK_LOCALUSER, _localuser );
+        model.put( MARK_SEARCHUSER, _myLuteceSearchUser );
         if ( _listMyLuteceAttribute == null )
         {
             _listMyLuteceAttribute = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
         }
         model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute );
-        return getPage( PROPERTY_PAGE_TITLE_CREATE_LOCALUSER, TEMPLATE_CREATE_LOCALUSER, model );
+        return getPage( PROPERTY_PAGE_TITLE_CREATE_SEARCHUSER, TEMPLATE_CREATE_SEARCHUSER, model );
     }
 
     /**
-     * Process the data capture form of a new localuser
+     * Process the data capture form of a new myLuteceSearchUser
      *
      * @param request
      *            The Http Request
      * @return The Jsp URL of the process result
      */
-    @Action( ACTION_CREATE_LOCALUSER )
-    public String doCreateLocalUser( HttpServletRequest request )
+    @Action( ACTION_CREATE_SEARCHUSER )
+    public String doCreateMyLuteceSearchUser( HttpServletRequest request )
     {
-        _localuser = ( _localuser == null ) ? new LocalUser( ) : _localuser;
+        _myLuteceSearchUser = ( _myLuteceSearchUser == null ) ? new MyLuteceSearchUser( ) : _myLuteceSearchUser;
         if ( _listMyLuteceAttribute == null )
         {
             _listMyLuteceAttribute = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
         }
-        populate( _localuser, request, request.getLocale( ) );
-        setMyLuteceAttributeValue( request, _localuser );
+        populate( _myLuteceSearchUser, request, request.getLocale( ) );
+        setMyLuteceAttributeValue( request, _myLuteceSearchUser );
         // Check constraints
-        if ( !validateBean( _localuser, VALIDATION_ATTRIBUTES_PREFIX ) || !validateMyLuteceAttribute( request ) )
+        if ( !validateBean( _myLuteceSearchUser, VALIDATION_ATTRIBUTES_PREFIX ) || !validateMyLuteceAttribute( request ) )
         {
-            return redirectView( request, VIEW_CREATE_LOCALUSER );
+            return redirectView( request, VIEW_CREATE_SEARCHUSER );
         }
-        if ( LocalUserHome.findByConnectId( _localuser.getProviderUserId( ) ) == null )
+        if ( MyLuteceSearchUserHome.findByConnectId( _myLuteceSearchUser.getProviderUserId( ) ) == null )
         {
-            LocalUserHome.create( _localuser );
+            MyLuteceSearchUserHome.create( _myLuteceSearchUser );
         }
         else
         {
-            addError( ERROR_LOCALUSER_PROVIDER_USER_ID_EXIST, getLocale( ) );
-            return redirectView( request, request.getParameter( PARAMETER_FROM_PROVIDER ) == null ? VIEW_CREATE_LOCALUSER : VIEW_IMPORT_LOCALUSER );
+            addError( ERROR_SEARCHUSER_PROVIDER_USER_ID_EXIST, getLocale( ) );
+            return redirectView( request, request.getParameter( PARAMETER_FROM_PROVIDER ) == null ? VIEW_CREATE_SEARCHUSER : VIEW_IMPORT_SEARCHUSER );
         }
-        MyLuteceUserFieldService.doCreateUserFields( _localuser.getId( ), request, request.getLocale( ) );
-        addInfo( INFO_LOCALUSER_CREATED, getLocale( ) );
-        return redirectView( request, VIEW_MANAGE_LOCALUSERS );
+        MyLuteceUserFieldService.doCreateUserFields( _myLuteceSearchUser.getId( ), request, request.getLocale( ) );
+        addInfo( INFO_SEARCHUSER_CREATED, getLocale( ) );
+        return redirectView( request, VIEW_MANAGE_SEARCHUSERS );
     }
 
     /**
-     * Manages the removal form of a localuser whose identifier is in the http request
+     * Manages the removal form of a myLuteceSearchUser whose identifier is in the http request
      *
      * @param request
      *            The Http request
      * @return the html code to confirm
      */
-    @Action( ACTION_CONFIRM_REMOVE_LOCALUSER )
-    public String getConfirmRemoveLocalUser( HttpServletRequest request )
+    @Action( ACTION_CONFIRM_REMOVE_SEARCHUSER )
+    public String getConfirmRemoveMyLuteceSearchUser( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_LOCALUSER ) );
-        UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_LOCALUSER ) );
-        url.addParameter( PARAMETER_ID_LOCALUSER, nId );
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_LOCALUSER, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_SEARCHUSER ) );
+        UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_SEARCHUSER ) );
+        url.addParameter( PARAMETER_ID_SEARCHUSER, nId );
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SEARCHUSER, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
         return redirect( request, strMessageUrl );
     }
 
     /**
-     * Handles the removal form of a localuser
+     * Handles the removal form of a myLuteceSearchUser
      *
      * @param request
      *            The Http request
-     * @return the jsp URL to display the form to manage localusers
+     * @return the jsp URL to display the form to manage myLuteceSearchUsers
      */
-    @Action( ACTION_REMOVE_LOCALUSER )
-    public String doRemoveLocalUser( HttpServletRequest request )
+    @Action( ACTION_REMOVE_SEARCHUSER )
+    public String doRemoveMyLuteceSearchUser( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_LOCALUSER ) );
-        LocalUserHome.remove( nId );
-        addInfo( INFO_LOCALUSER_REMOVED, getLocale( ) );
-        return redirectView( request, VIEW_MANAGE_LOCALUSERS );
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_SEARCHUSER ) );
+        MyLuteceSearchUserHome.remove( nId );
+        addInfo( INFO_SEARCHUSER_REMOVED, getLocale( ) );
+        return redirectView( request, VIEW_MANAGE_SEARCHUSERS );
     }
 
     /**
-     * Returns the form to update info about a localuser
+     * Returns the form to update info about a myLuteceSearchUser
      *
      * @param request
      *            The Http request
      * @return The HTML form to update info
      */
-    @View( VIEW_MODIFY_LOCALUSER )
-    public String getModifyLocalUser( HttpServletRequest request )
+    @View( VIEW_MODIFY_SEARCHUSER )
+    public String getModifyMyLuteceSearchUser( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_LOCALUSER ) );
-        if ( _localuser == null || ( _localuser.getId( ) != nId ) )
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_SEARCHUSER ) );
+        if ( _myLuteceSearchUser == null || ( _myLuteceSearchUser.getId( ) != nId ) )
         {
-            _localuser = LocalUserHome.findByPrimaryKey( nId );
+            _myLuteceSearchUser = MyLuteceSearchUserHome.findByPrimaryKey( nId );
         }
         if ( _listMyLuteceAttribute == null )
         {
@@ -336,7 +337,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
         }
         for ( IAttribute attribute : _listMyLuteceAttribute )
         {
-            List<MyLuteceUserField> listUserFields = MyLuteceUserFieldHome.selectUserFieldsByIdUserIdAttribute( _localuser.getId( ),
+            List<MyLuteceUserField> listUserFields = MyLuteceUserFieldHome.selectUserFieldsByIdUserIdAttribute( _myLuteceSearchUser.getId( ),
                     attribute.getIdAttribute( ), _myLutecePlugin );
             for ( AttributeField attributeField : attribute.getListAttributeFields( ) )
             {
@@ -350,31 +351,31 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
             }
         }
         Map<String, Object> model = getModel( );
-        model.put( MARK_LOCALUSER, _localuser );
+        model.put( MARK_SEARCHUSER, _myLuteceSearchUser );
         model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute );
-        return getPage( PROPERTY_PAGE_TITLE_MODIFY_LOCALUSER, TEMPLATE_MODIFY_LOCALUSER, model );
+        return getPage( PROPERTY_PAGE_TITLE_MODIFY_SEARCHUSER, TEMPLATE_MODIFY_SEARCHUSER, model );
     }
 
     /**
-     * Process the change form of a localuser
+     * Process the change form of a myLuteceSearchUser
      *
      * @param request
      *            The Http request
      * @return The Jsp URL of the process result
      */
-    @Action( ACTION_MODIFY_LOCALUSER )
-    public String doModifyLocalUser( HttpServletRequest request )
+    @Action( ACTION_MODIFY_SEARCHUSER )
+    public String doModifyMyLuteceSearchUser( HttpServletRequest request )
     {
-        populate( _localuser, request, request.getLocale( ) );
-        setMyLuteceAttributeValue( request, _localuser );
-        if ( !validateBean( _localuser, VALIDATION_ATTRIBUTES_PREFIX ) || !validateMyLuteceAttribute( request ) )
+        populate( _myLuteceSearchUser, request, request.getLocale( ) );
+        setMyLuteceAttributeValue( request, _myLuteceSearchUser );
+        if ( !validateBean( _myLuteceSearchUser, VALIDATION_ATTRIBUTES_PREFIX ) || !validateMyLuteceAttribute( request ) )
         {
-            return redirect( request, VIEW_MODIFY_LOCALUSER, PARAMETER_ID_LOCALUSER, _localuser.getId( ) );
+            return redirect( request, VIEW_MODIFY_SEARCHUSER, PARAMETER_ID_SEARCHUSER, _myLuteceSearchUser.getId( ) );
         }
-        LocalUserHome.update( _localuser );
-        MyLuteceUserFieldService.doModifyUserFields( _localuser.getId( ), request, request.getLocale( ), AdminUserService.getAdminUser( request ) );
-        addInfo( INFO_LOCALUSER_UPDATED, getLocale( ) );
-        return redirectView( request, VIEW_MANAGE_LOCALUSERS );
+        MyLuteceSearchUserHome.update( _myLuteceSearchUser );
+        MyLuteceUserFieldService.doModifyUserFields( _myLuteceSearchUser.getId( ), request, request.getLocale( ), AdminUserService.getAdminUser( request ) );
+        addInfo( INFO_SEARCHUSER_UPDATED, getLocale( ) );
+        return redirectView( request, VIEW_MANAGE_SEARCHUSERS );
     }
 
     /**
@@ -384,8 +385,8 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
      *            The request
      * @return The HTML content
      */
-    @View( VIEW_IMPORT_LOCALUSER )
-    public String getImportLocalUser( HttpServletRequest request )
+    @View( VIEW_IMPORT_SEARCHUSER )
+    public String getImportMyLuteceSearchUser( HttpServletRequest request )
     {
         _listAttributeMapping = ( _listAttributeMapping != null ) ? _listAttributeMapping : AttributeMappingHome.getAttributeMappingsList( );
         _listMyLuteceAttribute = ( _listMyLuteceAttribute != null ) ? _listMyLuteceAttribute
@@ -405,7 +406,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
      *            The request
      * @return The HTML content
      */
-    @Action( ACTION_SEARCH_LOCALUSER )
+    @Action( ACTION_SEARCH_SEARCHUSER )
     public String doSearchUsersFromProvider( HttpServletRequest request )
     {
         String strParameterLastName = request.getParameter( PARAMETER_SEARCH_BY_LAST_NAME );
@@ -432,12 +433,12 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
             List<AttributeField> listAttributeFields = AttributeFieldHome.selectAttributeFieldsByIdAttribute( attribute.getIdAttribute( ), _myLutecePlugin );
             attribute.setListAttributeFields( listAttributeFields );
         }
-        List<LocalUser> users = LocalUserInfoService.getInstance( ).findUsers( strParameterLastName, strParameterGivenName, strParameterEmail,
+        List<MyLuteceSearchUser> users = MyLuteceUserSearchService.getInstance( ).findUsers( strParameterLastName, strParameterGivenName, strParameterEmail,
                 listProviderAttribute );
         Map<String, Object> model = getModel( );
         model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute );
         model.put( MARK_ATTRIBUTE_MAPPING_LIST, _listAttributeMapping );
-        model.put( MARK_LOCALUSER_LIST, users );
+        model.put( MARK_SEARCHUSER_LIST, users );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
         return getAdminPage( template.getHtml( ) );
     }
@@ -491,16 +492,16 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
     }
 
     /**
-     * Fill mylutece attribute in request & localUser
+     * Fill mylutece attribute in request & searchUser
      *
      * @param request
      *            The Http request
-     * @param localUser
+     * @param searchUser
      *            The Http request
      * @return returns a list of mylutece attribute
      * 
      */
-    private void setMyLuteceAttributeValue( HttpServletRequest request, LocalUser localUser )
+    private void setMyLuteceAttributeValue( HttpServletRequest request, MyLuteceSearchUser myLuteceSearchUser )
     {
         ReferenceList userAttributes = new ReferenceList( );
         for ( IAttribute attribute : _listMyLuteceAttribute )
@@ -515,7 +516,7 @@ public class LocalUserJspBean extends AbstractmyLuteceUsersManagementJspBean
                 attribute.getListAttributeFields( ).get( 0 ).setValue( strAttributeValue );
             }
         }
-        localUser.setAttributes( userAttributes );
+        myLuteceSearchUser.setAttributes( userAttributes );
     }
 
 }

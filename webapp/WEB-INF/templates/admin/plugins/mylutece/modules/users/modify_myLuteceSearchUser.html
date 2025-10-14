@@ -1,0 +1,46 @@
+<#include "mylutecesearchusermanagement_tabs.html" />
+<#assign headerIcon>
+	<@icon style='user' />
+</#assign>
+<@box>
+	<@boxHeader title='${headerIcon}&nbsp;${mylutecesearchuser.givenName} ${mylutecesearchuser.lastName}' />
+	<@boxBody>
+		<@mylutecesearchusermanagement tab="mylutecesearchuser" />
+		<@tform class="form-horizontal" method="post" name="modify_mylutecesearchuser"
+			action="jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp">
+			<@messages errors=errors />
+			<@input type="hidden" id="id" name="id" value="${mylutecesearchuser.id}" />
+			<@formGroup labelKey='#i18n{module.mylutece.users.modify_mylutecesearchuser.labelLogin}'
+				helpKey='#i18n{module.mylutece.users.modify_mylutecesearchuser.labelLogin.help}' mandatory=true>
+				<@input type='text' name='login' value='${mylutecesearchuser.login}' />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{module.mylutece.users.modify_mylutecesearchuser.labelGivenName}'
+				helpKey='#i18n{module.mylutece.users.modify_mylutecesearchuser.labelGivenName.help}' mandatory=true>
+				<@input type='text' name='given_name' value='${mylutecesearchuser.givenName}' />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{module.mylutece.users.modify_mylutecesearchuser.labelLastName}'
+				helpKey='#i18n{module.mylutece.users.modify_mylutecesearchuser.labelLastName.help}' mandatory=true>
+				<@input type='text' name='last_name' value='${mylutecesearchuser.lastName}' />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelProviderUserId}'
+				helpKey='#i18n{module.mylutece.users.create_mylutecesearchuser.labelProviderUserId.help}' mandatory=true>
+				<@input type='text' name='provider_user_id' value='${mylutecesearchuser.providerUserId!}' />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{module.mylutece.users.modify_mylutecesearchuser.labelEmail}'
+				helpKey='#i18n{module.mylutece.users.modify_mylutecesearchuser.labelEmail.help}'>
+				<@input type='text' name='email' value='${mylutecesearchuser.email}' />
+			</@formGroup>
+			<#list attribute_list as attribute>
+				<@formGroup labelKey='${attribute.title}' helpKey='${attribute.helpMessage!}'
+					mandatory=attribute.mandatory!false>
+					<#list attribute.listAttributeFields as attributeField>
+						<@input type="text" class="form-control" name="attribute_${attribute.idAttribute}"
+							id="attribute_${attribute.idAttribute}" size="${attributeField.width}"
+							value=attributeField.value />
+					</#list>
+				</@formGroup>
+			</#list>
+			<@actionButtons button1Name="action_modifyMyLuteceSearchUser" button2Name="view_manageMyLuteceSearchUser" />
+		</@tform>
+	</@boxBody>
+</@box>

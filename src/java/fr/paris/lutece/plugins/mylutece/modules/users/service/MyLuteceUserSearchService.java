@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2025, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,32 +33,35 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.users.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserHome;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserRole;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserRoleHome;
-import fr.paris.lutece.plugins.mylutece.service.IMyLuteceExternalRolesProvider;
-import fr.paris.lutece.portal.service.security.LuteceUser;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-public final class LocalUserRoleProvider implements IMyLuteceExternalRolesProvider
+import fr.paris.lutece.plugins.mylutece.service.search.IUserSearchProvider;
+import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.util.ReferenceList;
+
+/**
+ * User Search Service
+ * Singleton service that delegates to a configured IUserSearchProvider implementation
+ */
+public final class MyLuteceUserSearchService implements IUserSearchProvider
 {
-    private static final String BEAN_NAME = "mylutece-localUserRoleProvider";
-    private static LocalUserRoleProvider _localUserRoleProvider;
+    private static final String BEAN_NAME = "mylutece.myLuteceUserSearchProvider";
+    private static IUserSearchProvider _userSearchProvider;
 
     /**
-     * Default constructor
+     * Private constructor
      */
-    private LocalUserRoleProvider( )
+    private MyLuteceUserSearchService( )
     {
     }
 
+    /**
+     * Initialize the service
+     */
     public void init( )
     {
-        _localUserRoleProvider = SpringContextService.getBean( BEAN_NAME );
+        _userSearchProvider = SpringContextService.getBean( BEAN_NAME );
     }
 
     /**
@@ -66,27 +69,49 @@ public final class LocalUserRoleProvider implements IMyLuteceExternalRolesProvid
      *
      * @return The instance of the singleton
      */
-    public static LocalUserRoleProvider getInstance( )
+    public static IUserSearchProvider getInstance( )
     {
-        if ( _localUserRoleProvider == null )
+        if ( _userSearchProvider == null )
         {
-            _localUserRoleProvider = SpringContextService.getBean( BEAN_NAME );
+            _userSearchProvider = SpringContextService.getBean( BEAN_NAME );
         }
-        return _localUserRoleProvider;
+        return _userSearchProvider;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Collection<String> providesRoles( LuteceUser user )
+    public List<MyLuteceSearchUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail,
+            ReferenceList listProviderAttribute )
     {
-        Collection<String> providesRoles = new ArrayList<String>( );
-        LocalUser localUser = LocalUserHome.findByConnectId( user.getName( ) );
-        if( localUser != null ) {
-            List<LocalUserRole> localUserRoleList = LocalUserRoleHome.getLocalUserRolesListByUserId( localUser.getId( ) );
-            for ( LocalUserRole localUserRole : localUserRoleList )
-            {
-                providesRoles.add( localUserRole.getRoleKey( ) );
-            }
-        }
-        return providesRoles;
+        return _userSearchProvider.findUsers( strParameterLastName, strParameterGivenName, strParameterCriteriaMail, listProviderAttribute );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getAllAttributes( )
+    {
+        return _userSearchProvider.getAllAttributes( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MyLuteceSearchUser getUserById( String strUserId )
+    {
+        return _userSearchProvider.getUserById( strUserId );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<MyLuteceSearchUser> getUsersByIds( List<String> userIds )
+    {
+        return _userSearchProvider.getUsersByIds( userIds );
     }
 }

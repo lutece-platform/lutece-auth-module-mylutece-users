@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.users.web;
 
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserHome;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserRole;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserRoleHome;
-import fr.paris.lutece.plugins.mylutece.modules.users.service.LocalUserRoleService;
+import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceSearchUserHome;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserRole;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserRoleHome;
+import fr.paris.lutece.plugins.mylutece.modules.users.service.MyLuteceUserRoleService;
 import fr.paris.lutece.plugins.mylutece.service.RoleResourceIdService;
 import fr.paris.lutece.portal.business.role.Role;
 import fr.paris.lutece.portal.business.role.RoleHome;
@@ -55,35 +55,35 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * This class provides the user interface to manage LocalUserRole features ( manage, create, modify, remove )
+ * This class provides the user interface to manage MyLuteceUserRole features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageLocalUserRoles.jsp", controllerPath = "jsp/admin/plugins/mylutece/modules/users/", right = "MYLUTECE_USERS_MANAGEMENT" )
-public class LocalUserRoleJspBean extends AbstractmyLuteceUsersManagementJspBean
+@Controller( controllerJsp = "ManageMyLuteceUserRoles.jsp", controllerPath = "jsp/admin/plugins/mylutece/modules/users/", right = "MYLUTECE_USERS_MANAGEMENT" )
+public class MyLuteceUserRoleJspBean extends AbstractmyLuteceUsersManagementJspBean
 {
     /**
      *
      */
     private static final long serialVersionUID = -779120944936133468L;
     // Templates
-    private static final String TEMPLATE_MANAGE_LOCALUSERROLES = "/admin/plugins/mylutece/modules/users/manage_localuserroles.html";
+    private static final String TEMPLATE_MANAGE_SEARCHUSERROLES = "/admin/plugins/mylutece/modules/users/manage_myluteceuserroles.html";
     // Parameters
-    private static final String PARAMETER_ID_LOCALUSER_ID = "id_localuser";
+    private static final String PARAMETER_ID_MYLUTECESEARCHUSER_ID = "id_mylutecesearchuser";
     private static final String PARAMETER_ROLE_KEY = "role_key";
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_LOCALUSERROLES = "module.mylutece.users.manage_localuserroles.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERROLES = "module.mylutece.users.manage_mylutecesearchuserroles.pageTitle";
     // Markers
-    private static final String MARK_LOCALUSERROLE_LIST = "localuserrole_list";
+    private static final String MARK_MYLUTECESEARCHUSERROLE_LIST = "mylutecesearchuserrole_list";
     private static final String MARK_MYLUTECE_ROLE_LIST = "mylutece_role_list";
-    private static final String MARK_LOCALUSER = "localuser";
-    private static final String MARK_LOCALUSER_ID = "id_localuser";
+    private static final String MARK_MYLUTECESEARCHUSER = "mylutecesearchuser";
+    private static final String MARK_MYLUTECESEARCHUSER_ID = "id_mylutecesearchuser";
     // Views
-    private static final String VIEW_MANAGE_LOCALUSERROLES = "manageLocalUserRoles";
+    private static final String VIEW_MANAGE_SEARCHUSERROLES = "manageMyLuteceUserRoles";
     // Actions
-    private static final String ACTION_ASSIGN_LOCALUSERROLE = "assignLocalUserRole";
+    private static final String ACTION_ASSIGN_SEARCHUSERROLE = "assignMyLuteceUserRole";
     // Infos
-    private static final String INFO_LOCALUSERROLE_CREATED = "module.mylutece.users.info.localuserrole.created";
+    private static final String INFO_SEARCHUSERROLE_CREATED = "module.mylutece.users.info.mylutecesearchuserrole.created";
     // Session variable to store working values
-    private LocalUser _localUser;
+    private MyLuteceSearchUser _myLuteceSearchUser;
 
     /**
      * Build the Manage View
@@ -92,39 +92,39 @@ public class LocalUserRoleJspBean extends AbstractmyLuteceUsersManagementJspBean
      *            The HTTP request
      * @return The page
      */
-    @View( value = VIEW_MANAGE_LOCALUSERROLES, defaultView = true )
-    public String getManageLocalUserRoles( HttpServletRequest request )
+    @View( value = VIEW_MANAGE_SEARCHUSERROLES, defaultView = true )
+    public String getManageMyLuteceUserRoles( HttpServletRequest request )
     {
-        String strUserId = request.getParameter( PARAMETER_ID_LOCALUSER_ID );
+        String strUserId = request.getParameter( PARAMETER_ID_MYLUTECESEARCHUSER_ID );
         int nUserId = Integer.parseInt( strUserId );
-        _localUser = LocalUserHome.findByPrimaryKey( nUserId );
+        _myLuteceSearchUser = MyLuteceSearchUserHome.findByPrimaryKey( nUserId );
         Collection<Role> myLuteceAuthorizedRoleCollection = RBACService.getAuthorizedCollection( RoleHome.findAll( ),
                 RoleResourceIdService.PERMISSION_ASSIGN_ROLE, AdminUserService.getAdminUser( request ) );
         List<Role> myLuteceAuthorizedRoleList = myLuteceAuthorizedRoleCollection.stream( ).collect( Collectors.toList( ) );
         Map<String, Object> model = getModel( );
         model.put( MARK_MYLUTECE_ROLE_LIST, myLuteceAuthorizedRoleList );
-        model.put( MARK_LOCALUSERROLE_LIST, getLocalUserAuthorizedRoleList( myLuteceAuthorizedRoleList, nUserId ) );
-        model.put( MARK_LOCALUSER, _localUser );
-        model.put( MARK_LOCALUSER_ID, strUserId );
-        return getPage( PROPERTY_PAGE_TITLE_MANAGE_LOCALUSERROLES, TEMPLATE_MANAGE_LOCALUSERROLES, model );
+        model.put( MARK_MYLUTECESEARCHUSERROLE_LIST, getSearchUserAuthorizedRoleList( myLuteceAuthorizedRoleList, nUserId ) );
+        model.put( MARK_MYLUTECESEARCHUSER, _myLuteceSearchUser );
+        model.put( MARK_MYLUTECESEARCHUSER_ID, strUserId );
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERROLES, TEMPLATE_MANAGE_SEARCHUSERROLES, model );
     }
 
     /**
-     * Process the data capture form of a new localuserrole
+     * Process the data capture form of a new searchuserrole
      *
      * @param request
      *            The Http Request
      * @return The Jsp URL of the process result
      */
-    @Action( ACTION_ASSIGN_LOCALUSERROLE )
-    public String doAssignLocalUserRole( HttpServletRequest request )
+    @Action( ACTION_ASSIGN_SEARCHUSERROLE )
+    public String doAssignMyLuteceUserRole( HttpServletRequest request )
     {
-        int nLocalUserId = _localUser.getId( );
+        int nSearchUserId = _myLuteceSearchUser.getId( );
         String [ ] arrKeys = request.getParameterValues( PARAMETER_ROLE_KEY );
         List<String> myLuteceRoleKeysList = ( arrKeys != null ) ? Arrays.asList( arrKeys ) : new ArrayList<>( );
-        LocalUserRoleService.doLocalUserAssignements( myLuteceRoleKeysList, nLocalUserId );
-        addInfo( INFO_LOCALUSERROLE_CREATED, getLocale( ) );
-        return redirect( request, VIEW_MANAGE_LOCALUSERROLES, PARAMETER_ID_LOCALUSER_ID, nLocalUserId );
+        MyLuteceUserRoleService.doSearchUserAssignements( myLuteceRoleKeysList, nSearchUserId );
+        addInfo( INFO_SEARCHUSERROLE_CREATED, getLocale( ) );
+        return redirect( request, VIEW_MANAGE_SEARCHUSERROLES, PARAMETER_ID_MYLUTECESEARCHUSER_ID, nSearchUserId );
     }
 
     /**
@@ -136,22 +136,22 @@ public class LocalUserRoleJspBean extends AbstractmyLuteceUsersManagementJspBean
      *            The user id
      * @return The Local user role list
      */
-    public Collection<Role> getLocalUserAuthorizedRoleList( List<Role> myLuteceAuthorizedRoleList, int nUserId )
+    public Collection<Role> getSearchUserAuthorizedRoleList( List<Role> myLuteceAuthorizedRoleList, int nUserId )
     {
-        List<LocalUserRole> currentlocalUserRoleList = LocalUserRoleHome.getLocalUserRolesListByUserId( nUserId );
-        Collection<Role> localUserRoleList = new ArrayList<>( );
-        for ( LocalUserRole localUserRole : currentlocalUserRoleList )
+        List<MyLuteceUserRole> currentmyLuteceSearchUserRoleList = MyLuteceUserRoleHome.getMyLuteceUserRolesListByUserId( nUserId );
+        Collection<Role> myLuteceSearchUserRoleList = new ArrayList<>( );
+        for ( MyLuteceUserRole myLuteceSearchUserRole : currentmyLuteceSearchUserRoleList )
         {
             for ( Role role : myLuteceAuthorizedRoleList )
             {
-                String roleKey = localUserRole.getRoleKey( );
+                String roleKey = myLuteceSearchUserRole.getRoleKey( );
                 if ( role.getRole( ).equals( roleKey ) )
                 {
-                    localUserRoleList.add( RoleHome.findByPrimaryKey( roleKey ) );
+                    myLuteceSearchUserRoleList.add( RoleHome.findByPrimaryKey( roleKey ) );
                     break;
                 }
             }
         }
-        return localUserRoleList;
+        return myLuteceSearchUserRoleList;
     }
 }

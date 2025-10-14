@@ -38,35 +38,35 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
 
 /**
- * ILocalUserRoleDAO Interface
+ * IMyLuteceUserRoleDAO Interface
  */
-public interface ILocalUserRoleDAO
+public interface IMyLuteceUserRoleDAO
 {
     /**
      * Insert a new record in the table.
      * 
-     * @param localUserRole
-     *            instance of the LocalUserRole object to insert
+     * @param myLuteceUserRole
+     *            instance of the MyLuteceUserRole object to insert
      * @param plugin
      *            the Plugin
      */
-    void insert( LocalUserRole localUserRole, Plugin plugin );
+    void insert( MyLuteceUserRole myLuteceUserRole, Plugin plugin );
 
     /**
      * Update the record in the table
      * 
-     * @param localUserRole
-     *            the reference of the LocalUserRole
+     * @param myLuteceUserRole
+     *            the reference of the MyLuteceUserRole
      * @param plugin
      *            the Plugin
      */
-    void store( LocalUserRole localUserRole, Plugin plugin );
+    void store( MyLuteceUserRole myLuteceUserRole, Plugin plugin );
 
     /**
      * Delete a record from the table
      * 
      * @param nKey
-     *            The identifier of the LocalUserRole to delete
+     *            The identifier of the MyLuteceUserRole to delete
      * @param plugin
      *            the Plugin
      */
@@ -79,48 +79,48 @@ public interface ILocalUserRoleDAO
      * Load the data from the table
      * 
      * @param nKey
-     *            The identifier of the localUserRole
+     *            The identifier of the myLuteceUserRole
      * @param plugin
      *            the Plugin
-     * @return The instance of the localUserRole
+     * @return The instance of the myLuteceUserRole
      */
-    LocalUserRole load( int nKey, Plugin plugin );
+    MyLuteceUserRole load( int nKey, Plugin plugin );
 
     /**
-     * Load the data of all the localUserRole objects and returns them as a list
+     * Load the data of all the myLuteceUserRole objects and returns them as a list
      * 
      * @param plugin
      *            the Plugin
-     * @return The list which contains the data of all the localUserRole objects
+     * @return The list which contains the data of all the myLuteceUserRole objects
      */
-    List<LocalUserRole> selectLocalUserRolesList( Plugin plugin );
+    List<MyLuteceUserRole> selectMyLuteceUserRolesList( Plugin plugin );
 
     /**
-     * Load the id of all the localUserRole objects and returns them as a list
+     * Load the id of all the myLuteceUserRole objects and returns them as a list
      * 
      * @param plugin
      *            the Plugin
-     * @return The list which contains the id of all the localUserRole objects
+     * @return The list which contains the id of all the myLuteceUserRole objects
      */
-    List<Integer> selectIdLocalUserRolesList( Plugin plugin );
+    List<Integer> selectIdMyLuteceUserRolesList( Plugin plugin );
 
     /**
-     * Load the id of all the localUserRole objects and returns them as a list
+     * Load the id of all the myLuteceUserRole objects and returns them as a list
      * 
      * @param plugin
      *            the Plugin
-     * @param nIdLocalUser
-     *            the LocalUserId
-     * @return The list which contains the id of all the localUserRole objects
+     * @param nIdSearchUser
+     *            the SearchUserId
+     * @return The list which contains the id of all the myLuteceUserRole objects
      */
-    List<LocalUserRole> selectLocalUserRolesListByUserId( int nIdLocalUser, Plugin plugin );
+    List<MyLuteceUserRole> selectMyLuteceUserRolesListByUserId( int nIdSearchUser, Plugin plugin );
 
     /**
-     * Load the data of all the localUserRole objects and returns them as a referenceList
+     * Load the data of all the myLuteceUserRole objects and returns them as a referenceList
      * 
      * @param plugin
      *            the Plugin
-     * @return The referenceList which contains the data of all the localUserRole objects
+     * @return The referenceList which contains the data of all the myLuteceUserRole objects
      */
-    ReferenceList selectLocalUserRolesReferenceList( Plugin plugin );
+    ReferenceList selectMyLuteceUserRolesReferenceList( Plugin plugin );
 }

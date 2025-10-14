@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-    <bean id="mylutece-users.localUserDAO" class="fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserDAO" />
-    <bean id="mylutece-users.localUserRoleDAO" class="fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUserRoleDAO" />
+    <bean id="mylutece-users.myLuteceSearchUserDAO" class="fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceSearchUserDAO" />
+    <bean id="mylutece-users.myLuteceUserRoleDAO" class="fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserRoleDAO" />
     <bean id="mylutece_users.attributeMappingDAO" class="fr.paris.lutece.plugins.mylutece.modules.users.business.AttributeMappingDAO" />
-    <bean id="mylutece-users.localUserSearchEngine" class="fr.paris.lutece.plugins.mylutece.modules.users.service.search.LocalUserSearchEngine" />
-    <bean id="mylutece-users.localUserSearchRestService" class="fr.paris.lutece.plugins.mylutece.modules.users.rs.LocalUserSearchRestService" />
-    <bean id="mylutece-users.localUserInfoService" class="fr.paris.lutece.plugins.mylutece.modules.users.service.LocalUserInfoService" />
-    <bean id="mylutece-localUserRoleProvider" class="fr.paris.lutece.plugins.mylutece.modules.users.service.LocalUserRoleProvider"/>
+    <bean id="mylutece-users.myLuteceSearchUserSearchEngine" class="fr.paris.lutece.plugins.mylutece.modules.users.service.search.MyLuteceSearchUserSearchEngine" />
+    <bean id="mylutece-users.myLuteceUserSearchService" class="fr.paris.lutece.plugins.mylutece.modules.users.service.MyLuteceUserSearchService" />
+    <bean id="mylutece-myLuteceUserRoleProvider" class="fr.paris.lutece.plugins.mylutece.modules.users.service.MyLuteceUserRoleProvider"/>
 </beans>

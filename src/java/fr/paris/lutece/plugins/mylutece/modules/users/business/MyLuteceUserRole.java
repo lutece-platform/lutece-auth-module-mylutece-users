@@ -31,34 +31,84 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.mylutece.modules.users.service;
+package fr.paris.lutece.plugins.mylutece.modules.users.business;
 
-import java.util.List;
-import fr.paris.lutece.plugins.mylutece.modules.users.business.LocalUser;
-import fr.paris.lutece.util.ReferenceList;
+import java.io.Serializable;
 
 /**
- * IUserInfosProvider Interface
- *
+ * This is the business class for the object MyLuteceUserRole
  */
-public interface IUserInfosProvider
+public class MyLuteceUserRole implements Serializable
 {
-    /**
-     * Find users
-     *
-     * @param listInfos
-     *            Attributes
-     * @return List<LocalUser>
-     */
-    List<LocalUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail,
-            ReferenceList listProviderAttribute );
+    private static final long serialVersionUID = 1L;
+
+    // Variables declarations
+    private int _nId;
+
+    private int _nIdMyLuteceSearchUser;
+
+    private String _strRoleKey;
 
     /**
-     * Get all attributes
-     *
-     * @param listInfos
-     *            Attributes
-     * @return List<LocalUser>
+     * Returns the Id
+     * 
+     * @return The Id
      */
-    List<String> getAllAttributes( );
+    public int getId( )
+    {
+        return _nId;
+    }
+
+    /**
+     * Sets the Id
+     * 
+     * @param nId
+     *            The Id
+     */
+    public void setId( int nId )
+    {
+        _nId = nId;
+    }
+
+    /**
+     * Returns the IdMyLuteceSearchUser
+     * 
+     * @return The IdMyLuteceSearchUser
+     */
+    public int getIdMyLuteceSearchUser( )
+    {
+        return _nIdMyLuteceSearchUser;
+    }
+
+    /**
+     * Sets the IdMyLuteceSearchUser
+     * 
+     * @param nIdMyLuteceSearchUser
+     *            The IdMyLuteceSearchUser
+     */
+    public void setIdMyLuteceSearchUser( int nIdMyLuteceSearchUser )
+    {
+        _nIdMyLuteceSearchUser = nIdMyLuteceSearchUser;
+    }
+
+    /**
+     * Returns the RoleKey
+     * 
+     * @return The RoleKey
+     */
+    public String getRoleKey( )
+    {
+        return _strRoleKey;
+    }
+
+    /**
+     * Sets the RoleKey
+     * 
+     * @param strRoleKey
+     *            The RoleKey
+     */
+    public void setRoleKey( String strRoleKey )
+    {
+        _strRoleKey = strRoleKey;
+    }
 }
