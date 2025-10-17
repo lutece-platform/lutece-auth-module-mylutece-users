@@ -33,8 +33,17 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.users.service.search;
 
-import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+
 import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceSearchUserHome;
+import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -47,12 +56,6 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.TextField;
 
 /**
  * Indexer service for myLuteceSearchUser Xpages
@@ -74,6 +77,7 @@ public class MyLuteceSearchUserIndexer implements SearchIndexer
     public static final String FIELD_LAST_NAME_TITLE = "LastName";
     public static final String FIELD_EMAIL_TITLE = "email";
     String _pluginName = "mylutece-users";
+    
 
     /**
      * Index all Local Users
@@ -200,9 +204,9 @@ public class MyLuteceSearchUserIndexer implements SearchIndexer
         // make a new, empty document
         org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document( );
         doc.add( new Field( SearchItem.FIELD_CONTENTS, getContentToIndex( myLuteceSearchUser ), TextField.TYPE_NOT_STORED ) );
-        doc.add( new Field( SearchItem.FIELD_UID, String.valueOf( myLuteceSearchUser.getId( ) ), TextField.TYPE_STORED ) );
-        doc.add( new Field( SearchItem.FIELD_TYPE, _pluginName, TextField.TYPE_STORED ) );
-        doc.add( new Field( SearchItem.FIELD_TITLE, getFullName( myLuteceSearchUser ), TextField.TYPE_STORED ) );
+        doc.add( new StringField( SearchItem.FIELD_UID, String.valueOf( myLuteceSearchUser.getId( ) ), Field.Store.YES ) );
+        doc.add( new StringField( SearchItem.FIELD_TYPE, _pluginName, Field.Store.YES ) );
+        doc.add( new TextField( SearchItem.FIELD_TITLE, getFullName( myLuteceSearchUser ), Field.Store.YES ) );
         ReferenceList listAttribute = myLuteceSearchUser.getAttributes( );
 
         if ( listAttribute != null )
