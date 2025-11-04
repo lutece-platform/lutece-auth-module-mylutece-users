@@ -82,9 +82,9 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
      */
     private static final long serialVersionUID = 2163559576736974617L;
     // Templates
-    private static final String TEMPLATE_MANAGE_SEARCHUSERS = "/admin/plugins/mylutece/modules/users/manage_myLuteceSearchUsers.html";
-    private static final String TEMPLATE_CREATE_SEARCHUSER = "/admin/plugins/mylutece/modules/users/create_myLuteceSearchUser.html";
-    private static final String TEMPLATE_MODIFY_SEARCHUSER = "/admin/plugins/mylutece/modules/users/modify_myLuteceSearchUser.html";
+    private static final String TEMPLATE_MANAGE_SEARCHUSERS = "/admin/plugins/mylutece/modules/users/manage_search_users.html";
+    private static final String TEMPLATE_CREATE_SEARCHUSER = "/admin/plugins/mylutece/modules/users/create_search_user.html";
+    private static final String TEMPLATE_MODIFY_SEARCHUSER = "/admin/plugins/mylutece/modules/users/modify_search_user.html";
     private static final String TEMPLATE_IMPORT_USERS_FROM_PROVIDER = "/admin/plugins/mylutece/modules/users/import_users_from_provider.html";
     private static final String TEMPLATE_MANAGE_ATTRIBUTE_MAPPING = "/admin/plugins/mylutece/modules/users/manage_attribute_mapping.html";
     // Parameters
@@ -95,24 +95,24 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     private static final String PARAMETER_SEARCH_BY_EMAIL = "search_email";
     private static final String PARAMETER_FROM_PROVIDER = "import_from_provider";
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERS = "module.mylutece.users.manage_myLuteceSearchUsers.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_SEARCHUSER = "module.mylutece.users.modify_myLuteceSearchUser.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_SEARCHUSER = "module.mylutece.users.create_myLuteceSearchUser.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_ATTRIBUTE_MAPPING = "module.mylutece.users.manage_attribute_mapping.pageTitle";
-    private static final String PROPERTY_IMPORT_USERS_PAGETITLE = "module.mylutece.users.import.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERS = "module.mylutece.users.manageUsers.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_SEARCHUSER = "module.mylutece.users.modifyUser.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_SEARCHUSER = "module.mylutece.users.createUser.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_ATTRIBUTE_MAPPING = "module.mylutece.users.attributeMapping.pageTitle";
+    private static final String PROPERTY_IMPORT_USERS_PAGETITLE = "module.mylutece.users.importUsers.pageTitle";
     // Markers
-    private static final String MARK_SEARCHUSER_LIST = "myLuteceSearchUser_list";
-    private static final String MARK_SEARCHUSER = "myLuteceSearchUser";
+    private static final String MARK_SEARCHUSER_LIST = "mylutece_search_user_list";
+    private static final String MARK_SEARCHUSER = "mylutece_search_user";
     private static final String MARK_MYLUTECE_ATTRIBUTES_LIST = "attribute_list";
     private static final String MARK_PROVIDER_ATTRIBUTES_LIST = "provider_attribute_list";
     private static final String MARK_ATTRIBUTE_MAPPING_LIST = "attribute_mapping_list";
     // Jsp
     private static final String JSP_MANAGE_SEARCHUSERS = "jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp";
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_SEARCHUSER = "module.mylutece.users.message.confirmRemoveMyLuteceSearchUser";
-    private static final String MESSAGE_FIELD_ERROR_MANDATORY = "module.mylutece.users.message.field.error.mandatory";
+    private static final String MESSAGE_CONFIRM_REMOVE_SEARCHUSER = "module.mylutece.users.message.confirmRemoveUser";
+    private static final String MESSAGE_FIELD_ERROR_MANDATORY = "module.mylutece.users.validation.field.mandatory";
     // Validations
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "module.mylutece.users.model.entity.myLuteceSearchUser.attribute.";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX = "module.mylutece.users.model.entity.user.";
     // Views
     private static final String VIEW_MANAGE_SEARCHUSERS = "manageMyLuteceSearchUsers";
     private static final String VIEW_CREATE_SEARCHUSER = "createMyLuteceSearchUser";
@@ -127,11 +127,11 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     private static final String ACTION_SEARCH_SEARCHUSER = "searchUsersFromProvider";
     private static final String ACTION_UPDATE_ATTRIBUTE_MAPPING = "updateAttributeMapping";
     // Infos
-    private static final String INFO_SEARCHUSER_CREATED = "module.mylutece.users.info.myLuteceSearchUser.created";
-    private static final String INFO_SEARCHUSER_UPDATED = "module.mylutece.users.info.myLuteceSearchUser.updated";
-    private static final String INFO_SEARCHUSER_REMOVED = "module.mylutece.users.info.myLuteceSearchUser.removed";
-    private static final String ERROR_SEARCHUSER_PROVIDER_USER_ID_EXIST = "module.mylutece.users.error.myLuteceSearchUser.providerUserIdExist";
-    private static final String INFO_ATTRIBUTE_MAPPING_DONE = "module.mylutece.users.info.attribute_mapping.done";
+    private static final String INFO_SEARCHUSER_CREATED = "module.mylutece.users.info.user.created";
+    private static final String INFO_SEARCHUSER_UPDATED = "module.mylutece.users.info.user.updated";
+    private static final String INFO_SEARCHUSER_REMOVED = "module.mylutece.users.info.user.removed";
+    private static final String ERROR_SEARCHUSER_PROVIDER_USER_ID_EXIST = "module.mylutece.users.error.providerUserIdExist";
+    private static final String INFO_ATTRIBUTE_MAPPING_DONE = "module.mylutece.users.info.attributeMapping.updated";
     // Prefixes
     private static final String PREFIX_ATTRIBUTE_MAPPING = "attribute_mapping_";
     private static final String PREFIX_PROVIDER_ATTRIBUTE = "provider_attribute_";

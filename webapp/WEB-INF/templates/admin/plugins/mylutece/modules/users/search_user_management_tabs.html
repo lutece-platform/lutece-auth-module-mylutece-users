@@ -1,0 +1,8 @@
+<#macro mylutecesearchusermanagement tab>
+    <@tabs>
+        <@tabList>
+            <@tabLink href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp?view=modifyMyLuteceSearchUser&id=${mylutece_search_user.id}' title='#i18n{module.mylutece.users.modifyUser.pageTitle}' active=(tab == "mylutecesearchuser") />
+            <@tabLink href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceUserRoles.jsp?view=manageMyLuteceUserRoles&id_mylutecesearchuser=${mylutece_search_user.id}' title='#i18n{module.mylutece.users.manageRoles.pageTitle}' active=(tab == "mylutecesearchuserrole") />
+        </@tabList>
+    </@tabs>
+</#macro>

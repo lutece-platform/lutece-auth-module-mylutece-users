@@ -1,0 +1,38 @@
+<@pageContainer>
+    <@pageColumn>
+        <@pageHeader title='#i18n{module.mylutece.users.manageUsers.pageTitle}' description='#i18n{module.mylutece.users.manageUsers.description}'>
+            <@tform name='manage_mylutecesearchuser' action='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp'>
+                <@button type='submit' name='view_importMyLuteceSearchUser' buttonIcon='upload' title='#i18n{module.mylutece.users.manageUsers.buttonImport}' />
+                <@button type='submit' name='view_manageAttributeMapping' buttonIcon='settings' title='#i18n{module.mylutece.users.attributeMapping.buttonManage}' />
+                <@button type='submit' name='view_createMyLuteceSearchUser' buttonIcon='plus' title='#i18n{module.mylutece.users.manageUsers.buttonAdd}' color='primary' />
+            </@tform>
+        </@pageHeader>
+        <@messages infos=infos />
+        <@table headBody=true>
+            <@tr>
+                <@th>#i18n{module.mylutece.users.column.login}</@th>
+                <@th>#i18n{module.mylutece.users.column.givenName}</@th>
+                <@th>#i18n{module.mylutece.users.column.lastName}</@th>
+                <@th>#i18n{module.mylutece.users.column.email}</@th>
+                <@th>#i18n{module.mylutece.users.column.providerUserId}</@th>
+                <@th>#i18n{portal.util.labelActions}</@th>
+            </@tr>
+            <@tableHeadBodySeparator />
+            <#list mylutece_search_user_list as mylutece_search_user>
+                <@tr>
+                    <@td>${mylutece_search_user.login}</@td>
+                    <@td>${mylutece_search_user.givenName}</@td>
+                    <@td>${mylutece_search_user.lastName}</@td>
+                    <@td>${mylutece_search_user.email}</@td>
+                    <@td>${mylutece_search_user.providerUserId!}</@td>
+                    <@td>
+                        <@aButton href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp?view=modifyMyLuteceSearchUser&id=${mylutece_search_user.id}' buttonIcon='pencil' title='#i18n{portal.util.labelModify}' hideTitle=['all'] />
+                        <@aButton href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceUserRoles.jsp?view=manageMyLuteceUserRoles&id_mylutecesearchuser=${mylutece_search_user.id}' buttonIcon='shield' title='#i18n{module.mylutece.users.manageRoles.pageTitle}' hideTitle=['all'] />
+                        <@aButton href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp?action=confirmRemoveMyLuteceSearchUser&id=${mylutece_search_user.id}' buttonIcon='trash' color='danger' title='#i18n{portal.util.labelDelete}' hideTitle=['all'] />
+                    </@td>
+                </@tr>
+            </#list>
+        </@table>
+        <@paginationAdmin paginator=paginator combo=1 />
+    </@pageColumn>
+</@pageContainer>

@@ -65,23 +65,23 @@ public class MyLuteceUserRoleJspBean extends AbstractmyLuteceUsersManagementJspB
      */
     private static final long serialVersionUID = -779120944936133468L;
     // Templates
-    private static final String TEMPLATE_MANAGE_SEARCHUSERROLES = "/admin/plugins/mylutece/modules/users/manage_myluteceuserroles.html";
+    private static final String TEMPLATE_MANAGE_SEARCHUSERROLES = "/admin/plugins/mylutece/modules/users/manage_user_roles.html";
     // Parameters
     private static final String PARAMETER_ID_MYLUTECESEARCHUSER_ID = "id_mylutecesearchuser";
     private static final String PARAMETER_ROLE_KEY = "role_key";
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERROLES = "module.mylutece.users.manage_mylutecesearchuserroles.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERROLES = "module.mylutece.users.manageRoles.pageTitle";
     // Markers
-    private static final String MARK_MYLUTECESEARCHUSERROLE_LIST = "mylutecesearchuserrole_list";
+    private static final String MARK_MYLUTECESEARCHUSERROLE_LIST = "mylutece_search_user_role_list";
     private static final String MARK_MYLUTECE_ROLE_LIST = "mylutece_role_list";
-    private static final String MARK_MYLUTECESEARCHUSER = "mylutecesearchuser";
+    private static final String MARK_MYLUTECESEARCHUSER = "mylutece_search_user";
     private static final String MARK_MYLUTECESEARCHUSER_ID = "id_mylutecesearchuser";
     // Views
     private static final String VIEW_MANAGE_SEARCHUSERROLES = "manageMyLuteceUserRoles";
     // Actions
     private static final String ACTION_ASSIGN_SEARCHUSERROLE = "assignMyLuteceUserRole";
     // Infos
-    private static final String INFO_SEARCHUSERROLE_CREATED = "module.mylutece.users.info.mylutecesearchuserrole.created";
+    private static final String INFO_SEARCHUSERROLE_CREATED = "module.mylutece.users.info.roles.updated";
     // Session variable to store working values
     private MyLuteceSearchUser _myLuteceSearchUser;
 

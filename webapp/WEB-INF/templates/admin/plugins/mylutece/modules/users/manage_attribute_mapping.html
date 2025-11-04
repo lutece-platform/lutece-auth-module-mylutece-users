@@ -1,45 +1,39 @@
-<@box>
-    <@boxHeader title='#i18n{module.mylutece.users.manage_attribute_mapping.pageTitle}' boxTools=true>
-    </@boxHeader>
-    <@boxBody>
+<@pageContainer>
+    <@pageColumn>
+        <@pageHeader title='#i18n{module.mylutece.users.attributeMapping.pageTitle}' />
         <@messages infos=infos />
         <@messages errors=errors />
-        <@row>
-            <@tform action='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp' method='post'>
-                <#if attribute_list??>
-                    <#list attribute_list as attribute>
-                        <@formGroup labelKey='${attribute.title}' helpKey='${attribute.helpMessage!}'
-                            mandatory=attribute.mandatory!false>
-                            <#assign attributeSelected=getSelected( attribute.idAttribute )>
-                            <select class="form-control" name="attribute_mapping_${attribute.idAttribute}">
-                                <option value=""></option>
-                                <#if provider_attribute_list??>
-                                    <#list provider_attribute_list as provider_attribute>
-                                        <option value="${provider_attribute}" <#if attributeSelected = provider_attribute>selected=selected</#if>>${provider_attribute}</option>
-                                    </#list>
-                                </#if>
-                            </select>
-                        </@formGroup>
-                    </#list>
-                </#if>
-                <@actionButtons button1Name="action_updateAttributeMapping" button2Name="view_manageMyLuteceSearchUsers" />
-            </@tform>
-        </@row>
-    </@boxBody>
-</@box>
+        <@tform action='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp' method='post' boxed=true>
+            <#if attribute_list??>
+                <#list attribute_list as attribute>
+                    <@formGroup labelKey='${attribute.title}' helpKey='${attribute.helpMessage!}' mandatory=attribute.mandatory!false>
+                        <#assign attributeSelected=getSelected(attribute.idAttribute)>
+                        <select class='form-select' name='attribute_mapping_${attribute.idAttribute}'>
+                            <option value=''></option>
+                            <#if provider_attribute_list??>
+                                <#list provider_attribute_list as provider_attribute>
+                                    <option value='${provider_attribute}' <#if attributeSelected == provider_attribute>selected</#if>>${provider_attribute}</option>
+                                </#list>
+                            </#if>
+                        </select>
+                    </@formGroup>
+                </#list>
+            </#if>
+            <@formGroup>
+                <@button type='submit' name='action_updateAttributeMapping' buttonIcon='device-floppy' title='#i18n{portal.util.labelSave}' color='primary' />
+                <@button type='submit' name='view_manageMyLuteceSearchUsers' buttonIcon='arrow-back' title='#i18n{portal.util.labelCancel}' />
+            </@formGroup>
+        </@tform>
+    </@pageColumn>
+</@pageContainer>
 
-<#--
--- Get the current provider attribute id mapped with the mylutece attribute
--- @param idMyLuteceAttribute
--- @return the provider attribute id
--->
 <#function getSelected idMyLuteceAttribute>
     <#if attribute_mapping_list?has_content>
-		<#list attribute_mapping_list as attribute_mapping>
-			<#if attribute_mapping.id = idMyLuteceAttribute>
-  				<#return attribute_mapping.idProviderAttribute>
-  			</#if>
-  		</#list>
-	</#if>
-	<#return "">
+        <#list attribute_mapping_list as attribute_mapping>
+            <#if attribute_mapping.id == idMyLuteceAttribute>
+                <#return attribute_mapping.idProviderAttribute>
+            </#if>
+        </#list>
+    </#if>
+    <#return "">
 </#function>
