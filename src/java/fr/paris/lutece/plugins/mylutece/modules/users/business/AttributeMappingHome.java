@@ -35,19 +35,19 @@ package fr.paris.lutece.plugins.mylutece.modules.users.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.List;
 
 /**
  * This class provides instances management methods (create, find, ...) for AttributeMapping objects
  */
-public final class AttributeMappingHome
+public class AttributeMappingHome
 {
     // Static variable pointed at the DAO instance
-    private static IAttributeMappingDAO _dao = SpringContextService.getBean( "mylutece_users.attributeMappingDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "mylutece_users" );
+    private static IAttributeMappingDAO _dao = CDI.current( ).select( IAttributeMappingDAO.class ).get( );
+    private static Plugin _plugin = PluginService.getPlugin( "mylutece-users" );
 
     /**
      * Private constructor - this class need not be instantiated

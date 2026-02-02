@@ -42,45 +42,26 @@ import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserRole;
 import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserRoleHome;
 import fr.paris.lutece.plugins.mylutece.service.IMyLuteceExternalRolesProvider;
 import fr.paris.lutece.portal.service.security.LuteceUser;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
-public final class MyLuteceUserRoleProvider implements IMyLuteceExternalRolesProvider
+/**
+ * MyLuteceUserRoleProvider
+ */
+@ApplicationScoped
+@Named( "mylutece-myLuteceUserRoleProvider" )
+public class MyLuteceUserRoleProvider implements IMyLuteceExternalRolesProvider
 {
-    private static final String BEAN_NAME = "mylutece-myLuteceSearchUserRoleProvider";
-    private static MyLuteceUserRoleProvider _myLuteceSearchUserRoleProvider;
-
     /**
-     * Default constructor
+     * {@inheritDoc}
      */
-    private MyLuteceUserRoleProvider( )
-    {
-    }
-
-    public void init( )
-    {
-        _myLuteceSearchUserRoleProvider = SpringContextService.getBean( BEAN_NAME );
-    }
-
-    /**
-     * Returns the instance of the singleton
-     *
-     * @return The instance of the singleton
-     */
-    public static MyLuteceUserRoleProvider getInstance( )
-    {
-        if ( _myLuteceSearchUserRoleProvider == null )
-        {
-            _myLuteceSearchUserRoleProvider = SpringContextService.getBean( BEAN_NAME );
-        }
-        return _myLuteceSearchUserRoleProvider;
-    }
-
     @Override
     public Collection<String> providesRoles( LuteceUser user )
     {
-        Collection<String> providesRoles = new ArrayList<String>( );
+        Collection<String> providesRoles = new ArrayList<>( );
         MyLuteceSearchUser myLuteceSearchUser = MyLuteceSearchUserHome.findByConnectId( user.getName( ) );
-        if( myLuteceSearchUser != null ) {
+        if ( myLuteceSearchUser != null )
+        {
             List<MyLuteceUserRole> myLuteceSearchUserRoleList = MyLuteceUserRoleHome.getMyLuteceUserRolesListByUserId( myLuteceSearchUser.getId( ) );
             for ( MyLuteceUserRole myLuteceSearchUserRole : myLuteceSearchUserRoleList )
             {

@@ -36,9 +36,7 @@ package fr.paris.lutece.plugins.mylutece.modules.users.business;
 import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.search.IndexationService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeField;
@@ -47,19 +45,17 @@ import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeHome;
 import fr.paris.lutece.plugins.mylutece.business.attribute.IAttribute;
 import fr.paris.lutece.plugins.mylutece.business.attribute.MyLuteceUserField;
 import fr.paris.lutece.plugins.mylutece.business.attribute.MyLuteceUserFieldHome;
-import fr.paris.lutece.plugins.mylutece.modules.users.service.search.MyLuteceSearchUserIndexer;
 import fr.paris.lutece.plugins.mylutece.service.MyLutecePlugin;
-import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import java.util.List;
 import java.util.Locale;
 
 /**
  * This class provides instances management methods (create, find, ...) for MyLuteceSearchUser objects
  */
-public final class MyLuteceSearchUserHome
+public class MyLuteceSearchUserHome
 {
     // Static variable pointed at the DAO instance
-    private static IMyLuteceSearchUserDAO _dao = SpringContextService.getBean( "mylutece-users.myLuteceSearchUserDAO" );
+    private static IMyLuteceSearchUserDAO _dao = CDI.current( ).select( IMyLuteceSearchUserDAO.class ).get( );
     private static Plugin _plugin = PluginService.getPlugin( "mylutece-users" );
     private static Locale _locale;
     private static Plugin _myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
@@ -81,9 +77,7 @@ public final class MyLuteceSearchUserHome
     public static MyLuteceSearchUser create( MyLuteceSearchUser myLuteceSearchUser )
     {
         _dao.insert( myLuteceSearchUser, _plugin );
-        String strIdMyLuteceSearchUser = Integer.toString( myLuteceSearchUser.getId( ) );
-        IndexationService.addIndexerAction( strIdMyLuteceSearchUser, AppPropertiesService.getProperty( MyLuteceSearchUserIndexer.PROPERTY_INDEXER_NAME ),
-                IndexerAction.TASK_CREATE );
+
         return myLuteceSearchUser;
     }
 
@@ -97,9 +91,7 @@ public final class MyLuteceSearchUserHome
     public static MyLuteceSearchUser update( MyLuteceSearchUser myLuteceSearchUser )
     {
         _dao.store( myLuteceSearchUser, _plugin );
-        String strIdMyLuteceSearchUser = Integer.toString( myLuteceSearchUser.getId( ) );
-        IndexationService.addIndexerAction( strIdMyLuteceSearchUser, AppPropertiesService.getProperty( MyLuteceSearchUserIndexer.PROPERTY_INDEXER_NAME ),
-                IndexerAction.TASK_MODIFY );
+
         return myLuteceSearchUser;
     }
 
@@ -112,8 +104,6 @@ public final class MyLuteceSearchUserHome
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
-        IndexationService.addIndexerAction( String.valueOf( nKey ), AppPropertiesService.getProperty( MyLuteceSearchUserIndexer.PROPERTY_INDEXER_NAME ),
-                IndexerAction.TASK_DELETE );
     }
 
     /**

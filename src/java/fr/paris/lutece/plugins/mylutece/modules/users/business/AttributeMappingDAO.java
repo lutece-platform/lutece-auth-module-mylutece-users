@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.mylutece.modules.users.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,8 @@ import java.util.List;
 /**
  * This class provides Data Access methods for AttributeMapping objects
  */
-public final class AttributeMappingDAO implements IAttributeMappingDAO
+@ApplicationScoped
+public class AttributeMappingDAO implements IAttributeMappingDAO
 {
     // Constants
     private static final String SQL_QUERY_SELECT = "SELECT id_mylutece_attribute, id_provider_attribute FROM mylutece_users_attribute_mapping WHERE id_mylutece_attribute = ?";

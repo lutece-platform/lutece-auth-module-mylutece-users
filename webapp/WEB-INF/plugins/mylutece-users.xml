@@ -2,7 +2,7 @@
 <plug-in>
     <name>mylutece-users</name>
     <class>fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation</class>
-    <version>1.0.0</version>
+    <version>2.0.0-SNAPSHOT</version>
     <documentation></documentation>
     <installation></installation>
     <changes></changes>
@@ -15,7 +15,7 @@
     <db-pool-required>1</db-pool-required>
     
     <core-version-dependency>
-        <min-core-version>7.0.0</min-core-version>
+        <min-core-version>8.0.0</min-core-version>
         <max-core-version/>	
     </core-version-dependency>
 
@@ -34,15 +34,6 @@
     <!-- XPages parameters -->
     <applications>
     </applications>
-
-     <!-- Search Indexer Service -->
-     <search-indexers>
-        <search-indexer>
-            <search-indexer-class>
-                fr.paris.lutece.plugins.mylutece.modules.users.service.search.MyLuteceSearchUserIndexer
-            </search-indexer-class>
-        </search-indexer>
-    </search-indexers>  
 
     <!-- Portlet parameters -->
     <portlets>

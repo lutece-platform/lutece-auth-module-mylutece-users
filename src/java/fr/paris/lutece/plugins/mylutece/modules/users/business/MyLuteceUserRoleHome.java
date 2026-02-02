@@ -35,17 +35,17 @@ package fr.paris.lutece.plugins.mylutece.modules.users.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
+import jakarta.enterprise.inject.spi.CDI;
 import java.util.List;
 
 /**
  * This class provides instances management methods (create, find, ...) for MyLuteceUserRole objects
  */
-public final class MyLuteceUserRoleHome
+public class MyLuteceUserRoleHome
 {
     // Static variable pointed at the DAO instance
-    private static IMyLuteceUserRoleDAO _dao = SpringContextService.getBean( "mylutece-users.myLuteceUserRoleDAO" );
+    private static IMyLuteceUserRoleDAO _dao = CDI.current( ).select( IMyLuteceUserRoleDAO.class ).get( );
     private static Plugin _plugin = PluginService.getPlugin( "mylutece-users" );
 
     /**

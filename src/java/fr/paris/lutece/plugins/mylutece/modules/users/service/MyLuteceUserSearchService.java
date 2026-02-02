@@ -37,32 +37,19 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.mylutece.service.search.IUserSearchProvider;
 import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.enterprise.inject.literal.NamedLiteral;
 
 /**
  * User Search Service
  * Singleton service that delegates to a configured IUserSearchProvider implementation
  */
-public final class MyLuteceUserSearchService implements IUserSearchProvider
+@ApplicationScoped
+public class MyLuteceUserSearchService implements IUserSearchProvider
 {
     private static final String BEAN_NAME = "mylutece.myLuteceUserSearchProvider";
-    private static IUserSearchProvider _userSearchProvider;
-
-    /**
-     * Private constructor
-     */
-    private MyLuteceUserSearchService( )
-    {
-    }
-
-    /**
-     * Initialize the service
-     */
-    public void init( )
-    {
-        _userSearchProvider = SpringContextService.getBean( BEAN_NAME );
-    }
 
     /**
      * Returns the instance of the singleton
@@ -71,11 +58,7 @@ public final class MyLuteceUserSearchService implements IUserSearchProvider
      */
     public static IUserSearchProvider getInstance( )
     {
-        if ( _userSearchProvider == null )
-        {
-            _userSearchProvider = SpringContextService.getBean( BEAN_NAME );
-        }
-        return _userSearchProvider;
+        return CDI.current( ).select( IUserSearchProvider.class, NamedLiteral.of( BEAN_NAME ) ).get( );
     }
 
     /**
@@ -85,7 +68,7 @@ public final class MyLuteceUserSearchService implements IUserSearchProvider
     public List<MyLuteceSearchUser> findUsers( String strParameterLastName, String strParameterGivenName, String strParameterCriteriaMail,
             ReferenceList listProviderAttribute )
     {
-        return _userSearchProvider.findUsers( strParameterLastName, strParameterGivenName, strParameterCriteriaMail, listProviderAttribute );
+        return getInstance( ).findUsers( strParameterLastName, strParameterGivenName, strParameterCriteriaMail, listProviderAttribute );
     }
 
     /**
@@ -94,7 +77,7 @@ public final class MyLuteceUserSearchService implements IUserSearchProvider
     @Override
     public List<String> getAllAttributes( )
     {
-        return _userSearchProvider.getAllAttributes( );
+        return getInstance( ).getAllAttributes( );
     }
 
     /**
@@ -103,7 +86,7 @@ public final class MyLuteceUserSearchService implements IUserSearchProvider
     @Override
     public MyLuteceSearchUser getUserById( String strUserId )
     {
-        return _userSearchProvider.getUserById( strUserId );
+        return getInstance( ).getUserById( strUserId );
     }
 
     /**
@@ -112,6 +95,6 @@ public final class MyLuteceUserSearchService implements IUserSearchProvider
     @Override
     public List<MyLuteceSearchUser> getUsersByIds( List<String> userIds )
     {
-        return _userSearchProvider.getUsersByIds( userIds );
+        return getInstance( ).getUsersByIds( userIds );
     }
 }

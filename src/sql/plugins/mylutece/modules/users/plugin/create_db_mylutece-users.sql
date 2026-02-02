@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+-- changeset mylutece-users:create_db_mylutece-users.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+
 --
 -- Structure for table mylutece_users_searchuser
 --

@@ -43,7 +43,7 @@ import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserRoleH
  * Service class for MyLuteceUserRole
  *
  */
-public final class MyLuteceUserRoleService
+public class MyLuteceUserRoleService
 {
     public static final String BEAN_NAME = "mylutece-users.myLuteceUserRoleService";
 

@@ -1,9 +1,9 @@
-<jsp:useBean id="myluteceusersmanagementMyLuteceUserRole" scope="session" class="fr.paris.lutece.plugins.mylutece.modules.users.web.MyLuteceUserRoleJspBean" />
-<% String strContent = myluteceusersmanagementMyLuteceUserRole.processController ( request , response ); %>
-
 <%@ page errorPage="../../../../ErrorPage.jsp" %>
+
+${ pageContext.setAttribute( 'strContent', myLuteceUserRoleJspBean.processController( pageContext.request, pageContext.response ) ) }
+
 <jsp:include page="../../../../AdminHeader.jsp" />
 
-<%= strContent %>
+${ pageContext.getAttribute( 'strContent' ) }
 
 <%@ include file="../../../../AdminFooter.jsp" %>
