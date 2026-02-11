@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<plug-in>
+<?xml version="1.0" encoding="UTF-8"?><plug-in>
     <name>mylutece-users</name>
     <class>fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation</class>
-    <version>2.0.0-SNAPSHOT</version>
-    <documentation></documentation>
-    <installation></installation>
-    <changes></changes>
-    <user-guide></user-guide>
+    <version>2.0.0</version>
+    <documentation/>
+    <installation/>
+    <changes/>
+    <user-guide/>
     <description>module.mylutece.users.module.description</description>
     <provider>module.mylutece.users.module.provider</provider>
     <provider-url>https://github.com/lutece-platform</provider-url>
@@ -27,7 +26,7 @@
             <feature-description>module.mylutece.users.adminFeature.myLuteceUsersManagement.description</feature-description>
             <feature-level>0</feature-level>
             <feature-url>jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp</feature-url>
-            <feature-icon-url></feature-icon-url>
+            <feature-icon-url/>
       </admin-feature>
     </admin-features>    
 
@@ -39,4 +38,3 @@
     <portlets>
    </portlets>
 </plug-in>
-
