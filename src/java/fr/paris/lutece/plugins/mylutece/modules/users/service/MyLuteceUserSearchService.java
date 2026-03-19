@@ -37,28 +37,48 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.mylutece.service.search.IUserSearchProvider;
 import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
+import fr.paris.lutece.portal.service.util.CdiHelper;
 import fr.paris.lutece.util.ReferenceList;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.spi.CDI;
-import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 /**
- * User Search Service
- * Singleton service that delegates to a configured IUserSearchProvider implementation
+ * User Search Service.
+ * Delegates to a configured IUserSearchProvider implementation resolved by bean name.
+ * The bean name is configurable via the property {@code mylutece.users.searchProviderName}.
  */
 @ApplicationScoped
 public class MyLuteceUserSearchService implements IUserSearchProvider
 {
-    private static final String BEAN_NAME = "mylutece.myLuteceUserSearchProvider";
+    private static final String DEFAULT_PROVIDER = "mylutece.myLuteceUserSearchProvider";
+
+    @Inject
+    @ConfigProperty( name = "mylutece.users.searchProviderName", defaultValue = DEFAULT_PROVIDER )
+    private String _strProviderName;
+
+    @Inject
+    private Instance<IUserSearchProvider> _providers;
 
     /**
-     * Returns the instance of the singleton
+     * Returns the configured IUserSearchProvider instance.
+     *
+     * @return the resolved IUserSearchProvider
+     */
+    public IUserSearchProvider getProvider( )
+    {
+        return CdiHelper.resolve( _providers, _strProviderName );
+    }
+
+    /**
+     * Returns the instance of the singleton.
      *
      * @return The instance of the singleton
      */
     public static IUserSearchProvider getInstance( )
     {
-        return CDI.current( ).select( IUserSearchProvider.class, NamedLiteral.of( BEAN_NAME ) ).get( );
+        return CdiHelper.getBean( MyLuteceUserSearchService.class ).getProvider( );
     }
 
     /**
