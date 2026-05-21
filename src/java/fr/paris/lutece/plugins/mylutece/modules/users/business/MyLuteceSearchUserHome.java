@@ -145,8 +145,21 @@ public class MyLuteceSearchUserHome
     }
 
     /**
+     * Load the data of myLuteceSearchUser objects matching the given filter criteria and returns them as a list. Every criterion is optional; null or empty
+     * values are ignored and a case-insensitive substring match is performed.
+     *
+     * @param filter
+     *            the search filter (last name, first name, email). May be null (no filter).
+     * @return the list which contains the matching myLuteceSearchUser objects
+     */
+    public static List<MyLuteceSearchUser> getMyLuteceSearchUsersListByFilter( MyLuteceUserFilter filter )
+    {
+        return _dao.selectByFilter( filter, _plugin );
+    }
+
+    /**
      * Load the data of all the myLuteceSearchUser objects and returns them as a list
-     * 
+     *
      * @return the list which contains the data of all the myLuteceSearchUser objects
      */
     public static List<MyLuteceSearchUser> getMyLuteceSearchUsersList( )

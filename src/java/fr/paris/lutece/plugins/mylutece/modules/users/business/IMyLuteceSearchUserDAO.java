@@ -124,4 +124,16 @@ public interface IMyLuteceSearchUserDAO
      * @return The referenceList which contains the data of all the myLuteceSearchUser objects
      */
     ReferenceList selectMyLuteceSearchUsersReferenceList( Plugin plugin );
+
+    /**
+     * Load the data of myLuteceSearchUser objects matching the given filter criteria and returns them as a list. Every criterion is optional; null or empty
+     * values are ignored and a case-insensitive substring match (LIKE) is performed.
+     *
+     * @param filter
+     *            the search filter (last name, first name, email)
+     * @param plugin
+     *            the Plugin
+     * @return The list which contains the data of the matching myLuteceSearchUser objects
+     */
+    List<MyLuteceSearchUser> selectByFilter( MyLuteceUserFilter filter, Plugin plugin );
 }

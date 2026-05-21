@@ -50,6 +50,7 @@ import fr.paris.lutece.plugins.mylutece.business.attribute.MyLuteceUserFieldHome
 import fr.paris.lutece.plugins.mylutece.modules.users.business.AttributeMapping;
 import fr.paris.lutece.plugins.mylutece.modules.users.business.AttributeMappingHome;
 import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceSearchUserHome;
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserFilter;
 import fr.paris.lutece.plugins.mylutece.modules.users.service.MyLuteceUserSearchService;
 import fr.paris.lutece.plugins.mylutece.service.MyLutecePlugin;
 import fr.paris.lutece.plugins.mylutece.service.attribute.MyLuteceUserFieldService;
@@ -110,6 +111,7 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     private static final String MARK_MYLUTECE_ATTRIBUTES_LIST = "attribute_list";
     private static final String MARK_PROVIDER_ATTRIBUTES_LIST = "provider_attribute_list";
     private static final String MARK_ATTRIBUTE_MAPPING_LIST = "attribute_mapping_list";
+    private static final String MARK_USER_FILTER = "user_filter";
     // Jsp
     private static final String JSP_MANAGE_SEARCHUSERS = "jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp";
     // Properties
@@ -141,6 +143,7 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     private static final String PREFIX_PROVIDER_ATTRIBUTE = "provider_attribute_";
     // Session variables
     private MyLuteceSearchUser _myLuteceSearchUser;
+    private MyLuteceUserFilter _userFilter = new MyLuteceUserFilter( );
     private Locale _locale;
     private transient Plugin _myLutecePlugin = PluginService.getPlugin( MyLutecePlugin.PLUGIN_NAME );
     private transient List<IAttribute> _listMyLuteceAttribute;
@@ -159,8 +162,12 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     {
         _myLuteceSearchUser = null;
         _listMyLuteceAttribute = null;
-        List<MyLuteceSearchUser> listMyLuteceSearchUsers = MyLuteceSearchUserHome.getMyLuteceSearchUsersListWithoutAttribute( );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_SEARCHUSER_LIST, listMyLuteceSearchUsers, JSP_MANAGE_SEARCHUSERS );
+        _userFilter.setMyLuteceUserFilter( request );
+        List<MyLuteceSearchUser> listMyLuteceSearchUsers = MyLuteceSearchUserHome.getMyLuteceSearchUsersListByFilter( _userFilter );
+        UrlItem urlBase = new UrlItem( JSP_MANAGE_SEARCHUSERS );
+        _userFilter.setUrlAttributes( urlBase );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_SEARCHUSER_LIST, listMyLuteceSearchUsers, urlBase.getUrl( ) );
+        model.put( MARK_USER_FILTER, _userFilter );
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERS, TEMPLATE_MANAGE_SEARCHUSERS, model );
     }
 

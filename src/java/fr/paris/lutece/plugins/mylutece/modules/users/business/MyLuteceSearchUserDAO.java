@@ -41,6 +41,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This class provides Data Access methods for MyLuteceSearchUser objects
@@ -56,6 +57,11 @@ public class MyLuteceSearchUserDAO implements IMyLuteceSearchUserDAO
     private static final String SQL_QUERY_SELECTALL = "SELECT connect_id, login, given_name, last_name, email, connect_id_provider FROM mylutece_users_searchuser";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT connect_id FROM mylutece_users_searchuser";
     private static final String SQL_QUERY_SELECT_BY_CONNECT_ID = "SELECT connect_id, login, given_name, last_name, email, connect_id_provider FROM mylutece_users_searchuser WHERE connect_id_provider = ?";
+    private static final String SQL_QUERY_SELECT_BY_FILTER_BASE = "SELECT connect_id, login, given_name, last_name, email, connect_id_provider FROM mylutece_users_searchuser WHERE 1=1";
+    private static final String SQL_FILTER_LAST_NAME = " AND LOWER(last_name) LIKE ?";
+    private static final String SQL_FILTER_GIVEN_NAME = " AND LOWER(given_name) LIKE ?";
+    private static final String SQL_FILTER_EMAIL = " AND LOWER(email) LIKE ?";
+    private static final String SQL_QUERY_ORDER_BY = " ORDER BY last_name, given_name";
 
     /**
      * {@inheritDoc }
@@ -195,6 +201,54 @@ public class MyLuteceSearchUserDAO implements IMyLuteceSearchUserDAO
             while ( daoUtil.next( ) )
             {
                 myLuteceSearchUserList.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
+            }
+        }
+        return myLuteceSearchUserList;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<MyLuteceSearchUser> selectByFilter( MyLuteceUserFilter filter, Plugin plugin )
+    {
+        List<MyLuteceSearchUser> myLuteceSearchUserList = new ArrayList<>( );
+        StringBuilder sbSql = new StringBuilder( SQL_QUERY_SELECT_BY_FILTER_BASE );
+        List<String> listParams = new ArrayList<>( );
+        if ( filter != null && StringUtils.isNotEmpty( filter.getLastName( ) ) )
+        {
+            sbSql.append( SQL_FILTER_LAST_NAME );
+            listParams.add( "%" + filter.getLastName( ).toLowerCase( ) + "%" );
+        }
+        if ( filter != null && StringUtils.isNotEmpty( filter.getFirstName( ) ) )
+        {
+            sbSql.append( SQL_FILTER_GIVEN_NAME );
+            listParams.add( "%" + filter.getFirstName( ).toLowerCase( ) + "%" );
+        }
+        if ( filter != null && StringUtils.isNotEmpty( filter.getEmail( ) ) )
+        {
+            sbSql.append( SQL_FILTER_EMAIL );
+            listParams.add( "%" + filter.getEmail( ).toLowerCase( ) + "%" );
+        }
+        sbSql.append( SQL_QUERY_ORDER_BY );
+        try ( DAOUtil daoUtil = new DAOUtil( sbSql.toString( ), plugin ) )
+        {
+            for ( int i = 0; i < listParams.size( ); i++ )
+            {
+                daoUtil.setString( i + 1, listParams.get( i ) );
+            }
+            daoUtil.executeQuery( );
+            while ( daoUtil.next( ) )
+            {
+                MyLuteceSearchUser myLuteceSearchUser = new MyLuteceSearchUser( );
+                int nIndex = 1;
+                myLuteceSearchUser.setId( daoUtil.getInt( nIndex++ ) );
+                myLuteceSearchUser.setLogin( daoUtil.getString( nIndex++ ) );
+                myLuteceSearchUser.setGivenName( daoUtil.getString( nIndex++ ) );
+                myLuteceSearchUser.setLastName( daoUtil.getString( nIndex++ ) );
+                myLuteceSearchUser.setEmail( daoUtil.getString( nIndex++ ) );
+                myLuteceSearchUser.setProviderUserId( daoUtil.getString( nIndex++ ) );
+                myLuteceSearchUserList.add( myLuteceSearchUser );
             }
         }
         return myLuteceSearchUserList;
