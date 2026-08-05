@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.mylutece.modules.users.service;
 
 import java.util.List;
+import java.util.Map;
 
 import fr.paris.lutece.plugins.mylutece.service.search.IUserSearchProvider;
 import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
@@ -116,5 +117,14 @@ public class MyLuteceUserSearchService implements IUserSearchProvider
     public List<MyLuteceSearchUser> getUsersByIds( List<String> userIds )
     {
         return getInstance( ).getUsersByIds( userIds );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Map<String, String>> getAttributeValues( List<String> listAttributeNames )
+    {
+        return getInstance( ).getAttributeValues( listAttributeNames );
     }
 }
