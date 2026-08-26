@@ -1,3 +1,6 @@
+-- liquibase formatted sql
+-- changeset mylutece-users:init_core_mylutece-users.sql
+-- preconditions onFail:MARK_RAN onError:WARN
 --
 -- Data for table core_admin_right
 --
