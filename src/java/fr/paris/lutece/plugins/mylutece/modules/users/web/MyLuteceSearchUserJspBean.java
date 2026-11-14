@@ -41,6 +41,8 @@ import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeField;
 import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeFieldHome;
 import fr.paris.lutece.plugins.mylutece.business.attribute.AttributeHome;
@@ -137,6 +139,7 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     private static final String INFO_SEARCHUSER_UPDATED = "module.mylutece.users.info.user.updated";
     private static final String INFO_SEARCHUSER_REMOVED = "module.mylutece.users.info.user.removed";
     private static final String ERROR_SEARCHUSER_PROVIDER_USER_ID_EXIST = "module.mylutece.users.error.providerUserIdExist";
+    private static final String ERROR_SEARCHUSER_NOT_FOUND = "module.mylutece.users.error.userNotFound";
     private static final String INFO_ATTRIBUTE_MAPPING_DONE = "module.mylutece.users.info.attributeMapping.updated";
     // Prefixes
     private static final String PREFIX_ATTRIBUTE_MAPPING = "attribute_mapping_";
@@ -337,10 +340,10 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     @View( VIEW_MODIFY_SEARCHUSER )
     public String getModifyMyLuteceSearchUser( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_SEARCHUSER ) );
-        if ( _myLuteceSearchUser == null || ( _myLuteceSearchUser.getId( ) != nId ) )
+        if ( !loadSearchUser( request ) )
         {
-            _myLuteceSearchUser = MyLuteceSearchUserHome.findByPrimaryKey( nId );
+            addError( ERROR_SEARCHUSER_NOT_FOUND, getLocale( ) );
+            return redirectView( request, VIEW_MANAGE_SEARCHUSERS );
         }
         if ( _listMyLuteceAttribute == null )
         {
@@ -377,6 +380,15 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     @Action( ACTION_MODIFY_SEARCHUSER )
     public String doModifyMyLuteceSearchUser( HttpServletRequest request )
     {
+        if ( !loadSearchUser( request ) )
+        {
+            addError( ERROR_SEARCHUSER_NOT_FOUND, getLocale( ) );
+            return redirectView( request, VIEW_MANAGE_SEARCHUSERS );
+        }
+        if ( _listMyLuteceAttribute == null )
+        {
+            _listMyLuteceAttribute = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
+        }
         populate( _myLuteceSearchUser, request, request.getLocale( ) );
         setMyLuteceAttributeValue( request, _myLuteceSearchUser );
         if ( !validateBean( _myLuteceSearchUser, VALIDATION_ATTRIBUTES_PREFIX ) || !validateMyLuteceAttribute( request ) )
@@ -452,6 +464,28 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
         model.put( MARK_SEARCHUSER_LIST, users );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
         return getAdminPage( template.getHtml( ) );
+    }
+
+    /**
+     * Keep in session the user whose id is in the request, loading it unless it is already the one in session
+     *
+     * @param request
+     *            The Http request
+     * @return false if the id is missing, not a number or unknown
+     */
+    private boolean loadSearchUser( HttpServletRequest request )
+    {
+        int nId = NumberUtils.toInt( request.getParameter( PARAMETER_ID_SEARCHUSER ), -1 );
+        if ( nId < 0 )
+        {
+            return false;
+        }
+        if ( _myLuteceSearchUser == null || ( _myLuteceSearchUser.getId( ) != nId ) )
+        {
+            _myLuteceSearchUser = MyLuteceSearchUserHome.findByPrimaryKey( nId );
+        }
+
+        return _myLuteceSearchUser != null;
     }
 
     /**

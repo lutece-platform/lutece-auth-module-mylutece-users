@@ -46,6 +46,8 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
+import fr.paris.lutece.util.url.UrlItem;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 import java.util.ArrayList;
@@ -55,6 +57,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * This class provides the user interface to manage MyLuteceUserRole features ( manage, create, modify, remove )
@@ -84,8 +87,12 @@ public class MyLuteceUserRoleJspBean extends AbstractmyLuteceUsersManagementJspB
     private static final String VIEW_MANAGE_SEARCHUSERROLES = "manageMyLuteceUserRoles";
     // Actions
     private static final String ACTION_ASSIGN_SEARCHUSERROLE = "assignMyLuteceUserRole";
+    // Jsp
+    private static final String JSP_MANAGE_SEARCHUSERS = "ManageMyLuteceSearchUsers.jsp";
+    private static final String VIEW_MANAGE_SEARCHUSERS = "manageMyLuteceSearchUsers";
     // Infos
     private static final String INFO_SEARCHUSERROLE_CREATED = "module.mylutece.users.info.roles.updated";
+    private static final String ERROR_SEARCHUSER_NOT_FOUND = "module.mylutece.users.error.userNotFound";
     // Session variable to store working values
     private MyLuteceSearchUser _myLuteceSearchUser;
 
@@ -99,9 +106,12 @@ public class MyLuteceUserRoleJspBean extends AbstractmyLuteceUsersManagementJspB
     @View( value = VIEW_MANAGE_SEARCHUSERROLES, defaultView = true )
     public String getManageMyLuteceUserRoles( HttpServletRequest request )
     {
-        String strUserId = request.getParameter( PARAMETER_ID_MYLUTECESEARCHUSER_ID );
-        int nUserId = Integer.parseInt( strUserId );
-        _myLuteceSearchUser = MyLuteceSearchUserHome.findByPrimaryKey( nUserId );
+        _myLuteceSearchUser = findSearchUser( request );
+        if ( _myLuteceSearchUser == null )
+        {
+            return redirectToUserList( request );
+        }
+        int nUserId = _myLuteceSearchUser.getId( );
         Collection<Role> myLuteceAuthorizedRoleCollection = RBACService.getAuthorizedCollection( RoleHome.findAll( ),
                 RoleResourceIdService.PERMISSION_ASSIGN_ROLE, AdminUserService.getAdminUser( request ) );
         List<Role> myLuteceAuthorizedRoleList = myLuteceAuthorizedRoleCollection.stream( ).collect( Collectors.toList( ) );
@@ -109,7 +119,7 @@ public class MyLuteceUserRoleJspBean extends AbstractmyLuteceUsersManagementJspB
         model.put( MARK_MYLUTECE_ROLE_LIST, myLuteceAuthorizedRoleList );
         model.put( MARK_MYLUTECESEARCHUSERROLE_LIST, getSearchUserAuthorizedRoleList( myLuteceAuthorizedRoleList, nUserId ) );
         model.put( MARK_MYLUTECESEARCHUSER, _myLuteceSearchUser );
-        model.put( MARK_MYLUTECESEARCHUSER_ID, strUserId );
+        model.put( MARK_MYLUTECESEARCHUSER_ID, String.valueOf( nUserId ) );
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERROLES, TEMPLATE_MANAGE_SEARCHUSERROLES, model );
     }
 
@@ -123,12 +133,47 @@ public class MyLuteceUserRoleJspBean extends AbstractmyLuteceUsersManagementJspB
     @Action( ACTION_ASSIGN_SEARCHUSERROLE )
     public String doAssignMyLuteceUserRole( HttpServletRequest request )
     {
+        _myLuteceSearchUser = findSearchUser( request );
+        if ( _myLuteceSearchUser == null )
+        {
+            return redirectToUserList( request );
+        }
         int nSearchUserId = _myLuteceSearchUser.getId( );
         String [ ] arrKeys = request.getParameterValues( PARAMETER_ROLE_KEY );
         List<String> myLuteceRoleKeysList = ( arrKeys != null ) ? Arrays.asList( arrKeys ) : new ArrayList<>( );
         MyLuteceUserRoleService.doSearchUserAssignements( myLuteceRoleKeysList, nSearchUserId );
         addInfo( INFO_SEARCHUSERROLE_CREATED, getLocale( ) );
         return redirect( request, VIEW_MANAGE_SEARCHUSERROLES, PARAMETER_ID_MYLUTECESEARCHUSER_ID, nSearchUserId );
+    }
+
+    /**
+     * Find the user whose id is in the request
+     *
+     * @param request
+     *            The Http request
+     * @return the user, or null if the id is missing, not a number or unknown
+     */
+    private static MyLuteceSearchUser findSearchUser( HttpServletRequest request )
+    {
+        int nUserId = NumberUtils.toInt( request.getParameter( PARAMETER_ID_MYLUTECESEARCHUSER_ID ), -1 );
+
+        return ( nUserId < 0 ) ? null : MyLuteceSearchUserHome.findByPrimaryKey( nUserId );
+    }
+
+    /**
+     * Go back to the list of the users with the message that the user is not found
+     *
+     * @param request
+     *            The Http request
+     * @return The redirection result
+     */
+    private String redirectToUserList( HttpServletRequest request )
+    {
+        addError( ERROR_SEARCHUSER_NOT_FOUND, getLocale( ) );
+        UrlItem url = new UrlItem( JSP_MANAGE_SEARCHUSERS );
+        url.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_MANAGE_SEARCHUSERS );
+
+        return redirect( request, url.getUrl( ) );
     }
 
     /**
