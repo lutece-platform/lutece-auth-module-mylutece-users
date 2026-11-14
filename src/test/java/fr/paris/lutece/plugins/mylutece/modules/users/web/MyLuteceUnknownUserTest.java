@@ -34,6 +34,8 @@
 package fr.paris.lutece.plugins.mylutece.modules.users.web;
 
 import java.io.IOException;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -45,6 +47,7 @@ import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.portal.web.cdi.mvc.Models;
 import fr.paris.lutece.test.AdminUserUtils;
+import fr.paris.lutece.util.ErrorMessage;
 import fr.paris.lutece.test.LuteceTestCase;
 import fr.paris.lutece.test.mocks.MockHttpServletRequest;
 import fr.paris.lutece.test.mocks.MockHttpServletResponse;
@@ -53,8 +56,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletResponseWrapper;
 
 /**
- * The screens and the actions of a user whose id is unknown, missing or not a number go back to the list of the users
- * with an error message.
+ * The screens and the actions of a user whose id is unknown, missing or not a number (roles, modification, removal) go
+ * back to the list of the users with an error message.
  */
 public class MyLuteceUnknownUserTest extends LuteceTestCase
 {
@@ -65,6 +68,9 @@ public class MyLuteceUnknownUserTest extends LuteceTestCase
     private static final String PARAMETER_ID_USERS = "id";
     private static final String UNKNOWN_ID = "999999";
     private static final String NOT_A_NUMBER = "abc";
+    private static final String ACTION_CONFIRM_REMOVE = "confirmRemoveMyLuteceSearchUser";
+    private static final String ACTION_REMOVE = "removeMyLuteceSearchUser";
+    private static final List<String> USER_NOT_FOUND = List.of( "The user does not exist", "L'utilisateur n'existe pas" );
     private static final String USERS_LIST = "ManageMyLuteceSearchUsers.jsp?view=manageMyLuteceSearchUsers";
 
     @Inject
@@ -112,13 +118,16 @@ public class MyLuteceUnknownUserTest extends LuteceTestCase
      */
     private void assertBackToTheListWithAnError( ControllerCall caller, MockHttpServletRequest request ) throws AccessDeniedException
     {
+        // The error messages of a previous call must not count
+        _models.put( MVCUtils.MARK_ERRORS, new LinkedHashSet<>( ) );
         RedirectResponse response = new RedirectResponse( );
         assertNull( caller.call( request, response ), "The page is shown instead of a redirection" );
         String strLocation = response.getLocation( );
         assertTrue( strLocation != null, "No redirection" );
         assertTrue( strLocation.contains( USERS_LIST ), strLocation );
         Set<?> errors = _models.get( MVCUtils.MARK_ERRORS, Set.class );
-        assertTrue( errors != null && !errors.isEmpty( ), "No error message" );
+        assertTrue( errors != null && errors.stream( ).map( error -> ( (ErrorMessage) error ).getMessage( ) ).anyMatch( USER_NOT_FOUND::contains ),
+                "No message that the user does not exist: " + errors );
     }
 
     @FunctionalInterface
@@ -232,5 +241,90 @@ public class MyLuteceUnknownUserTest extends LuteceTestCase
         request.addParameter( "last_name", "Last" );
         request.addParameter( "provider_user_id", "provider" );
         assertBackToTheListWithAnError( _userJspBean::processController, request );
+    }
+    private void assertRemovalBackToTheList( String strAction, String strId ) throws AccessDeniedException
+    {
+        MockHttpServletRequest request = newRequest( "POST", SERVLET_PATH_USERS );
+        request.addParameter( "action", strAction );
+        if ( strId != null )
+        {
+            request.addParameter( PARAMETER_ID_USERS, strId );
+        }
+        assertBackToTheListWithAnError( _userJspBean::processController, request );
+    }
+
+    private static MyLuteceSearchUser createUser( String strLogin )
+    {
+        MyLuteceSearchUser user = new MyLuteceSearchUser( );
+        user.setLogin( strLogin );
+        user.setGivenName( "Given" );
+        user.setLastName( "Last" );
+        user.setProviderUserId( strLogin );
+        MyLuteceSearchUserHome.create( user );
+        return user;
+    }
+
+    @Test
+    public void testConfirmRemoveAnUnknownUser( ) throws AccessDeniedException
+    {
+        assertRemovalBackToTheList( ACTION_CONFIRM_REMOVE, UNKNOWN_ID );
+    }
+
+    @Test
+    public void testConfirmRemoveWithAnIdThatIsNotANumber( ) throws AccessDeniedException
+    {
+        assertRemovalBackToTheList( ACTION_CONFIRM_REMOVE, NOT_A_NUMBER );
+    }
+
+    @Test
+    public void testConfirmRemoveWithoutId( ) throws AccessDeniedException
+    {
+        assertRemovalBackToTheList( ACTION_CONFIRM_REMOVE, null );
+    }
+
+    @Test
+    public void testRemoveAnUnknownUser( ) throws AccessDeniedException
+    {
+        assertRemovalBackToTheList( ACTION_REMOVE, UNKNOWN_ID );
+    }
+
+    @Test
+    public void testRemoveWithAnIdThatIsNotANumber( ) throws AccessDeniedException
+    {
+        assertRemovalBackToTheList( ACTION_REMOVE, NOT_A_NUMBER );
+    }
+
+    @Test
+    public void testRemoveWithoutId( ) throws AccessDeniedException
+    {
+        assertRemovalBackToTheList( ACTION_REMOVE, null );
+    }
+
+    @Test
+    public void testRemoveAKnownUserStillWorks( ) throws AccessDeniedException
+    {
+        MyLuteceSearchUser user = createUser( "unknown_user_remove_test" );
+        try
+        {
+            MockHttpServletRequest request = newRequest( "POST", SERVLET_PATH_USERS );
+            request.addParameter( "action", ACTION_CONFIRM_REMOVE );
+            request.addParameter( PARAMETER_ID_USERS, String.valueOf( user.getId( ) ) );
+            RedirectResponse response = new RedirectResponse( );
+            assertNull( _userJspBean.processController( request, response ) );
+            String strLocation = response.getLocation( );
+            assertTrue( strLocation != null && !strLocation.contains( USERS_LIST ), "No confirmation asked: " + strLocation );
+
+            request = newRequest( "POST", SERVLET_PATH_USERS );
+            request.addParameter( "action", ACTION_REMOVE );
+            request.addParameter( PARAMETER_ID_USERS, String.valueOf( user.getId( ) ) );
+            response = new RedirectResponse( );
+            assertNull( _userJspBean.processController( request, response ) );
+            assertTrue( response.getLocation( ) != null && response.getLocation( ).contains( USERS_LIST ), response.getLocation( ) );
+            assertNull( MyLuteceSearchUserHome.findByPrimaryKey( user.getId( ) ) );
+        }
+        finally
+        {
+            MyLuteceSearchUserHome.remove( user.getId( ) );
+        }
     }
 }

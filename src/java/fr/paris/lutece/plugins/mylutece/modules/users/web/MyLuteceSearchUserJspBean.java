@@ -307,7 +307,13 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     @Action( ACTION_CONFIRM_REMOVE_SEARCHUSER )
     public String getConfirmRemoveMyLuteceSearchUser( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_SEARCHUSER ) );
+        MyLuteceSearchUser myLuteceSearchUser = findSearchUser( request );
+        if ( myLuteceSearchUser == null )
+        {
+            addError( ERROR_SEARCHUSER_NOT_FOUND, getLocale( ) );
+            return redirectView( request, VIEW_MANAGE_SEARCHUSERS );
+        }
+        int nId = myLuteceSearchUser.getId( );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_SEARCHUSER ) );
         url.addParameter( PARAMETER_ID_SEARCHUSER, nId );
         String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SEARCHUSER, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
@@ -324,8 +330,13 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     @Action( ACTION_REMOVE_SEARCHUSER )
     public String doRemoveMyLuteceSearchUser( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_SEARCHUSER ) );
-        MyLuteceSearchUserHome.remove( nId );
+        MyLuteceSearchUser myLuteceSearchUser = findSearchUser( request );
+        if ( myLuteceSearchUser == null )
+        {
+            addError( ERROR_SEARCHUSER_NOT_FOUND, getLocale( ) );
+            return redirectView( request, VIEW_MANAGE_SEARCHUSERS );
+        }
+        MyLuteceSearchUserHome.remove( myLuteceSearchUser.getId( ) );
         addInfo( INFO_SEARCHUSER_REMOVED, getLocale( ) );
         return redirectView( request, VIEW_MANAGE_SEARCHUSERS );
     }
@@ -464,6 +475,20 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
         model.put( MARK_SEARCHUSER_LIST, users );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
         return getAdminPage( template.getHtml( ) );
+    }
+
+    /**
+     * Find the user whose id is in the request
+     *
+     * @param request
+     *            The Http request
+     * @return the user, or null if the id is missing, not a number or unknown
+     */
+    private static MyLuteceSearchUser findSearchUser( HttpServletRequest request )
+    {
+        int nId = NumberUtils.toInt( request.getParameter( PARAMETER_ID_SEARCHUSER ), -1 );
+
+        return ( nId < 0 ) ? null : MyLuteceSearchUserHome.findByPrimaryKey( nId );
     }
 
     /**
