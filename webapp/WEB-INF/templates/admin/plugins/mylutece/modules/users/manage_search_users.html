@@ -12,16 +12,22 @@
             <input type='hidden' name='search_is_search' value='true' />
             <@row>
                 <@columns md=3>
-                    <@input type='text' name='search_last_name' id='search_last_name' value=user_filter.lastName!'' placeHolder='#i18n{module.mylutece.users.search.lastName}' labelKey='#i18n{module.mylutece.users.column.lastName}' />
+                    <@formGroup labelFor='search_last_name' labelKey='#i18n{module.mylutece.users.column.lastName}' formStyle='fullwidth'>
+                        <@input type='text' name='search_last_name' id='search_last_name' value=user_filter.lastName!'' placeHolder='#i18n{module.mylutece.users.search.lastName}' />
+                    </@formGroup>
                 </@columns>
                 <@columns md=3>
-                    <@input type='text' name='search_first_name' id='search_first_name' value=user_filter.firstName!'' placeHolder='#i18n{module.mylutece.users.search.firstName}' labelKey='#i18n{module.mylutece.users.column.givenName}' />
+                    <@formGroup labelFor='search_first_name' labelKey='#i18n{module.mylutece.users.column.givenName}' formStyle='fullwidth'>
+                        <@input type='text' name='search_first_name' id='search_first_name' value=user_filter.firstName!'' placeHolder='#i18n{module.mylutece.users.search.firstName}' />
+                    </@formGroup>
                 </@columns>
                 <@columns md=3>
-                    <@input type='text' name='search_email' id='search_email' value=user_filter.email!'' placeHolder='#i18n{module.mylutece.users.search.email}' labelKey='#i18n{module.mylutece.users.column.email}' />
+                    <@formGroup labelFor='search_email' labelKey='#i18n{module.mylutece.users.column.email}' formStyle='fullwidth'>
+                        <@input type='text' name='search_email' id='search_email' value=user_filter.email!'' placeHolder='#i18n{module.mylutece.users.search.email}' />
+                    </@formGroup>
                 </@columns>
                 <@columns md=3>
-                    <@formGroup labelKey=' '>
+                    <@formGroup labelKey=' ' formStyle='fullwidth'>
                         <@button type='submit' buttonIcon='search' title='#i18n{module.mylutece.users.search.button}' color='primary' />
                         <@aButton href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp' buttonIcon='x' title='#i18n{module.mylutece.users.search.reset}' color='secondary' />
                     </@formGroup>
@@ -46,9 +52,9 @@
                     <@td>${mylutece_search_user.email}</@td>
                     <@td>${mylutece_search_user.providerUserId!}</@td>
                     <@td>
-                        <@aButton href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp?view=modifyMyLuteceSearchUser&id=${mylutece_search_user.id}' buttonIcon='pencil' title='#i18n{portal.util.labelModify}' hideTitle=['all'] />
-                        <@aButton href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceUserRoles.jsp?view=manageMyLuteceUserRoles&id_mylutecesearchuser=${mylutece_search_user.id}' buttonIcon='shield' title='#i18n{module.mylutece.users.manageRoles.pageTitle}' hideTitle=['all'] />
-                        <@aButton href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp?action=confirmRemoveMyLuteceSearchUser&id=${mylutece_search_user.id}' buttonIcon='trash' color='danger' title='#i18n{portal.util.labelDelete}' hideTitle=['all'] />
+                        <@aButton href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp?view=modifyMyLuteceSearchUser&id=${mylutece_search_user.id}' buttonIcon='pencil' title='#i18n{portal.util.labelModify}' hideTitle=['all'] params={ 'aria-label': '#i18n{portal.util.labelModify} ' + mylutece_search_user.login } />
+                        <@aButton href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceUserRoles.jsp?view=manageMyLuteceUserRoles&id_mylutecesearchuser=${mylutece_search_user.id}' buttonIcon='shield' title='#i18n{module.mylutece.users.manageRoles.pageTitle}' hideTitle=['all'] params={ 'aria-label': '#i18n{module.mylutece.users.manageRoles.pageTitle} ' + mylutece_search_user.login } />
+                        <@aButton href='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp?action=confirmRemoveMyLuteceSearchUser&id=${mylutece_search_user.id}' buttonIcon='trash' color='danger' title='#i18n{portal.util.labelDelete}' hideTitle=['all'] params={ 'aria-label': '#i18n{portal.util.labelDelete} ' + mylutece_search_user.login } />
                     </@td>
                 </@tr>
             </#list>

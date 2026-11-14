@@ -6,9 +6,9 @@
         <@tform action='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp' method='post' boxed=true>
             <#if attribute_list??>
                 <#list attribute_list as attribute>
-                    <@formGroup labelKey='${attribute.title}' helpKey='${attribute.helpMessage!}' mandatory=attribute.mandatory!false>
+                    <@formGroup labelFor='attribute_mapping_${attribute.idAttribute}' labelKey='${attribute.title}' helpKey='${attribute.helpMessage!}' mandatory=attribute.mandatory!false>
                         <#assign attributeSelected=getSelected(attribute.idAttribute)>
-                        <select class='form-select' name='attribute_mapping_${attribute.idAttribute}'>
+                        <select class='form-select' name='attribute_mapping_${attribute.idAttribute}' id='attribute_mapping_${attribute.idAttribute}'<#if attribute.helpMessage?has_content> aria-describedby='help_attribute_mapping_${attribute.idAttribute}'</#if>>
                             <option value=''></option>
                             <#if provider_attribute_list??>
                                 <#list provider_attribute_list as provider_attribute>
@@ -20,7 +20,7 @@
                 </#list>
             </#if>
             <@formGroup>
-                <@button type='submit' name='action_updateAttributeMapping' buttonIcon='device-floppy' title='#i18n{portal.util.labelSave}' color='primary' />
+                <@button type='submit' name='action_updateAttributeMapping' buttonIcon='device-floppy' title='#i18n{module.mylutece.users.buttonSave}' color='primary' />
                 <@button type='submit' name='view_manageMyLuteceSearchUsers' buttonIcon='arrow-back' title='#i18n{portal.util.labelCancel}' />
             </@formGroup>
         </@tform>

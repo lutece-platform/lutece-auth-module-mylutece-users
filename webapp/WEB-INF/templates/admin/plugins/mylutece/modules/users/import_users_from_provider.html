@@ -49,22 +49,22 @@
                                 <@td>${searchUser.email}</@td>
                                 <@td>
                                     <@tform method='post' action='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp'>
-                                        <@input type='hidden' name='plugin_name' value='${plugin_name!""}' />
-                                        <@input type='hidden' name='login' value='${searchUser.login}' />
-                                        <@input type='hidden' name='email' value='${searchUser.email}' />
-                                        <@input type='hidden' name='last_name' value='${searchUser.lastName}' />
-                                        <@input type='hidden' name='given_name' value='${searchUser.givenName}' />
-                                        <@input type='hidden' name='provider_user_id' value='${searchUser.providerUserId}' />
-                                        <@input type='hidden' name='import_from_provider' value='true' />
+                                        <@input type='hidden' name='plugin_name' id='plugin_name_${searchUser?index}' value='${plugin_name!""}' />
+                                        <@input type='hidden' name='login' id='login_${searchUser?index}' value='${searchUser.login}' />
+                                        <@input type='hidden' name='email' id='email_${searchUser?index}' value='${searchUser.email}' />
+                                        <@input type='hidden' name='last_name' id='last_name_${searchUser?index}' value='${searchUser.lastName}' />
+                                        <@input type='hidden' name='given_name' id='given_name_${searchUser?index}' value='${searchUser.givenName}' />
+                                        <@input type='hidden' name='provider_user_id' id='provider_user_id_${searchUser?index}' value='${searchUser.providerUserId}' />
+                                        <@input type='hidden' name='import_from_provider' id='import_from_provider_${searchUser?index}' value='true' />
                                         <#if searchUser.attributes??>
                                             <#list searchUser.attributes as attribute>
                                                 <#if attribute.code??>
                                                     <#assign mylutece_attribute_id=getIdMyLuteceAttribute(attribute.name)>
-                                                    <@input type='hidden' name='attribute_${mylutece_attribute_id}' value='${attribute.code}' />
+                                                    <@input type='hidden' name='attribute_${mylutece_attribute_id}' id='attribute_${mylutece_attribute_id}_${searchUser?index}' value='${attribute.code}' />
                                                 </#if>
                                             </#list>
                                         </#if>
-                                        <@button type='submit' title='#i18n{module.mylutece.users.importUsers.buttonImport}' buttonIcon='upload' size='sm' name='action_createMyLuteceSearchUser' color='primary' hideTitle=['all'] />
+                                        <@button type='submit' title='#i18n{module.mylutece.users.importUsers.buttonImport}' buttonIcon='upload' size='sm' name='action_createMyLuteceSearchUser' color='primary' hideTitle=['all'] params={ 'aria-label': '#i18n{module.mylutece.users.importUsers.buttonImport} ' + searchUser.login } />
                                     </@tform>
                                 </@td>
                             </@tr>

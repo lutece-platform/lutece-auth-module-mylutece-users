@@ -3,7 +3,7 @@
     <@pageColumn>
         <@pageHeader title='${mylutece_search_user.givenName} ${mylutece_search_user.lastName}' description='#i18n{module.mylutece.users.manageRoles.pageTitle}'>
             <@inputGroup>
-                <@input type='text' name='roleFilter' id='roleFilter' placeHolder='#i18n{module.mylutece.users.manageRoles.filterPlaceholder}' autoComplete="off" size='' />
+                <@input type='text' name='roleFilter' id='roleFilter' placeHolder='#i18n{module.mylutece.users.manageRoles.filterPlaceholder}' autoComplete="off" size='' params={ 'aria-label': '#i18n{module.mylutece.users.manageRoles.filterLabel}' } />
                 <@button type='button' title='#i18n{module.mylutece.users.buttonSearch}' buttonIcon='search' hideTitle=['all'] size='' />
             </@inputGroup>
         </@pageHeader>
@@ -11,7 +11,7 @@
         <@mylutecesearchusermanagement tab="mylutecesearchuserrole" />
         <@tform name='assign_user_roles' action='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceUserRoles.jsp' boxed=true>
             <@input type='hidden' name='id_mylutecesearchuser' value='${id_mylutecesearchuser}' />
-            <@formGroup id='roleList'>
+            <@fieldSet fieldsetId='roleList' legend='#i18n{module.mylutece.users.manageRoles.legend}'>
                 <#list mylutece_role_list as role>
                     <#if role.role != "none">
                         <#if mylutece_search_user_role_list??>
@@ -22,11 +22,11 @@
                                     <#break>
                                 </#if>
                             </#list>
-                            <@checkBox id='${role.role}' labelKey='${role.role} - ${role.roleDescription}' value='${role.role}' name='role_key' checked=checked labelClass='searchable' params={"data-role": "${role.role} ${role.roleDescription}"} />
+                            <@checkBox id='role_${role?index}' labelKey='${role.role} - ${role.roleDescription}' value='${role.role}' name='role_key' checked=checked labelClass='searchable' params={"data-role": "${role.role} ${role.roleDescription}"} />
                         </#if>
                     </#if>
                 </#list>
-            </@formGroup>
+            </@fieldSet>
             <@formGroup class='mt-3'>
                 <@button type='submit' name='action_assignMyLuteceUserRole' buttonIcon='device-floppy' title='#i18n{module.mylutece.users.manageRoles.buttonSave}' color='primary' />
             </@formGroup>

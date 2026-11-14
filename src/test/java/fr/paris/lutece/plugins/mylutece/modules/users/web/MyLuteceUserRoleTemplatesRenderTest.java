@@ -126,7 +126,8 @@ public class MyLuteceUserRoleTemplatesRenderTest
     /**
      * The roles screen renders (it showed an internal error while the filter field got its attributes as a string): the
      * filter field gets autocomplete="off", each role check box its data-role, the role held by the user is checked, and
-     * the names of the user and the description of the role are written as text.
+     * the names of the user and the description of the role are written as text. The filter field has a name, the check
+     * boxes are grouped under a legend and their ids do not depend on the role keys.
      *
      * @throws Exception
      *             if the rendering fails
@@ -152,6 +153,10 @@ public class MyLuteceUserRoleTemplatesRenderTest
         assertTrue( strHtml.contains( "data-role=\"" + ROLE_KEY + " " + HOSTILE_ESCAPED + "\"" ), strHtml );
         assertTrue( strHtml.contains( "value=\"" + ROLE_KEY + "\"" ), strHtml );
         assertTrue( strHtml.contains( "checked" ), strHtml );
+        assertTrue( strHtml.contains( "aria-label=\"#i18n{module.mylutece.users.manageRoles.filterLabel}\"" ), strHtml );
+        assertTrue( strHtml.contains( "#i18n{module.mylutece.users.manageRoles.legend}</legend>" ), strHtml );
+        assertTrue( strHtml.contains( "id=\"role_1\"" ), strHtml );
+        assertTrue( strHtml.contains( "for=\"role_1\"" ), strHtml );
         assertTrue( strHtml.contains( HOSTILE_ESCAPED ), strHtml );
         assertFalse( strHtml.contains( "<b>x</b>" ), strHtml );
         assertFalse( strHtml.contains( "value=\"none\"" ), strHtml );
