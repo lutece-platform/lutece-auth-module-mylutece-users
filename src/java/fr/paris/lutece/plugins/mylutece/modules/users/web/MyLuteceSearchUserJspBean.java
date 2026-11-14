@@ -81,7 +81,7 @@ import jakarta.inject.Named;
  */
 @SessionScoped
 @Named
-@Controller( controllerJsp = "ManageMyLuteceSearchUsers.jsp", controllerPath = "jsp/admin/plugins/mylutece/modules/users/", right = "MYLUTECE_USERS_MANAGEMENT" )
+@Controller( controllerJsp = "ManageMyLuteceSearchUsers.jsp", controllerPath = "jsp/admin/plugins/mylutece/modules/users/", right = "MYLUTECE_USERS_MANAGEMENT", securityTokenEnabled = true )
 public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJspBean
 {
     /**
@@ -181,7 +181,7 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
      *            The Http request
      * @return the html code of the myLuteceSearchUser form
      */
-    @View( VIEW_MANAGE_ATTRIBUTE_MAPPING )
+    @View( value = VIEW_MANAGE_ATTRIBUTE_MAPPING, securityTokenAction = ACTION_UPDATE_ATTRIBUTE_MAPPING )
     public String getManageAttributeMapping( HttpServletRequest request )
     {
         _listMyLuteceAttribute = gettMyLuteceAttributeWithFields( AttributeHome.findAll( _locale, _myLutecePlugin ) );
@@ -414,13 +414,14 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     }
 
     /**
-     * Get a page to import users from Provider.
+     * Get a page to import users from Provider. The search and the import of each user found share the token of the
+     * creation action.
      * 
      * @param request
      *            The request
      * @return The HTML content
      */
-    @View( VIEW_IMPORT_SEARCHUSER )
+    @View( value = VIEW_IMPORT_SEARCHUSER, securityTokenAction = ACTION_CREATE_SEARCHUSER )
     public String getImportMyLuteceSearchUser( HttpServletRequest request )
     {
         _listAttributeMapping = ( _listAttributeMapping != null ) ? _listAttributeMapping : AttributeMappingHome.getAttributeMappingsList( );
@@ -441,7 +442,7 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
      *            The request
      * @return The HTML content
      */
-    @Action( ACTION_SEARCH_SEARCHUSER )
+    @Action( value = ACTION_SEARCH_SEARCHUSER, securityTokenAction = ACTION_CREATE_SEARCHUSER )
     public String doSearchUsersFromProvider( HttpServletRequest request )
     {
         String strParameterLastName = request.getParameter( PARAMETER_SEARCH_BY_LAST_NAME );

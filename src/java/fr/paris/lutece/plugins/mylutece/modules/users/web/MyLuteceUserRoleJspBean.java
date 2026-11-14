@@ -64,7 +64,7 @@ import org.apache.commons.lang3.math.NumberUtils;
  */
 @SessionScoped
 @Named
-@Controller( controllerJsp = "ManageMyLuteceUserRoles.jsp", controllerPath = "jsp/admin/plugins/mylutece/modules/users/", right = "MYLUTECE_USERS_MANAGEMENT" )
+@Controller( controllerJsp = "ManageMyLuteceUserRoles.jsp", controllerPath = "jsp/admin/plugins/mylutece/modules/users/", right = "MYLUTECE_USERS_MANAGEMENT", securityTokenEnabled = true )
 public class MyLuteceUserRoleJspBean extends AbstractmyLuteceUsersManagementJspBean
 {
     /**
@@ -103,7 +103,7 @@ public class MyLuteceUserRoleJspBean extends AbstractmyLuteceUsersManagementJspB
      *            The HTTP request
      * @return The page
      */
-    @View( value = VIEW_MANAGE_SEARCHUSERROLES, defaultView = true )
+    @View( value = VIEW_MANAGE_SEARCHUSERROLES, defaultView = true, securityTokenAction = ACTION_ASSIGN_SEARCHUSERROLE )
     public String getManageMyLuteceUserRoles( HttpServletRequest request )
     {
         _myLuteceSearchUser = findSearchUser( request );
