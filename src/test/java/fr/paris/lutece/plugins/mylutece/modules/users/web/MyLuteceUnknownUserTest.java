@@ -44,6 +44,9 @@ import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceSearchUse
 import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
+import fr.paris.lutece.portal.service.message.AdminMessage;
+import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.security.SecurityTokenHandler;
 import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.portal.web.cdi.mvc.Models;
 import fr.paris.lutece.test.AdminUserUtils;
@@ -57,7 +60,7 @@ import jakarta.servlet.http.HttpServletResponseWrapper;
 
 /**
  * The screens and the actions of a user whose id is unknown, missing or not a number (roles, modification, removal) go
- * back to the list of the users with an error message.
+ * back to the list of the users with an error message; the confirmation of the removal opened by a link is a view.
  */
 public class MyLuteceUnknownUserTest extends LuteceTestCase
 {
@@ -68,7 +71,7 @@ public class MyLuteceUnknownUserTest extends LuteceTestCase
     private static final String PARAMETER_ID_USERS = "id";
     private static final String UNKNOWN_ID = "999999";
     private static final String NOT_A_NUMBER = "abc";
-    private static final String ACTION_CONFIRM_REMOVE = "confirmRemoveMyLuteceSearchUser";
+    private static final String VIEW_CONFIRM_REMOVE = "confirmRemoveMyLuteceSearchUser";
     private static final String ACTION_REMOVE = "removeMyLuteceSearchUser";
     private static final List<String> USER_NOT_FOUND = List.of( "The user does not exist", "L'utilisateur n'existe pas" );
     private static final String USERS_LIST = "ManageMyLuteceSearchUsers.jsp?view=manageMyLuteceSearchUsers";
@@ -79,6 +82,8 @@ public class MyLuteceUnknownUserTest extends LuteceTestCase
     private MyLuteceSearchUserJspBean _userJspBean;
     @Inject
     private Models _models;
+    @Inject
+    private SecurityTokenHandler _securityTokenHandler;
 
     /**
      * Keeps the URL of the redirection, which the mock response does not keep
@@ -242,6 +247,7 @@ public class MyLuteceUnknownUserTest extends LuteceTestCase
         request.addParameter( "provider_user_id", "provider" );
         assertBackToTheListWithAnError( _userJspBean::processController, request );
     }
+
     private void assertRemovalBackToTheList( String strAction, String strId ) throws AccessDeniedException
     {
         MockHttpServletRequest request = newRequest( "POST", SERVLET_PATH_USERS );
@@ -251,6 +257,20 @@ public class MyLuteceUnknownUserTest extends LuteceTestCase
             request.addParameter( PARAMETER_ID_USERS, strId );
         }
         assertBackToTheListWithAnError( _userJspBean::processController, request );
+    }
+
+    /**
+     * Opens the confirmation of the removal as the delete link of the list does
+     */
+    private static MockHttpServletRequest newConfirmRemoveRequest( String strId )
+    {
+        MockHttpServletRequest request = newRequest( "GET", SERVLET_PATH_USERS );
+        request.addParameter( "view", VIEW_CONFIRM_REMOVE );
+        if ( strId != null )
+        {
+            request.addParameter( PARAMETER_ID_USERS, strId );
+        }
+        return request;
     }
 
     private static MyLuteceSearchUser createUser( String strLogin )
@@ -267,19 +287,19 @@ public class MyLuteceUnknownUserTest extends LuteceTestCase
     @Test
     public void testConfirmRemoveAnUnknownUser( ) throws AccessDeniedException
     {
-        assertRemovalBackToTheList( ACTION_CONFIRM_REMOVE, UNKNOWN_ID );
+        assertBackToTheListWithAnError( _userJspBean::processController, newConfirmRemoveRequest( UNKNOWN_ID ) );
     }
 
     @Test
     public void testConfirmRemoveWithAnIdThatIsNotANumber( ) throws AccessDeniedException
     {
-        assertRemovalBackToTheList( ACTION_CONFIRM_REMOVE, NOT_A_NUMBER );
+        assertBackToTheListWithAnError( _userJspBean::processController, newConfirmRemoveRequest( NOT_A_NUMBER ) );
     }
 
     @Test
     public void testConfirmRemoveWithoutId( ) throws AccessDeniedException
     {
-        assertRemovalBackToTheList( ACTION_CONFIRM_REMOVE, null );
+        assertBackToTheListWithAnError( _userJspBean::processController, newConfirmRemoveRequest( null ) );
     }
 
     @Test
@@ -306,13 +326,11 @@ public class MyLuteceUnknownUserTest extends LuteceTestCase
         MyLuteceSearchUser user = createUser( "unknown_user_remove_test" );
         try
         {
-            MockHttpServletRequest request = newRequest( "POST", SERVLET_PATH_USERS );
-            request.addParameter( "action", ACTION_CONFIRM_REMOVE );
-            request.addParameter( PARAMETER_ID_USERS, String.valueOf( user.getId( ) ) );
+            MockHttpServletRequest request = newConfirmRemoveRequest( String.valueOf( user.getId( ) ) );
             RedirectResponse response = new RedirectResponse( );
             assertNull( _userJspBean.processController( request, response ) );
-            String strLocation = response.getLocation( );
-            assertTrue( strLocation != null && !strLocation.contains( USERS_LIST ), "No confirmation asked: " + strLocation );
+            AdminMessage message = AdminMessageService.getMessage( request );
+            assertTrue( message != null && message.getUrl( ).contains( "action=" + ACTION_REMOVE ), "No confirmation asked: " + response.getLocation( ) );
 
             request = newRequest( "POST", SERVLET_PATH_USERS );
             request.addParameter( "action", ACTION_REMOVE );
@@ -321,6 +339,40 @@ public class MyLuteceUnknownUserTest extends LuteceTestCase
             assertNull( _userJspBean.processController( request, response ) );
             assertTrue( response.getLocation( ) != null && response.getLocation( ).contains( USERS_LIST ), response.getLocation( ) );
             assertNull( MyLuteceSearchUserHome.findByPrimaryKey( user.getId( ) ) );
+        }
+        finally
+        {
+            MyLuteceSearchUserHome.remove( user.getId( ) );
+        }
+    }
+
+    /**
+     * The confirmation of the removal is opened by a link of the list (GET): it is a view, which the policy of the actions
+     * requested without POST (lutece.mvc.action.getPolicy: logged by default, refused with "refuse") does not concern.
+     *
+     * @throws AccessDeniedException
+     *             if the controller is refused
+     */
+    @Test
+    public void testConfirmRemoveOpenedByALinkIsAView( ) throws AccessDeniedException
+    {
+        MyLuteceSearchUser user = createUser( "unknown_user_link_test" );
+        try
+        {
+            MockHttpServletRequest request = newConfirmRemoveRequest( String.valueOf( user.getId( ) ) );
+            // Registers the actions and views of the controller in the security token handler
+            _userJspBean.processController( newConfirmRemoveRequest( UNKNOWN_ID ), new RedirectResponse( ) );
+            assertTrue( _securityTokenHandler.shouldNotFilter( request ), "The confirmation opened by a link must not need a security token" );
+            assertFalse( _securityTokenHandler.isMvcActionWithoutPost( request ), "The confirmation opened by a link must not be an action requested without POST" );
+            // An action opened by a link, as the confirmation was, falls under the policy of the actions requested without POST
+            MockHttpServletRequest actionLink = newRequest( "GET", SERVLET_PATH_USERS );
+            actionLink.addParameter( "action", ACTION_REMOVE );
+            actionLink.addParameter( PARAMETER_ID_USERS, String.valueOf( user.getId( ) ) );
+            assertTrue( _securityTokenHandler.isMvcActionWithoutPost( actionLink ), "An action opened by a link is an action requested without POST" );
+
+            assertNull( _userJspBean.processController( request, new RedirectResponse( ) ) );
+            AdminMessage message = AdminMessageService.getMessage( request );
+            assertTrue( message != null && message.getUrl( ).contains( "action=" + ACTION_REMOVE ), "No confirmation of the removal" );
         }
         finally
         {

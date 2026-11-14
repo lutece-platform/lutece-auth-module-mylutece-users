@@ -33,10 +33,13 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.users.web;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -65,6 +68,7 @@ public class MyLuteceSearchUserTemplatesRenderTest
     private static final String PATH = "admin/plugins/mylutece/modules/users/";
     private static final String TEMPLATE_CREATE = PATH + "create_search_user.html";
     private static final String TEMPLATE_MODIFY = PATH + "modify_search_user.html";
+    private static final String TEMPLATE_MANAGE = PATH + "manage_search_users.html";
     private static final String CANCEL = "name=\"view_manageMyLuteceSearchUsers\" formnovalidate";
 
     /**
@@ -150,5 +154,20 @@ public class MyLuteceSearchUserTemplatesRenderTest
 
         assertTrue( strHtml.contains( "required" ), strHtml );
         assertTrue( strHtml.contains( CANCEL ), strHtml );
+    }
+
+    /**
+     * The delete link of the list opens the confirmation view (a link is a GET, which the actions refuse).
+     *
+     * @throws Exception
+     *             if the template cannot be read
+     */
+    @Test
+    public void testDeleteLinkOpensTheConfirmationView( ) throws Exception
+    {
+        String strTemplate = Files.readString( Paths.get( TEMPLATES_ROOT, TEMPLATE_MANAGE ) );
+
+        assertTrue( strTemplate.contains( "ManageMyLuteceSearchUsers.jsp?view=confirmRemoveMyLuteceSearchUser&id=" ), strTemplate );
+        assertFalse( strTemplate.contains( "action=confirmRemoveMyLuteceSearchUser" ), strTemplate );
     }
 }

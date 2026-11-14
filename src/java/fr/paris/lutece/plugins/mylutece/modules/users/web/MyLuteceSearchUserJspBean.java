@@ -127,11 +127,11 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     private static final String VIEW_MODIFY_SEARCHUSER = "modifyMyLuteceSearchUser";
     private static final String VIEW_IMPORT_SEARCHUSER = "importMyLuteceSearchUser";
     private static final String VIEW_MANAGE_ATTRIBUTE_MAPPING = "manageAttributeMapping";
+    private static final String VIEW_CONFIRM_REMOVE_SEARCHUSER = "confirmRemoveMyLuteceSearchUser";
     // Actions
     private static final String ACTION_CREATE_SEARCHUSER = "createMyLuteceSearchUser";
     private static final String ACTION_MODIFY_SEARCHUSER = "modifyMyLuteceSearchUser";
     private static final String ACTION_REMOVE_SEARCHUSER = "removeMyLuteceSearchUser";
-    private static final String ACTION_CONFIRM_REMOVE_SEARCHUSER = "confirmRemoveMyLuteceSearchUser";
     private static final String ACTION_SEARCH_SEARCHUSER = "searchUsersFromProvider";
     private static final String ACTION_UPDATE_ATTRIBUTE_MAPPING = "updateAttributeMapping";
     // Infos
@@ -298,13 +298,14 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     }
 
     /**
-     * Manages the removal form of a myLuteceSearchUser whose identifier is in the http request
+     * Manages the removal form of a myLuteceSearchUser whose identifier is in the http request. A view opened by the
+     * delete link of the list: the confirmation form posts the removal with the security token of the removal action.
      *
      * @param request
      *            The Http request
      * @return the html code to confirm
      */
-    @Action( ACTION_CONFIRM_REMOVE_SEARCHUSER )
+    @View( value = VIEW_CONFIRM_REMOVE_SEARCHUSER, securityTokenAction = ACTION_REMOVE_SEARCHUSER )
     public String getConfirmRemoveMyLuteceSearchUser( HttpServletRequest request )
     {
         MyLuteceSearchUser myLuteceSearchUser = findSearchUser( request );
