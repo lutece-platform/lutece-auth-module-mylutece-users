@@ -111,12 +111,15 @@ public class MyLuteceSearchUserHome
      * 
      * @param nKey
      *            The myLuteceSearchUser primary key
-     * @return an instance of MyLuteceSearchUser
+     * @return an instance of MyLuteceSearchUser, or null if no user has this key
      */
     public static MyLuteceSearchUser findByPrimaryKey( int nKey )
     {
         MyLuteceSearchUser myLuteceSearchUser = _dao.load( nKey, _plugin );
-        fillAttributes( myLuteceSearchUser );
+        if ( myLuteceSearchUser != null )
+        {
+            fillAttributes( myLuteceSearchUser );
+        }
         return myLuteceSearchUser;
     }
 
