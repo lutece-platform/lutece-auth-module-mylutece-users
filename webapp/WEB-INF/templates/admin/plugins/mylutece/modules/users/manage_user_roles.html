@@ -3,7 +3,7 @@
     <@pageColumn>
         <@pageHeader title='${mylutece_search_user.givenName} ${mylutece_search_user.lastName}' description='#i18n{module.mylutece.users.manageRoles.pageTitle}'>
             <@inputGroup>
-                <@input type='text' name='roleFilter' id='roleFilter' placeHolder='#i18n{module.mylutece.users.manageRoles.filterPlaceholder}' params='autocomplete="off"' size='' />
+                <@input type='text' name='roleFilter' id='roleFilter' placeHolder='#i18n{module.mylutece.users.manageRoles.filterPlaceholder}' autoComplete="off" size='' />
                 <@button type='button' title='#i18n{module.mylutece.users.buttonSearch}' buttonIcon='search' hideTitle=['all'] size='' />
             </@inputGroup>
         </@pageHeader>
@@ -22,7 +22,7 @@
                                     <#break>
                                 </#if>
                             </#list>
-                            <@checkBox id='${role.role}' labelKey='${role.role} - ${role.roleDescription}' value='${role.role}' name='role_key' checked=checked labelClass='searchable' params='data-role="${role.role} ${role.roleDescription}"' />
+                            <@checkBox id='${role.role}' labelKey='${role.role} - ${role.roleDescription}' value='${role.role}' name='role_key' checked=checked labelClass='searchable' params={"data-role": "${role.role} ${role.roleDescription}"} />
                         </#if>
                     </#if>
                 </#list>
