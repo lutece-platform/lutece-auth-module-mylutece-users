@@ -34,13 +34,19 @@
 package fr.paris.lutece.plugins.mylutece.modules.users.web;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.security.SecurityTokenHandler;
+import fr.paris.lutece.portal.service.template.FreeMarkerTemplateService;
+import fr.paris.lutece.portal.web.LocalVariables;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.cdi.mvc.event.MvcEvent.ControllerInvocationType;
@@ -189,5 +195,97 @@ public class MyLuteceUsersSecurityTokenTest extends LuteceTestCase
         MockHttpServletRequest request = newRequest( SERVLET_PATH_ROLES );
         String strToken = issueToken( request, MyLuteceUserRoleJspBean.class, ControllerInvocationType.VIEW, "manageMyLuteceUserRoles" );
         assertActionNeedsToken( request, "assignMyLuteceUserRole", strToken );
+    }
+
+    private static final String COMMONS = "commons_bs5_tabler.html";
+    private static final Pattern PATTERN_POST_FORM = Pattern.compile( "<form[^>]*method=\"post\"[^>]*>(.*?)</form>", Pattern.DOTALL );
+    private static final Pattern PATTERN_TOKEN_FIELD = Pattern.compile( "<input[^>]*name=\"_csrftoken\"[^>]*>" );
+    private static final Pattern PATTERN_VALUE = Pattern.compile( "value=\"([^\"]*)\"" );
+
+    /**
+     * Renders a page of the controller with the back office macros, which the test context does not include by itself
+     */
+    private static String renderPage( MockHttpServletRequest request, ControllerPage page ) throws AccessDeniedException
+    {
+        // The page reads its token from the request of the thread
+        LocalVariables.setLocal( null, request, null );
+        FreeMarkerTemplateService serviceFMT = FreeMarkerTemplateService.getInstance( );
+        boolean bAdded = !serviceFMT.getAutoIncludes( ).contains( COMMONS );
+        if ( bAdded )
+        {
+            serviceFMT.addAutoInclude( COMMONS );
+        }
+        try
+        {
+            return page.render( );
+        }
+        finally
+        {
+            if ( bAdded )
+            {
+                serviceFMT.removeAutoInclude( COMMONS );
+            }
+            LocalVariables.remove( );
+        }
+    }
+
+    @FunctionalInterface
+    private interface ControllerPage
+    {
+        String render( ) throws AccessDeniedException;
+    }
+
+    /**
+     * The security token fields of each form posted by the page
+     */
+    private static List<String [ ]> getPostFormTokens( String strHtml )
+    {
+        List<String [ ]> listForms = new ArrayList<>( );
+        Matcher form = PATTERN_POST_FORM.matcher( strHtml );
+        while ( form.find( ) )
+        {
+            List<String> listTokens = new ArrayList<>( );
+            Matcher field = PATTERN_TOKEN_FIELD.matcher( form.group( 1 ) );
+            while ( field.find( ) )
+            {
+                Matcher value = PATTERN_VALUE.matcher( field.group( ) );
+                if ( value.find( ) )
+                {
+                    listTokens.add( value.group( 1 ) );
+                }
+            }
+            listForms.add( listTokens.toArray( new String [ 0] ) );
+        }
+        return listForms;
+    }
+
+    /**
+     * The page of the results of a search in the import screen posts the search again and the import of each user found:
+     * each form carries a token of its own, so the forms can be posted one after the other (another import after going
+     * back to the results page, a new search).
+     */
+    @Test
+    public void testEachFormOfTheImportResultsHasItsToken( ) throws AccessDeniedException
+    {
+        displayControllers( );
+        MockHttpServletRequest request = newRequest( SERVLET_PATH_USERS );
+        request.setMethod( "POST" );
+        // The token of the page, issued as the security token filter does when the search is posted
+        issueToken( request, MyLuteceSearchUserJspBean.class, ControllerInvocationType.ACTION, "searchUsersFromProvider" );
+        MockHttpServletResponse response = new MockHttpServletResponse( );
+        String strHtml = renderPage( request, ( ) -> _userJspBean.processController( request, response ) );
+
+        List<String [ ]> listForms = getPostFormTokens( strHtml );
+        assertEquals( 3, listForms.size( ), "The search and the import of the two users found: " + strHtml );
+        String strTokenKey = _securityTokenHandler.resolveTokenAction( request, "createMyLuteceSearchUser" );
+        assertEquals( strTokenKey, _securityTokenHandler.resolveTokenAction( request, "searchUsersFromProvider" ) );
+        // The imports first, then the search
+        for ( int i : new int [ ] {
+                1, 2, 0
+        } )
+        {
+            request.setParameter( SecurityTokenHandler.MARK_CSRF_TOKEN, listForms.get( i ) );
+            assertTrue( _securityTokenHandler.validate( request, strTokenKey ), "Form " + i + " of the results page refused after the previous ones: " + strHtml );
+        }
     }
 }

@@ -114,6 +114,8 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     private static final String MARK_PROVIDER_ATTRIBUTES_LIST = "provider_attribute_list";
     private static final String MARK_ATTRIBUTE_MAPPING_LIST = "attribute_mapping_list";
     private static final String MARK_USER_FILTER = "user_filter";
+    private static final String MARK_SEARCH_TOKEN = "search_token";
+    private static final String MARK_IMPORT_TOKENS = "import_tokens";
     // Jsp
     private static final String JSP_MANAGE_SEARCHUSERS = "jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp";
     // Properties
@@ -436,7 +438,8 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
     }
 
     /**
-     * Get a page to import users from Provider.
+     * Search users from the provider and show them in the import page. Each form of the page (the search, the import of
+     * each user found) carries a token of its own, so that a form can still be posted after another one.
      * 
      * @param request
      *            The request
@@ -475,6 +478,9 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
         model.put( MARK_MYLUTECE_ATTRIBUTES_LIST, _listMyLuteceAttribute );
         model.put( MARK_ATTRIBUTE_MAPPING_LIST, _listAttributeMapping );
         model.put( MARK_SEARCHUSER_LIST, users );
+        // Each form of the results page carries a token of its own: posting one form leaves the others usable
+        model.put( MARK_SEARCH_TOKEN, getSecurityTokenService( ).getToken( request, ACTION_CREATE_SEARCHUSER ) );
+        model.put( MARK_IMPORT_TOKENS, users.stream( ).map( user -> getSecurityTokenService( ).getToken( request, ACTION_CREATE_SEARCHUSER ) ).toList( ) );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_IMPORT_USERS_FROM_PROVIDER, AdminUserService.getLocale( request ), model );
         return getAdminPage( template.getHtml( ) );
     }

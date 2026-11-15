@@ -25,6 +25,9 @@
                             </#if>
                         </#list>
                     </#if>
+                    <#if search_token??>
+                        <@input type='hidden' name='_csrftoken' id='csrftoken_search' value=search_token />
+                    </#if>
                     <@formGroup>
                         <@button type='submit' name='action_searchUsersFromProvider' buttonIcon='search' title='#i18n{module.mylutece.users.buttonSearch}' color='primary' />
                     </@formGroup>
@@ -55,6 +58,9 @@
                                         <@input type='hidden' name='last_name' id='last_name_${searchUser?index}' value='${searchUser.lastName}' />
                                         <@input type='hidden' name='given_name' id='given_name_${searchUser?index}' value='${searchUser.givenName}' />
                                         <@input type='hidden' name='provider_user_id' id='provider_user_id_${searchUser?index}' value='${searchUser.providerUserId}' />
+                                        <#if import_tokens??>
+                                            <@input type='hidden' name='_csrftoken' id='csrftoken_${searchUser?index}' value=import_tokens[searchUser?index] />
+                                        </#if>
                                         <@input type='hidden' name='import_from_provider' id='import_from_provider_${searchUser?index}' value='true' />
                                         <#if searchUser.attributes??>
                                             <#list searchUser.attributes as attribute>
