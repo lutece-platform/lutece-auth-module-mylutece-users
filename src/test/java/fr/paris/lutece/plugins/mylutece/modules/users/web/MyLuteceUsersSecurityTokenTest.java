@@ -288,4 +288,28 @@ public class MyLuteceUsersSecurityTokenTest extends LuteceTestCase
             assertTrue( _securityTokenHandler.validate( request, strTokenKey ), "Form " + i + " of the results page refused after the previous ones: " + strHtml );
         }
     }
+
+    /**
+     * The list of the users is a view: its search form is sent with GET and its links open views, so neither carries the
+     * security token (a token is not written in a URL).
+     */
+    @Test
+    public void testTheListKeepsTheTokenOutOfUrls( ) throws AccessDeniedException
+    {
+        displayControllers( );
+        MockHttpServletRequest request = newRequest( SERVLET_PATH_USERS );
+        // The token of the page, issued as the security token filter does when the list is displayed
+        issueToken( request, MyLuteceSearchUserJspBean.class, ControllerInvocationType.VIEW, "manageMyLuteceSearchUsers" );
+        MockHttpServletResponse response = new MockHttpServletResponse( );
+        String strHtml = renderPage( request, ( ) -> _userJspBean.processController( request, response ) );
+
+        Matcher form = Pattern.compile( "<form[^>]*method=\"get\"[^>]*>(.*?)</form>", Pattern.DOTALL ).matcher( strHtml );
+        assertTrue( form.find( ), "No search form: " + strHtml );
+        do
+        {
+            assertFalse( form.group( 1 ).contains( SecurityTokenHandler.MARK_CSRF_TOKEN ), "Token in a form sent with GET: " + form.group( ) );
+        }
+        while ( form.find( ) );
+        assertFalse( strHtml.contains( SecurityTokenHandler.MARK_CSRF_TOKEN + "=" ), "Token in a link: " + strHtml );
+    }
 }

@@ -63,6 +63,7 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.security.SecurityTokenHandler;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
@@ -173,6 +174,8 @@ public class MyLuteceSearchUserJspBean extends AbstractmyLuteceUsersManagementJs
         _userFilter.setUrlAttributes( urlBase );
         Map<String, Object> model = getPaginatedListModel( request, MARK_SEARCHUSER_LIST, listMyLuteceSearchUsers, urlBase.getUrl( ) );
         model.put( MARK_USER_FILTER, _userFilter );
+        // No form of the list posts an action: the token would only be written in the URL of the search sent with GET
+        model.remove( SecurityTokenHandler.MARK_CSRF_TOKEN );
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_SEARCHUSERS, TEMPLATE_MANAGE_SEARCHUSERS, model );
     }
 
