@@ -7,7 +7,7 @@
                 <@button type='submit' name='view_createMyLuteceSearchUser' buttonIcon='plus' title='#i18n{module.mylutece.users.manageUsers.buttonAdd}' color='primary' />
             </@tform>
         </@pageHeader>
-        <@messages infos=infos />
+        <@messages errors=errors![] infos=infos![] />
         <@tform name='search_mylutecesearchuser' action='jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp' method='get' class='mb-3'>
             <input type='hidden' name='search_is_search' value='true' />
             <@row>

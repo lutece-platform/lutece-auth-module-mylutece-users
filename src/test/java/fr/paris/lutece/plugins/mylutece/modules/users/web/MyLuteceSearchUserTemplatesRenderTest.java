@@ -47,7 +47,10 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import fr.paris.lutece.plugins.mylutece.modules.users.business.MyLuteceUserFilter;
 import fr.paris.lutece.plugins.mylutece.service.search.MyLuteceSearchUser;
+import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
+import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.portal.service.template.HtmlAttributesMethod;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
@@ -69,6 +72,8 @@ public class MyLuteceSearchUserTemplatesRenderTest
     private static final String TEMPLATE_CREATE = PATH + "create_search_user.html";
     private static final String TEMPLATE_MODIFY = PATH + "modify_search_user.html";
     private static final String TEMPLATE_MANAGE = PATH + "manage_search_users.html";
+    private static final String USER_NOT_FOUND = "L'utilisateur n'existe pas";
+    private static final String USER_NOT_FOUND_ESCAPED = "L&#39;utilisateur n&#39;existe pas";
     private static final String CANCEL = "name=\"view_manageMyLuteceSearchUsers\" formnovalidate";
 
     /**
@@ -169,5 +174,32 @@ public class MyLuteceSearchUserTemplatesRenderTest
 
         assertTrue( strTemplate.contains( "ManageMyLuteceSearchUsers.jsp?view=confirmRemoveMyLuteceSearchUser&id=" ), strTemplate );
         assertFalse( strTemplate.contains( "action=confirmRemoveMyLuteceSearchUser" ), strTemplate );
+    }
+
+    /**
+     * The list of the users shows the error messages, such as the one of a user that does not exist (the list is the
+     * page the screens of an unknown user go back to).
+     *
+     * @throws Exception
+     *             if the rendering fails
+     */
+    @Test
+    public void testManageListShowsTheErrors( ) throws Exception
+    {
+        MyLuteceSearchUser user = userModel( ).entrySet( ).stream( ).filter( e -> e.getValue( ) instanceof MyLuteceSearchUser )
+                .map( e -> (MyLuteceSearchUser) e.getValue( ) ).findFirst( ).orElseThrow( );
+        List<MyLuteceSearchUser> listUsers = List.of( user );
+        Map<String, Object> model = new HashMap<>( );
+        model.put( "mylutece_search_user_list", listUsers );
+        model.put( "user_filter", new MyLuteceUserFilter( ) );
+        model.put( "paginator", new Paginator<>( listUsers, 50, "jsp/admin/plugins/mylutece/modules/users/ManageMyLuteceSearchUsers.jsp", "page_index", "1" ) );
+        model.put( "nb_items_per_page", "50" );
+        model.put( "infos", List.of( ) );
+        model.put( "errors", List.of( new MVCMessage( USER_NOT_FOUND ) ) );
+
+        String strHtml = render( TEMPLATE_MANAGE, model );
+
+        assertTrue( strHtml.contains( USER_NOT_FOUND_ESCAPED ), strHtml );
+        assertTrue( strHtml.contains( "alert-danger" ), strHtml );
     }
 }
