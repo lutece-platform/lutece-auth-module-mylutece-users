@@ -200,6 +200,11 @@ public final class MyLuteceSearchUserHome
      */
     private static void fillAttributes( MyLuteceSearchUser myLuteceSearchUser )
     {
+        if ( myLuteceSearchUser == null )
+        {
+            return;
+        }
+
         List<IAttribute> listMyLuteceAttribute = AttributeHome.findAll( _locale, _myLutecePlugin );
         ReferenceList listMyLuteceSearchUserAttribute = new ReferenceList( );
 
