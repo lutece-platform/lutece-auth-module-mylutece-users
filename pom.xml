@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>lutece-global-pom</artifactId>
@@ -8,8 +9,14 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>module-mylutece-users</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>2.0.1-beta-01</version>
     <name>Lutece mylutece users module</name>
+    <version>2.0.1</version>
+    <scm>
+        <connection>scm:git:https://github.com/lutece-platform/lutece-auth-module-mylutece-users.git</connection>
+        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-auth-module-mylutece-users.git</developerConnection>
+        <tag>module-mylutece-users-2.0.1-beta-01</tag>
+        <url>https://github.com/lutece-platform/lutece-auth-module-mylutece-users.git</url>
+    </scm>
     <repositories>
         <repository>
             <id>lutece</id>
@@ -18,15 +25,15 @@
             <layout>default</layout>
         </repository>
         <repository>
-            <id>luteceSnapshot</id>
-            <name>luteceSnapshot</name>
-            <url>https://dev.lutece.paris.fr/snapshot_repository</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
             <releases>
                 <enabled>false</enabled>
             </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>luteceSnapshot</id>
+            <name>luteceSnapshot</name>
+            <url>https://dev.lutece.paris.fr/snapshot_repository</url>
         </repository>
     </repositories>
     <dependencies>
@@ -58,12 +65,6 @@
     <properties>
         <componentName>mylutece-users</componentName>
         <jiraProjectName>MYLUTUSERS</jiraProjectName>
-        <jiraComponentId />
+        <jiraComponentId/>
     </properties>
-    <scm>
-        <connection>scm:git:https://github.com/lutece-platform/lutece-auth-module-mylutece-users.git</connection>
-        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-auth-module-mylutece-users.git</developerConnection>
-        <url>https://github.com/lutece-platform/lutece-auth-module-mylutece-users.git</url>
-        <tag>module-mylutece-users-2.0.1-beta-01</tag>
-    </scm>
 </project>
